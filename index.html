@@ -94,6 +94,13 @@ body:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;ba
 .hud.r b{color:var(--cy);font-weight:500}
 .cor{position:absolute;width:14px;height:14px;z-index:2;pointer-events:none;border:1px solid #2a3a4f}
 .cor.a{right:14px;top:14px;border-width:1px 1px 0 0}.cor.b{left:14px;bottom:14px;border-width:0 0 1px 1px}.cor.c{right:14px;bottom:14px;border-width:0 1px 1px 0}
+.rl{list-style:none;margin:0;padding:0}
+.rl li{padding:10px 0;border-bottom:1px solid var(--line)}
+.rt{font-size:12.5px;line-height:1.4}.rt span{color:var(--mut)}.rt b{font-weight:600}
+.rs{font-style:normal;font-family:'JetBrains Mono',monospace;display:inline-block;width:16px}
+.rd{font-size:12px;line-height:1.5;color:#9fb0c3;margin-top:3px;padding-left:20px}
+#tip{position:absolute;z-index:4;pointer-events:none;display:none;max-width:260px;background:#070b11ee;border:1px solid var(--line);border-left:2px solid var(--cy);padding:8px 10px;font-size:12px;line-height:1.45}
+#tip b{display:block;font-size:12.5px;margin-bottom:3px}
 @keyframes gx{from{transform:scaleX(0)}}
 @keyframes gy{from{transform:scaleY(0)}}
 @keyframes dr{to{stroke-dashoffset:0}}
@@ -106,13 +113,14 @@ body:after{content:'';position:absolute;inset:0;z-index:1;pointer-events:none;ba
 <header><div class="eyebrow">Kennedy · Bogotá</div><h1>Red de problemas</h1><p>Seis problemas que se alimentan entre sí. Arrastra para girar, acerca con la rueda y toca un nodo para ver sus indicadores.</p></header>
 <div class="legend">
 <b>Convenciones</b>
-<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="28" y2="5" stroke="#8fa6c0" stroke-width="1.2"/><path d="M34 5L26 2V8z" fill="#8fa6c0"/></svg>Causa (A provoca B)</div>
+<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="28" y2="5" stroke="#8fa6c0" stroke-width="1.2"/><path d="M34 5L26 2V8z" fill="#8fa6c0"/></svg>Causa: A provoca B (color del nodo A)</div>
 <div><svg viewBox="0 0 34 10"><line x1="6" y1="5" x2="28" y2="5" stroke="#ffb454" stroke-width="1.6"/><path d="M0 5L8 2V8zM34 5L26 2V8z" fill="#ffb454"/></svg>Se refuerzan mutuamente</div>
 <div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="#3ef0c8" stroke-width="1.2" stroke-dasharray="4 3"/></svg>Se complementan</div>
 <small>El tamaño del nodo indica su número de conexiones.</small>
 </div>
 <div class="cor a"></div><div class="cor b"></div><div class="cor c"></div>
 <div class="hud r"><div>Nodos <b>06</b> · Enlaces <b>11</b></div><div>Sistema <b>en línea</b></div></div>
+<div id="tip"></div>
 <div id="panel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
@@ -204,23 +212,24 @@ N.forEach(n=>{
 });
 if(document.fonts&&document.fonts.load)Promise.all([document.fonts.load("500 40px 'Space Grotesk'"),document.fonts.load("500 40px 'JetBrains Mono'")]).then(()=>N.forEach(n=>{const m=mkSph(n).material.map;n.sp.material.map=m;n.sp.material.needsUpdate=true})).catch(()=>{});
 const ECOL={c:0x5c584f,r:0xb4492d,m:0x3f8f8a};
+const edgePick=[];
+const ecol=e=>new THREE.Color(e.k==='c'?PC[e.a.id]:ECOL[e.k]);
+function cyl(p,q,r,mat,e){const d=q.clone().sub(p),L=d.length();const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,1,8,1),mat);m.scale.y=L;m.position.copy(p).addScaledVector(d,.5);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize());m.userData.e=e;scene.add(m);edgePick.push(m);return m}
 E.forEach(e=>{
- e.mats=[];
- const u=e.b.p.clone().sub(e.a.p).normalize(),hl=18,hr=5;
- const p=e.a.p.clone().addScaledVector(u,e.a.r+3),q=e.b.p.clone().addScaledVector(u,-(e.b.r+3));
- const mat=e.k==='m'?new THREE.LineDashedMaterial({color:ECOL.m,dashSize:9,gapSize:7,transparent:true,opacity:.8}):new THREE.LineBasicMaterial({color:ECOL[e.k],transparent:true,opacity:.75});
- e.mats.push(mat);
+ const u=e.b.p.clone().sub(e.a.p).normalize(),hl=44,hr=13,tr=2.6;
+ const p=e.a.p.clone().addScaledVector(u,e.a.r*1.18),q=e.b.p.clone().addScaledVector(u,-(e.b.r*1.18+4));
+ const mat=new THREE.MeshBasicMaterial({color:ecol(e),transparent:true,opacity:.95,depthWrite:false,fog:false});
+ e.mats=[mat];
  const p2=p.clone(),q2=q.clone();
- if(e.k==='c'||e.k==='r')q2.addScaledVector(u,-hl);
- if(e.k==='r')p2.addScaledVector(u,hl);
- const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([p2,q2]),mat);if(e.k==='m')ln.computeLineDistances();scene.add(ln);
+ if(e.k==='c'||e.k==='r')q2.addScaledVector(u,-hl+4);
+ if(e.k==='r')p2.addScaledVector(u,hl-4);
+ if(e.k==='m'){const L=p2.distanceTo(q2),n=Math.floor(L/26);for(let i=0;i<n;i++){const t0=i/n,t1=t0+.55/n;cyl(p2.clone().lerp(q2,t0),p2.clone().lerp(q2,t1),tr*.9,mat,e)}}
+ else cyl(p2,q2,tr,mat,e);
  if(e.k!=='m'){
-  const cm=new THREE.MeshBasicMaterial({color:ECOL[e.k],transparent:true,opacity:.75});e.mats.push(cm);
-  const cone=(tip,dir)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(1,1,12),cm);m.scale.set(hr,hl,hr);m.position.copy(tip).addScaledVector(dir,-hl/2);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);scene.add(m)};
+  const cone=(tip,dir)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(1,1,16),mat);m.scale.set(hr,hl,hr);m.position.copy(tip).addScaledVector(dir,-hl/2);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);m.userData.e=e;scene.add(m);edgePick.push(m)};
   cone(q,u);if(e.k==='r')cone(p,u.clone().negate());
  }
 });
-
 // ambiente
 const dotTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),g=x.createRadialGradient(32,32,0,32,32,32);g.addColorStop(0,'#fff');g.addColorStop(.25,'#fffb');g.addColorStop(1,'#fff0');x.fillStyle=g;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c)})();
 const stars=(()=>{const n=900,a=new Float32Array(n*3),cl=new Float32Array(n*3);for(let i=0;i<n;i++){const u=Math.random()*2-1,t=Math.random()*6.283,r=ext*(2.6+Math.random()*3.4),q=Math.sqrt(1-u*u);a.set([r*q*Math.cos(t),r*u,r*q*Math.sin(t)],i*3);const b=.35+Math.random()*.65;cl.set([b*.7,b*.9,b],i*3)}
@@ -230,8 +239,8 @@ const shell=new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.Icosahe
 const ring2=new THREE.Mesh(new THREE.RingGeometry(ext*1.9,ext*1.9+2,128),new THREE.MeshBasicMaterial({color:0x3ef0c8,transparent:true,opacity:.18,side:THREE.DoubleSide,fog:false}));ring2.rotation.x=Math.PI/2.3;scene.add(ring2);
 const FL=[];E.forEach(e=>{const u=e.b.p.clone().sub(e.a.p),L=u.length();const k=e.k==='m'?2:3;for(let i=0;i<k;i++)FL.push({e,t:i/k,v:.0016+Math.random()*.0008,d:1,L});if(e.k==='r')for(let i=0;i<2;i++)FL.push({e,t:i/2+.25,v:.0016+Math.random()*.0008,d:-1,L})});
 const flG=new THREE.BufferGeometry();flG.setAttribute('position',new THREE.BufferAttribute(new Float32Array(FL.length*3),3));
-const flC=new Float32Array(FL.length*3);FL.forEach((f,i)=>{const c=new THREE.Color(ECOL[f.e.k]);flC.set([c.r,c.g,c.b],i*3)});flG.setAttribute('color',new THREE.BufferAttribute(flC,3));
-const flow=new THREE.Points(flG,new THREE.PointsMaterial({size:26,map:dotTex,vertexColors:true,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false}));flow.renderOrder=5;flow.frustumCulled=false;scene.add(flow);
+const flC=new Float32Array(FL.length*3);FL.forEach((f,i)=>{flC.set([1,1,1],i*3)});flG.setAttribute('color',new THREE.BufferAttribute(flC,3));
+const flow=new THREE.Points(flG,new THREE.PointsMaterial({size:34,map:dotTex,vertexColors:true,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false}));flow.renderOrder=5;flow.frustumCulled=false;scene.add(flow);
 let live=null;
 function tick(t){
  stars.rotation.y=t*.00002;shell.rotation.y=-t*.00004;shell.rotation.x=t*.00002;ring2.rotation.z=t*.00008;
@@ -249,7 +258,7 @@ function focus(n){
  live=n;
  const s=n?neigh(n):null;
  N.forEach(m=>{const on=!s||s.has(m.id),k=m===n?1.07:1;m.sp.material.opacity=on?1:.14;m.rg.material.opacity=on?.85:.1;m.sp.scale.set(m.r*2.35*k,m.r*2.35*k,1)});
- E.forEach(e=>{const on=!n||e.a===n||e.b===n;e.mats.forEach(x=>x.opacity=on?(n?1:.75):.06)});
+ E.forEach(e=>{const on=!n||e.a===n||e.b===n;e.mats.forEach(x=>x.opacity=on?1:.07)});
 }
 function selectOld(n){
  sel=n;focus(n);ctl.autoRotate=false;
@@ -325,20 +334,29 @@ function select(n){
  P.style.setProperty('--ac',ac);
  P.innerHTML='<div class="ph"><span class="dot">'+n.id+'</span><h2>'+n.t+'</h2><button class="x" aria-label="Cerrar">×</button></div><div class="pb">'+
   '<div class="lgs"><span class="v">Dato verificado, con fuente</span><span class="c">Cálculo propio</span><span>Relación explicativa</span></div>'+
-  (d.lead?'<p class="lead">'+d.lead+'</p>':'')+d.g.map(kpis).join('')+cards+
+  (d.lead?'<p class="lead">'+d.lead+'</p>':'')+(()=>{const it=E.filter(e=>e.a===n||e.b===n).map(e=>{const o=e.a===n?e.b:e.a,c=PC[o.id];let tag,sym;
+   if(e.k==='c'){if(e.a===n){tag='provoca';sym='→'}else{tag='es provocado por';sym='←'}}else if(e.k==='r'){tag='se refuerza con';sym='⇄'}else{tag='se complementa con';sym='┄'}
+   return '<li><div class="rt"><i class="rs" style="color:'+c+'">'+sym+'</i> <span>'+tag+'</span> <b style="color:'+c+'">'+o.t+'</b></div><div class="rd">'+e.d+'</div></li>'}).join('');
+  return '<div class="gh">RELACIONES EN LA RED</div><ul class="rl">'+it+'</ul>'})()+
+  d.g.map(kpis).join('')+cards+
   '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
   '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
-  '<div class="gh">CONECTADO EN LA RED CON</div><div class="cn">'+nb+'</div>'+
   '<div class="gh">FUENTES</div><ul class="sl">'+d.s.map(i=>'<li><a href="'+SRC[i][1]+'" target="_blank" rel="noopener"><b>['+i+']</b> '+SRC[i][0]+'</a></li>').join('')+'</ul></div>';
  P.style.display='block';P.scrollTop=0;
  P.querySelector('.x').onclick=()=>{P.style.display='none';sel=null;focus(null);ctl.autoRotate=true};
 }
 const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
 function hit(ev){const r=cv.getBoundingClientRect();mv.set((ev.clientX-r.left)/r.width*2-1,-((ev.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);const h=ray.intersectObjects(pick)[0];return h?h.object.userData.n:null}
+const tip=document.getElementById('tip');
+function hitE(ev){const r=cv.getBoundingClientRect();mv.set((ev.clientX-r.left)/r.width*2-1,-((ev.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);const h=ray.intersectObjects(edgePick)[0];return h?h.object.userData.e:null}
+function showTip(e,ev){if(!e){tip.style.display='none';return}
+ const v=e.k==='c'?' provoca ':e.k==='r'?' ⇄ ':' ┄ ';
+ tip.innerHTML='<b>'+e.a.t+(e.k==='c'?' → ':e.k==='r'?' ⇄ ':' ┄ ')+e.b.t+'</b>'+e.d;
+ tip.style.display='block';const w=innerWidth;tip.style.left=Math.min(ev.clientX+14,w-280)+'px';tip.style.top=(ev.clientY+14)+'px'}
 let dn=null;
 cv.addEventListener('pointerdown',ev=>{dn=[ev.clientX,ev.clientY]});
-cv.addEventListener('pointerup',ev=>{if(dn&&Math.hypot(ev.clientX-dn[0],ev.clientY-dn[1])<5){const n=hit(ev);if(n)select(n)}dn=null});
-cv.addEventListener('pointermove',ev=>{if(dn)return;const n=hit(ev);cv.style.cursor=n?'pointer':'grab';if(n!==hov){hov=n;focus(hov||sel)}});
+cv.addEventListener('pointerup',ev=>{if(dn&&Math.hypot(ev.clientX-dn[0],ev.clientY-dn[1])<5){const n=hit(ev);if(n){select(n);showTip(null)}else showTip(hitE(ev),ev)}dn=null});
+cv.addEventListener('pointermove',ev=>{if(dn)return;const n=hit(ev);const ee=n?null:hitE(ev);if(ev.pointerType==='mouse')showTip(ee,ev);cv.style.cursor=(n||ee)?'pointer':'grab';if(n!==hov){hov=n;focus(hov||sel)}});
 let zoomed=0;
 function resize(){const w=innerWidth,h=innerHeight;if(!zoomed&&w<h*.9){cam.position.multiplyScalar(1.7);zoomed=1}renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
 addEventListener('resize',resize);resize();
