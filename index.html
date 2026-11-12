@@ -140,7 +140,7 @@ N.forEach((n,i)=>{n.r=2*n.deg*n.deg;n.p=new THREE.Vector3(Math.sin(i*12.9)*160,M
 // disposición: el nodo más conectado al centro, el resto sobre una esfera
 const R=380,order=['F','B','C','D','A','E'];
 order.forEach((id,i)=>{const k=i+.5,ph=Math.acos(1-2*k/6),th=Math.PI*(1+Math.sqrt(5))*k;byId[id].p=new THREE.Vector3(Math.cos(th)*Math.sin(ph),Math.cos(ph),Math.sin(th)*Math.sin(ph)).multiplyScalar(R)});
-N.forEach(n=>{n.r=64+(n.deg-3)*21});
+N.forEach(n=>{n.r=62+(n.deg-3)*42});
 let ext=0;N.forEach(n=>ext=Math.max(ext,n.p.length()+n.r));
 // scene
 const cv=document.getElementById('c');
