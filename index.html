@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Red de problemas · Kennedy</title>
+<meta name="description" content="Mapa interactivo de seis problemas interrelacionados en la localidad de Kennedy, Bogotá.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f0e8;--fg:#1f1e1b;--mut:#6d695f;--line:#d9d3c5;--card:#fbf9f4;--ink:#1f1e1b;box-sizing:border-box}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased}
+.serif,h1,h2,.kp b,.cc b{font-family:Newsreader,Georgia,"Times New Roman",serif}
+#c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
+header{position:absolute;left:28px;top:calc(env(safe-area-inset-top,0px) + 24px);z-index:2;pointer-events:none;max-width:360px}
+header .eyebrow{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-bottom:6px}
+h1{margin:0;font-size:34px;line-height:1.05;font-weight:500;letter-spacing:-.01em}
+header p{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--mut)}
+.legend{position:absolute;left:28px;bottom:calc(env(safe-area-inset-bottom,0px) + 24px);z-index:2;font-size:12px;color:var(--mut);max-width:260px}
+.legend b{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.legend div{display:flex;align-items:center;gap:10px;margin:7px 0;color:var(--fg)}
+.legend svg{width:34px;height:10px;flex:none}
+.legend small{display:block;margin-top:10px;line-height:1.4;color:var(--mut)}
+#panel{--ac:#5b6fa3;position:absolute;right:20px;top:20px;width:min(480px,calc(100% - 40px));max-height:calc(100% - 40px);overflow:auto;display:none;z-index:3;background:var(--card);border:1px solid var(--line);border-radius:4px;scrollbar-width:thin;font-size:13px}
+.ph{position:sticky;top:0;z-index:2;display:flex;align-items:baseline;gap:12px;padding:20px 48px 14px 22px;background:var(--card);border-bottom:1px solid var(--line)}
+.ph h2{margin:0;font-size:24px;line-height:1.15;font-weight:500;letter-spacing:-.005em}
+.dot{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;color:var(--ac);border:1px solid var(--ac);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;flex:none;transform:translateY(-3px)}
+#panel .x{position:absolute;right:14px;top:16px;cursor:pointer;color:var(--mut);background:none;border:0;font-size:22px;line-height:1;padding:4px}
+#panel .x:hover{color:var(--fg)}
+.pb{padding:16px 22px 24px}
+.lgs{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:14px;font-size:11px;color:var(--mut)}
+.lgs span{display:flex;align-items:center;gap:6px}
+.lgs span:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--ac)}
+.lgs .c:before{background:repeating-linear-gradient(135deg,var(--ac) 0 2px,transparent 2px 4px);border:1px solid var(--ac)}
+.lgs span:last-child:before{background:none;border:1px dashed var(--mut)}
+.lead{font-size:14px;line-height:1.6;color:#3b3934;margin:0 0 6px}
+.gh{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:22px 0 10px;font-weight:500}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kp{border:1px solid var(--line);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.kp b{font-size:23px;line-height:1.1;font-weight:500;color:var(--fg)}
+.kp.calc b{color:var(--ac)}
+.kp span{font-size:12px;line-height:1.35}
+.kp em{font-size:10.5px;color:var(--mut);font-style:normal}
+.cd{margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.cd.nd{color:var(--mut)}
+.cd h4{margin:0 0 3px;font-size:14px;font-weight:600}
+.cd small{display:block;color:var(--mut);font-size:11px;line-height:1.4;margin-bottom:12px}
+.cd p{margin:0;font-size:13px;line-height:1.55}
+.cb{color:var(--ac);text-decoration:none;font-size:10px;margin-left:2px;font-weight:600;vertical-align:super;line-height:0}
+.cb:hover{text-decoration:underline}
+.br{margin:11px 0}
+.bh{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:5px}
+.bh em{display:block;font-style:normal;color:var(--mut);font-size:10.5px}
+.bh b{font-weight:600;white-space:nowrap}
+.bt{height:6px;background:#e7e2d5}
+.bt i{display:block;height:100%;background:var(--ac);transform-origin:left;animation:gx .7s cubic-bezier(.2,.8,.2,1) both}
+.bt i.calc{background:repeating-linear-gradient(135deg,var(--ac) 0 4px,#e7e2d5 4px 7px)}
+.cl{display:flex;gap:14px;justify-content:space-around;align-items:flex-end}
+.cc{flex:1;text-align:center;font-size:11px;display:flex;flex-direction:column;gap:5px;align-items:center}
+.cc b{font-size:14px;font-weight:500}
+.cw{height:110px;width:100%;max-width:56px;display:flex;align-items:flex-end}
+.cw i{display:block;width:100%;background:var(--ac);transform-origin:bottom;animation:gy .7s cubic-bezier(.2,.8,.2,1) both}
+.cc span{color:var(--mut)}
+.ls{width:100%;height:auto;display:block}
+.gl{stroke:var(--line);stroke-width:1}
+.ln{fill:none;stroke:var(--ac);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;animation:dr 1.2s ease forwards}
+.ar{opacity:0;animation:fi .8s .6s forwards}
+.pt{fill:var(--card);stroke:var(--ac);stroke-width:2;opacity:0;animation:fi .4s forwards}
+.vt{fill:var(--fg);font-size:9.5px;font-weight:600}
+.xt{fill:var(--mut);font-size:9.5px}
+.cap{margin-top:10px;font-size:11px;color:var(--mut)}
+.rel{margin-top:24px;padding:14px 16px;border-left:2px solid var(--ac);background:#efeadd}
+.rel b{font-size:10.5px;letter-spacing:.12em;color:var(--ac);font-weight:600}
+.chain{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin-top:8px;font-size:12.5px;line-height:1.4}
+.chain i{color:var(--mut);font-style:normal}
+.nt{margin-top:14px;font-size:12px;line-height:1.55;color:var(--mut)}
+.nt b{color:var(--fg);font-weight:600}
+.cn{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.cn span{font-size:11.5px;padding:3px 9px;border:1px solid var(--line);border-radius:99px}
+.sl{margin:6px 0 0;padding:0;list-style:none;font-size:11.5px;line-height:1.5}
+.sl li{margin:7px 0}
+.sl a{color:var(--mut);text-decoration:none}
+.sl a:hover{color:var(--fg);text-decoration:underline}
+.sl a b{color:var(--ac)}
+@keyframes gx{from{transform:scaleX(0)}}
+@keyframes gy{from{transform:scaleY(0)}}
+@keyframes dr{to{stroke-dashoffset:0}}
+@keyframes fi{to{opacity:1}}
+@media(max-width:600px){header{left:18px;top:18px}h1{font-size:26px}header p{display:none}.legend{left:18px;bottom:18px;font-size:11px;max-width:200px}#panel{left:0;right:0;top:auto;bottom:0;width:100%;max-height:72%;border-radius:10px 10px 0 0;border-width:1px 0 0}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<header><div class="eyebrow">Kennedy · Bogotá</div><h1>Red de problemas</h1><p>Seis problemas que se alimentan entre sí. Arrastra para girar, acerca con la rueda y toca un nodo para ver sus indicadores.</p></header>
+<div class="legend">
+<b>Convenciones</b>
+<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="28" y2="5" stroke="#5c584f" stroke-width="1.2"/><path d="M34 5L26 2V8z" fill="#5c584f"/></svg>Causa (A provoca B)</div>
+<div><svg viewBox="0 0 34 10"><line x1="6" y1="5" x2="28" y2="5" stroke="#b4492d" stroke-width="1.6"/><path d="M0 5L8 2V8zM34 5L26 2V8z" fill="#b4492d"/></svg>Se refuerzan mutuamente</div>
+<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="#3f8f8a" stroke-width="1.2" stroke-dasharray="4 3"/></svg>Se complementan</div>
+<small>El tamaño del nodo indica su número de conexiones.</small>
+</div>
+<div id="panel"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const N=[
+{id:'A',t:'Dependencia de alimentos externos'},
+{id:'B',t:'Crecimiento poblacional'},
+{id:'C',t:'Valorización del suelo'},
+{id:'D',t:'Especulación'},
+{id:'E',t:'Gestión de residuos sólidos'},
+{id:'F',t:'Centralización de servicios'}];
+const E=[
+{s:'B',t:'C',k:'c',w:3,d:'Más habitantes aumentan la demanda de suelo y su precio.'},
+{s:'B',t:'A',k:'c',w:2,d:'Más población exige más alimento que el territorio no produce.'},
+{s:'B',t:'E',k:'c',w:2,d:'Más habitantes generan más residuos.'},
+{s:'F',t:'B',k:'c',w:2,d:'Concentrar servicios atrae población hacia esas zonas.'},
+{s:'C',t:'D',k:'r',w:3,d:'El suelo valorizado atrae especulación, y la especulación lo valoriza aún más.'},
+{s:'F',t:'C',k:'c',w:3,d:'Estar cerca de los servicios eleva el valor del suelo.'},
+{s:'F',t:'A',k:'c',w:2,d:'Centralizar abastos y mercados aleja la producción local del consumo.'},
+{s:'F',t:'E',k:'c',w:2,d:'Servicios concentrados dejan zonas periféricas sin buena recolección.'},
+{s:'D',t:'A',k:'c',w:2,d:'La especulación convierte suelo productivo en suelo urbano.'},
+{s:'A',t:'E',k:'c',w:1,d:'Los alimentos traídos de fuera generan empaques y residuos.'},
+{s:'D',t:'F',k:'m',w:2,d:'La inversión especulativa se concentra donde ya hay servicios.'}];
+const COL={c:0xd9e2ec,r:0xf2cc8f,m:0x81d4b0};
+const NCOL={3:0x2a9d8f,4:0x457b9d,5:0xe76f51};
+const byId={};N.forEach(n=>{byId[n.id]=n;n.deg=0});
+E.forEach(e=>{e.a=byId[e.s];e.b=byId[e.t];e.a.deg++;e.b.deg++});
+N.forEach((n,i)=>{n.r=2*n.deg*n.deg;n.p=new THREE.Vector3(Math.sin(i*12.9)*160,Math.cos(i*7.3)*160,Math.sin(i*4.1+1)*160);n.v=new THREE.Vector3()});
+// disposición: el nodo más conectado al centro, el resto sobre una esfera
+const R=380,order=['B','C','D','A','E'];
+byId.F.p=new THREE.Vector3(0,0,0);
+order.forEach((id,i)=>{const k=i+.5,ph=Math.acos(1-2*k/5),th=Math.PI*(1+Math.sqrt(5))*k;byId[id].p=new THREE.Vector3(Math.cos(th)*Math.sin(ph),Math.cos(ph),Math.sin(th)*Math.sin(ph)).multiplyScalar(R)});
+N.forEach(n=>{n.r=64+(n.deg-3)*21});
+let ext=0;N.forEach(n=>ext=Math.max(ext,n.p.length()+n.r));
+// scene
+const cv=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas:cv,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+const scene=new THREE.Scene();scene.background=new THREE.Color(0xf3f0e8);scene.fog=new THREE.Fog(0xf3f0e8,ext*3,ext*7);
+const cam=new THREE.PerspectiveCamera(45,1,1,6000);
+cam.position.set(ext*.35,ext*.28,ext*2.6);
+const ctl=new THREE.OrbitControls(cam,cv);ctl.enableDamping=true;ctl.dampingFactor=.08;ctl.autoRotate=true;ctl.autoRotateSpeed=.45;ctl.minDistance=ext*1.2;ctl.maxDistance=ext*5;
+scene.add(new THREE.AmbientLight(0xffffff,.55));
+const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(1,1.2,1.5);scene.add(dl);
+const pl=new THREE.PointLight(0x88aaff,.8,0);pl.position.set(-ext,ext,ext);scene.add(pl);
+// nodos esféricos con ícono y texto, aristas finas
+const NC={A:'#3e8f6f',B:'#6f55b0',C:'#3f72a8',D:'#a24a8d',E:'#37868c',F:'#b8693f'};
+const PC={A:'#5f8a4f',B:'#4f63a0',C:'#b5832c',D:'#a2476b',E:'#2f8683',F:'#7b5aa6'};
+const ICONS={
+A:x=>{x.strokeRect(-46,-28,54,42);x.beginPath();x.moveTo(8,-14);x.lineTo(32,-14);x.lineTo(46,2);x.lineTo(46,14);x.lineTo(8,14);x.stroke();x.beginPath();x.arc(-24,22,9,0,7);x.stroke();x.beginPath();x.arc(30,22,9,0,7);x.stroke()},
+B:x=>{[-22,22].forEach(c=>{x.beginPath();x.arc(c,-20,11,0,7);x.stroke();x.beginPath();x.arc(c,34,20,Math.PI,0);x.stroke()})},
+C:x=>{x.beginPath();x.moveTo(-44,-2);x.lineTo(0,-38);x.lineTo(44,-2);x.stroke();x.strokeRect(-30,-2,60,40);x.strokeRect(-8,14,16,24)},
+D:x=>{x.beginPath();x.moveTo(-44,-34);x.lineTo(-44,34);x.lineTo(46,34);x.stroke();x.beginPath();x.moveTo(-32,20);x.lineTo(-10,-2);x.lineTo(6,12);x.lineTo(38,-22);x.stroke();x.beginPath();x.moveTo(24,-24);x.lineTo(40,-24);x.lineTo(40,-8);x.stroke()},
+E:x=>{x.beginPath();x.moveTo(-32,-24);x.lineTo(32,-24);x.moveTo(-10,-24);x.lineTo(-10,-34);x.lineTo(10,-34);x.lineTo(10,-24);x.stroke();x.beginPath();x.moveTo(-24,-24);x.lineTo(-18,36);x.lineTo(18,36);x.lineTo(24,-24);x.stroke();x.beginPath();x.moveTo(-6,-10);x.lineTo(-6,24);x.moveTo(6,-10);x.lineTo(6,24);x.stroke()},
+F:x=>{x.beginPath();x.arc(0,0,12,0,7);x.stroke();[[-38,-28],[38,-28],[-38,28],[38,28]].forEach(p=>{x.beginPath();x.moveTo(p[0]*.32,p[1]*.32);x.lineTo(p[0]*.82,p[1]*.82);x.stroke();x.beginPath();x.arc(p[0],p[1],7,0,7);x.stroke()})}};
+function mkSph(n){
+ const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');
+ const col=PC[n.id],FONT=f=>'500 '+f+'px Newsreader,Georgia,serif',RR=218;
+ let fs=56,lines;
+ for(;fs>20;fs-=2){x.font=FONT(fs);lines=[];let cur='';n.t.split(' ').forEach(w=>{const t=cur?cur+' '+w:w;if(x.measureText(t).width>310&&cur){lines.push(cur);cur=w}else cur=t});lines.push(cur);
+  if(Math.max(...lines.map(l=>x.measureText(l).width))<=310&&lines.length*fs*1.15+70<=290)break}
+ x.beginPath();x.arc(256,256,RR,0,7);x.fillStyle='#fbf9f4';x.fill();
+ x.strokeStyle=col;x.lineWidth=7;x.beginPath();x.arc(256,256,RR,0,7);x.stroke();
+ const lh=fs*1.15,ih=56,gap=14,top=256-(ih+gap+lines.length*lh)/2;
+ x.fillStyle=col;x.textAlign='center';x.textBaseline='middle';x.font='500 44px ui-monospace,Menlo,monospace';x.fillText(n.id,256,top+ih/2);
+ x.fillStyle='#1f1e1b';x.font=FONT(fs);
+ lines.forEach((l,i)=>x.fillText(l,256,top+ih+gap+lh*(i+.5)));
+ const tex=new THREE.CanvasTexture(c);tex.anisotropy=8;
+ return new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthWrite:false,depthTest:false}));
+}
+const pick=[];
+N.forEach(n=>{
+ n.mat=new THREE.MeshBasicMaterial({visible:false});
+ n.mesh=new THREE.Mesh(new THREE.SphereGeometry(n.r,24,16),n.mat);n.mesh.position.copy(n.p);n.mesh.userData.n=n;scene.add(n.mesh);
+ n.sp=mkSph(n);n.sp.position.copy(n.p);n.sp.scale.set(n.r*2.35,n.r*2.35,1);n.sp.userData.n=n;scene.add(n.sp);pick.push(n.mesh,n.sp);
+});
+if(document.fonts&&document.fonts.load)Promise.all([document.fonts.load('500 40px Newsreader'),document.fonts.load('500 40px Inter')]).then(()=>N.forEach(n=>{const m=mkSph(n).material.map;n.sp.material.map=m;n.sp.material.needsUpdate=true})).catch(()=>{});
+const ECOL={c:0x5c584f,r:0xb4492d,m:0x3f8f8a};
+E.forEach(e=>{
+ e.mats=[];
+ const u=e.b.p.clone().sub(e.a.p).normalize(),hl=18,hr=5;
+ const p=e.a.p.clone().addScaledVector(u,e.a.r+3),q=e.b.p.clone().addScaledVector(u,-(e.b.r+3));
+ const mat=e.k==='m'?new THREE.LineDashedMaterial({color:ECOL.m,dashSize:9,gapSize:7,transparent:true,opacity:.8}):new THREE.LineBasicMaterial({color:ECOL[e.k],transparent:true,opacity:.75});
+ e.mats.push(mat);
+ const p2=p.clone(),q2=q.clone();
+ if(e.k==='c'||e.k==='r')q2.addScaledVector(u,-hl);
+ if(e.k==='r')p2.addScaledVector(u,hl);
+ const ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints([p2,q2]),mat);if(e.k==='m')ln.computeLineDistances();scene.add(ln);
+ if(e.k!=='m'){
+  const cm=new THREE.MeshBasicMaterial({color:ECOL[e.k],transparent:true,opacity:.75});e.mats.push(cm);
+  const cone=(tip,dir)=>{const m=new THREE.Mesh(new THREE.ConeGeometry(1,1,12),cm);m.scale.set(hr,hl,hr);m.position.copy(tip).addScaledVector(dir,-hl/2);m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir);scene.add(m)};
+  cone(q,u);if(e.k==='r')cone(p,u.clone().negate());
+ }
+});
+// interacción
+const P=document.getElementById('panel');let sel=null,hov=null;
+function neigh(n){const s=new Set([n.id]);E.forEach(e=>{if(e.a===n)s.add(e.b.id);if(e.b===n)s.add(e.a.id)});return s}
+function focus(n){
+ const s=n?neigh(n):null;
+ N.forEach(m=>{const on=!s||s.has(m.id),k=m===n?1.07:1;m.sp.material.opacity=on?1:.14;m.sp.scale.set(m.r*2.35*k,m.r*2.35*k,1)});
+ E.forEach(e=>{const on=!n||e.a===n||e.b===n;e.mats.forEach(x=>x.opacity=on?(n?1:.75):.06)});
+}
+function selectOld(n){
+ sel=n;focus(n);ctl.autoRotate=false;
+ const it=(arr)=>arr.length?'<ul>'+arr.map(x=>'<li><b>'+x[0]+'</b><span>'+x[1]+'</span></li>').join('')+'</ul>':'<ul><li style="color:#8b93a3">—</li></ul>';
+ const out=E.filter(e=>e.k==='c'&&e.a===n).map(e=>[e.b.t,e.d]);
+ const inn=E.filter(e=>e.k==='c'&&e.b===n).map(e=>[e.a.t,e.d]);
+ const mut=E.filter(e=>e.k!=='c'&&(e.a===n||e.b===n)).map(e=>[(e.a===n?e.b:e.a).t+(e.k==='r'?' · se refuerzan':' · se complementan'),e.d]);
+ P.innerHTML='<button class="x" aria-label="Cerrar">×</button><h2>'+n.t+'</h2><div style="color:#8b93a3;font-size:12px">'+n.deg+' conexiones</div><h3>CAUSA</h3>'+it(out)+'<h3>ES CAUSADO POR</h3>'+it(inn)+'<h3>RELACIÓN MUTUA / COMPLEMENTO</h3>'+it(mut);
+ P.style.display='block';
+ P.querySelector('.x').onclick=()=>{P.style.display='none';sel=null;focus(null);ctl.autoRotate=true};
+}
+const SRC={
+1:['Región Metropolitana Bogotá–Cundinamarca. Documento técnico de logística y distribución de alimentos (cifras SIPSA-DANE, 2022).','https://regionmetropolitana.gov.co/sites/default/files/archivos/normatividad/2024-11-19/189_5-logistica-y-distribucion-de-alimentos.pdf'],
+2:['Observatorio de Desarrollo Económico. Boletín de volumen de abastecimiento, cuarto trimestre de 2025.','https://observatorio.desarrolloeconomico.gov.co/wp-content/uploads/2026/05/BOLETIN_VOLUMEN_ABASTECIMIENTO_TRIMESTRE_IV_2025.pdf'],
+3:['Secretaría Distrital de Integración Social. Diagnóstico local de Kennedy 2023 (publicado en mayo de 2024).','https://www.integracionsocial.gov.co/images/_docs/2024/Entidad/localidades/04062024-8-Kennedy-Diagnostico-2023.pdf'],
+4:['Secretaría Distrital de Salud – SaluData. Caracterización de Kennedy 2024.','https://saludata.saludcapital.gov.co/osb/wp-content/uploads/2024/12/Kennedy_MasBienestar_2024_v1_2.pdf'],
+5:['Catastro Bogotá. Censo Inmobiliario 2026, apartado “8 Kennedy” (2022–2026).','https://www.catastrobogota.gov.co/sites/default/files/recursos/Documento_Censo_Inmobiliario_Vig_2026_20260331_publicar.pdf'],
+6:['Universidad Nacional de Colombia, Agencia de Noticias. “Vivir junto al Metro no aseguraría más valorización en Kennedy”.','https://agenciadenoticias.unal.edu.co/detalle/vivir-junto-al-metro-no-aseguraria-mas-valorizacion-en-kennedy'],
+7:['UAESP. “Así estamos acabando con los puntos críticos en Bogotá”, mayo de 2023.','https://www.uaesp.gov.co/noticias/asi-estamos-acabando-los-puntos-criticos-bogota'],
+8:['Secretaría Distrital de Gobierno. Balance de recuperación de espacio público y residuos en Kennedy, 2025 y parte de 2026.','https://www.gobiernobogota.gov.co/noticias/alcaldia-local-de-kennedy-ha-recuperado-mas-de-22-mil-metros-cuadrados-de-espacio-publico-afectados-por-residuos'],
+9:['Infobae. “Vivir cerca del metro de Bogotá sería más costoso: el precio de la vivienda podría aumentar cerca de 12% al año” (datos de Fincaraiz), 10 de noviembre de 2026.','https://www.infobae.com/colombia/2026/11/10/vivir-cerca-del-metro-de-bogota-seria-mas-costoso-el-precio-de-la-vivienda-podria-aumentar-cerca-de-12-al-ano/'],
+10:['Valora Analitik. “¿La construcción del metro de Bogotá impacta el precio de la vivienda?” (análisis de Properati, segundo trimestre de 2024).','https://www.valoraanalitik.com/?p=397847']};
+// k: [valor, etiqueta, año/periodo, [fuentes], calculo propio?, icono?]
+const D={
+A:{lead:'Corabastos está ubicada en Kennedy y recibe alimentos de otras regiones para distribuirlos en Bogotá y su área de influencia.',
+ g:[{k:[['2.198.118 t','Alimentos ingresados a Corabastos','2022',[1]],['1.016.649 t','Aporte de Cundinamarca','2022',[1]],['191.453 t','Promedio mensual recibido','IV trimestre de 2025',[2]]]}],
+ c:[{ty:'bars',t:'Origen de los alimentos que ingresaron a Corabastos',s:'2022 · % del abastecimiento registrado',src:[1],max:100,i:[['Cundinamarca',46.25,'46,25 %','1.016.649 toneladas'],['Meta',12.43,'12,43 %'],['Resto del abastecimiento',41.32,'41,32 %','100 − 46,25 − 12,43',null,1]]}],
+ rel:['EXPLICACIÓN','Dependencia de producción regional → Necesidad de transporte y conectividad vial → Exposición a interrupciones del abastecimiento'],
+ n:'Estos volúmenes corresponden a Corabastos; no representan exclusivamente el consumo de Kennedy. No hay un porcentaje local de dependencia alimentaria verificado en estas fuentes.',s:[1,2]},
+B:{g:[{k:[['1.035.224','Habitantes proyectados','2023',[3]],['1.037.929','Habitantes estimados','2024',[4]],['3.858,97 ha','Extensión territorial','2024',[4]],['≈ 269 hab/ha','Densidad aproximada sobre toda la superficie local','2024',[4],1]]}],
+ c:[{ty:'cols',t:'Población de Kennedy',s:'Estimaciones demográficas · eje desde cero',max:1037929,base:0,cap:'Diferencia entre las estimaciones: 2.705 habitantes (≈ 0,26 %) · cálculo propio',i:[['2023',1035224,'1.035.224',[3]],['2024',1037929,'1.037.929',[4]]]}],
+ rel:['EXPLICACIÓN','Población numerosa → Demanda de vivienda, alimentos, servicios y gestión de residuos'],
+ n:'Son estimaciones demográficas, no dos censos consecutivos.',s:[3,4]},
+C:{g:[{k:[['+33,4 %','Aumento del valor catastral agregado','2022 → 2026',[5],1],['+9.013 predios','Incorporados entre 2025 y 2026 (≈ 3,0 %)','2025 → 2026',[5],1],['80,310 billones','Valor catastral total, en pesos colombianos','2026',[5]]]}],
+ c:[{ty:'line',t:'Valor catastral total de Kennedy',s:'Billones de pesos colombianos · 2022–2026 · eje recortado',src:[5],i:[['2022',60.197,'60,197'],['2023',65.248,'65,248'],['2024',70.123,'70,123'],['2025',77.323,'77,323'],['2026',80.310,'80,310']]},
+ {ty:'cols',t:'Predios de Kennedy',s:'Número de predios · 2022–2026 · eje recortado desde 280.000',src:[5],base:280000,max:313983,i:[['2022',294529,'294.529'],['2023',297246,'297.246'],['2024',299683,'299.683'],['2025',304970,'304.970'],['2026',313983,'313.983']]}],
+ rel:['EXPLICACIÓN','Nuevas construcciones, cambios de avalúo y transformaciones urbanas → Aumento del valor inmobiliario agregado'],
+ n:'El valor catastral incluye suelo y construcciones. No equivale al precio comercial del suelo ni a la valorización individual de cada vivienda.',s:[5]},
+D:{g:[{h:'PRECIOS DE OFERTA CERCA DEL TRAZADO DE LA PRIMERA LÍNEA DEL METRO · FINCARAIZ, 2026',k:[['≈ 12 %','Aumento anual del precio de venta a menos de 1 km del trazado','Último año',[9]],['≈ 5 %','Aumento anual en el resto de Bogotá','Último año',[9]],['≈ $3,7 millones','Precio de venta por m² en Bosa y Kennedy','2026',[9]],['≈ 6 % vs 7 %','Arriendo de apartamentos de 2 habitaciones: cerca de la línea frente a Bogotá','Último año',[9]]]}],
+ c:[{ty:'bars',t:'Variación anual del precio de venta por metro cuadrado',s:'Avisos publicados en el último año frente al año anterior · oferta, no transacciones',src:[9],max:15,i:[['A menos de 1 km de la Primera Línea del Metro',12,'≈ 12 %'],['Resto de Bogotá',5,'≈ 5 %']]},
+ {ty:'bars',t:'Barrios de Kennedy con aumento del precio promedio por m²',s:'Segundo trimestre de 2024 frente al mismo trimestre de 2023 · 18 barrios analizados',src:[10],max:18,i:[['Con aumento',12,'12 de 18'],['Sin aumento',6,'6 de 18','resto de los 18 barrios',null,1]]},
+ {ty:'text',t:'Hallazgo de la Universidad Nacional',s:'Valores de referencia catastrales de manzanas residenciales de Kennedy · 2015–2023',src:[6],html:'La cercanía a futuras estaciones del Metro no garantiza por sí sola una mayor valorización; existen diferencias entre sectores.'},
+ {ty:'text',nd:1,t:'Sin cifra directa de especulación',s:'',html:'Los datos anteriores son precios de oferta publicados en portales inmobiliarios. Las fuentes reunidas no cuantifican qué porcentaje de las compraventas o del aumento de precios corresponde a especulación.'}],
+ rel:['POSIBILIDAD EXPLICATIVA','Expectativas por infraestructura y cambios urbanos → Interés de inversión → Posibles presiones sobre precios'],
+ n:'No presentar el aumento del avalúo catastral ni del precio de oferta como prueba de especulación. Fincaraiz y Properati miden avisos publicados, no transacciones registradas. Según Fincaraiz, los inmuebles a menos de 500 metros de la infraestructura tienen precios por m² inferiores, por las molestias de las obras.',s:[6,9,10]},
+E:{g:[{h:'MAYO DE 2023',k:[['77','Puntos críticos de residuos reportados por la UAESP','Mayo de 2023',[7]]]},{h:'BALANCE DE INTERVENCIONES · 2025 Y LO CORRIDO DE 2026',k:[['18','Puntos críticos atendidos','2025–2026',[8]],['820 t','Residuos domiciliarios, voluminosos y de construcción y demolición recolectados','2025–2026',[8]],['22.500 m²','Espacio público intervenido','2025–2026',[8]],['1.120','Llantas recogidas en 12 operativos','2025–2026',[8]]]}],
+ c:[],
+ rel:['EXPLICACIÓN','Disposición inadecuada → Acumulación en espacio público → Necesidad de recolección, aprovechamiento y control'],
+ n:'820 toneladas no es la generación total de residuos de Kennedy. Los 77 puntos registrados y los 18 atendidos no son una serie comparable para calcular reducción.',s:[7,8]},
+F:{g:[],
+ c:[{ty:'bars',t:'Oferta de servicios en Kennedy',s:'Número de equipamientos · el año depende de la fuente',max:185,i:[['Colegios no oficiales',185,'185','2023',[3]],['Unidades operativas de Integración Social',79,'79','2023',[3]],['Colegios oficiales',42,'42','2023',[3]],['IPS de la red pública',17,'17','2024',[4]],['Comisarías de Familia',5,'5','2023',[3]]]},
+ {ty:'bars',t:'Cobertura bruta educativa',s:'2022 · %',src:[3],max:100,i:[['Kennedy',94.2,'94,2 %'],['Bogotá',99.1,'99,1 %']]}],
+ rel:['EXPLICACIÓN','Distribución y capacidad de los servicios → Diferencias de acceso y desplazamientos entre barrios'],
+ n:'Estas cifras describen oferta local; por sí solas no demuestran su concentración espacial. No confundir colegios con sedes, ni cobertura bruta con porcentaje de niños residentes escolarizados.',s:[3,4]}};
+const AC={3:'#3ec8b6',4:'#6aa8d6',5:'#ff8a6a'};
+const cite=a=>(a||[]).map(i=>'<a class="cb" href="'+SRC[i][1]+'" target="_blank" rel="noopener" title="'+SRC[i][0]+'">['+i+']</a>').join('');
+function kpis(g){return (g.h?'<div class="gh">'+g.h+'</div>':'')+'<div class="kg">'+g.k.map(x=>'<div class="kp'+(x[4]?' calc':'')+'">'+'<b>'+x[0]+'</b><span>'+x[1]+'</span><em>'+x[2]+' '+cite(x[3])+(x[4]?' · cálculo propio':'')+'</em></div>').join('')+'</div>'}
+function bars(c){return c.i.map((r,i)=>'<div class="br"><div class="bh"><span>'+r[0]+((r[3]||r[5])?'<em>'+(r[3]||'')+(r[5]?(r[3]?' · ':'')+'cálculo propio':'')+'</em>':'')+'</span><b>'+r[2]+' '+cite(r[4]||c.src)+'</b></div><div class="bt"><i class="'+(r[5]?'calc':'')+'" style="width:'+(r[1]/c.max*100)+'%;animation-delay:'+(i*.12)+'s"></i></div></div>').join('')}
+function cols(c){const mx=c.max,b=c.base||0;return '<div class="cl">'+c.i.map((r,i)=>'<div class="cc"><b>'+r[2]+'</b><div class="cw"><i style="height:'+Math.max(4,(r[1]-b)/(mx-b)*100)+'%;animation-delay:'+(i*.1)+'s"></i></div><span>'+r[0]+' '+cite(r[3])+'</span></div>').join('')+'</div>'}
+function line(c){const W=340,H=170,l=28,r=28,t=26,bt=26,v=c.i.map(q=>q[1]),mn=Math.min(...v),mx=Math.max(...v),lo=mn-(mx-mn)*.3,hi=mx+(mx-mn)*.15;
+ const X=i=>l+i*(W-l-r)/(v.length-1),Y=x=>t+(1-(x-lo)/(hi-lo))*(H-t-bt);
+ const P=v.map((x,i)=>[X(i),Y(x)]),d=P.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ');
+ let s='<svg viewBox="0 0 '+W+' '+H+'" class="ls"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ac);stop-opacity:.45"/><stop offset="1" style="stop-color:var(--ac);stop-opacity:0"/></linearGradient></defs>';
+ for(let i=0;i<3;i++){const y=t+i*(H-t-bt)/2;s+='<line class="gl" x1="'+l+'" x2="'+(W-r)+'" y1="'+y+'" y2="'+y+'"/>'}
+ s+='<path class="ar" fill="url(#lg)" d="'+d+' L'+P[P.length-1][0]+' '+(H-bt)+' L'+P[0][0]+' '+(H-bt)+'Z"/><path class="ln" pathLength="1" d="'+d+'"/>';
+ P.forEach((q,i)=>{s+='<circle class="pt" cx="'+q[0]+'" cy="'+q[1]+'" r="4" style="animation-delay:'+(.5+i*.15)+'s"/><text class="vt" x="'+q[0]+'" y="'+(q[1]-9)+'" text-anchor="middle">'+c.i[i][2]+'</text><text class="xt" x="'+q[0]+'" y="'+(H-8)+'" text-anchor="middle">'+c.i[i][0]+'</text>'});
+ return s+'</svg>'}
+function select(n){
+ sel=n;focus(n);ctl.autoRotate=false;
+ const d=D[n.id],ac=PC[n.id];
+ const cards=d.c.map(c=>'<section class="cd'+(c.nd?' nd':'')+'"><h4>'+c.t+'</h4>'+(c.s?'<small>'+c.s+' '+cite(c.src)+'</small>':'')+(c.ty==='bars'?bars(c):c.ty==='cols'?cols(c):c.ty==='line'?line(c):'<p>'+c.html+(c.s?'':' '+cite(c.src))+'</p>')+(c.cap?'<div class="cap">'+c.cap+'</div>':'')+'</section>').join('');
+ const nb=[...neigh(n)].filter(x=>x!==n.id).map(x=>'<span>'+byId[x].t+'</span>').join('');
+ P.style.setProperty('--ac',ac);
+ P.innerHTML='<div class="ph"><span class="dot">'+n.id+'</span><h2>'+n.t+'</h2><button class="x" aria-label="Cerrar">×</button></div><div class="pb">'+
+  '<div class="lgs"><span class="v">Dato verificado, con fuente</span><span class="c">Cálculo propio</span><span>Relación explicativa</span></div>'+
+  (d.lead?'<p class="lead">'+d.lead+'</p>':'')+d.g.map(kpis).join('')+cards+
+  '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
+  '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
+  '<div class="gh">CONECTADO EN LA RED CON</div><div class="cn">'+nb+'</div>'+
+  '<div class="gh">FUENTES</div><ul class="sl">'+d.s.map(i=>'<li><a href="'+SRC[i][1]+'" target="_blank" rel="noopener"><b>['+i+']</b> '+SRC[i][0]+'</a></li>').join('')+'</ul></div>';
+ P.style.display='block';P.scrollTop=0;
+ P.querySelector('.x').onclick=()=>{P.style.display='none';sel=null;focus(null);ctl.autoRotate=true};
+}
+const ray=new THREE.Raycaster(),mv=new THREE.Vector2();
+function hit(ev){const r=cv.getBoundingClientRect();mv.set((ev.clientX-r.left)/r.width*2-1,-((ev.clientY-r.top)/r.height)*2+1);ray.setFromCamera(mv,cam);const h=ray.intersectObjects(pick)[0];return h?h.object.userData.n:null}
+let dn=null;
+cv.addEventListener('pointerdown',ev=>{dn=[ev.clientX,ev.clientY]});
+cv.addEventListener('pointerup',ev=>{if(dn&&Math.hypot(ev.clientX-dn[0],ev.clientY-dn[1])<5){const n=hit(ev);if(n)select(n)}dn=null});
+cv.addEventListener('pointermove',ev=>{if(dn)return;const n=hit(ev);cv.style.cursor=n?'pointer':'grab';if(n!==hov){hov=n;focus(hov||sel)}});
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
+addEventListener('resize',resize);resize();
+const tmp=new THREE.Vector3();
+(function loop(){
+ requestAnimationFrame(loop);ctl.update();N.map(n=>[n,cam.position.distanceTo(n.p)]).sort((p,q)=>q[1]-p[1]).forEach((q,i)=>q[0].sp.renderOrder=10+i);
+ 
+ renderer.render(scene,cam);
+})();
+</script>
+</body>
+</html>
