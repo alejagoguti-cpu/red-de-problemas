@@ -193,6 +193,11 @@ header p{animation:up 1s .38s cubic-bezier(.2,.8,.2,1) both}
 .kp,.cd,.rl li{transition:border-color .2s,background .2s}.kp:hover{border-color:var(--ac)}
 @media(max-width:600px){@keyframes pin{from{opacity:0;transform:translateY(34px)}}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;animation-delay:0s!important}}
+.goprop{position:absolute;right:24px;top:22px;z-index:2;font-size:13px;color:var(--fg);text-decoration:none;border:1px solid var(--line);background:#0e0e11cc;border-radius:99px;padding:8px 16px;transition:border-color .2s,background .2s;animation:up .9s 1.4s cubic-bezier(.2,.8,.2,1) both}
+.goprop:hover{border-color:#e6d9b0;background:#e6d9b01a}
+.goprop2{display:block;margin-top:10px;font-size:12.5px;color:var(--mut);text-decoration:none;padding:6px 2px}
+.goprop2:hover{color:#e6d9b0}
+@media(max-width:600px){.goprop{top:auto;bottom:18px;right:18px;font-size:12px;padding:7px 13px}}
 @keyframes gx{from{transform:scaleX(0)}}
 @keyframes gy{from{transform:scaleY(0)}}
 @keyframes dr{to{stroke-dashoffset:0}}
@@ -210,6 +215,7 @@ header p{animation:up 1s .38s cubic-bezier(.2,.8,.2,1) both}
 <small>El tamaño del nodo indica su número de conexiones.</small>
 </div>
 <div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
+<a class="goprop" href="propuesta.html">Ver la propuesta →</a>
 <div id="tip"></div>
 <div id="panel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -578,7 +584,7 @@ function select(n){
    if(e.k==='c'){if(e.a===n){tag='provoca';sym='→'}else{tag='es provocado por';sym='←'}}else if(e.k==='r'){tag='se refuerza con';sym='⇄'}else{tag='se complementa con';sym='┄'}
    return '<li><div class="rt"><i class="rs" style="color:'+c+'">'+sym+'</i> <span>'+tag+'</span> <b style="color:'+c+'">'+o.t+'</b></div><div class="rd">'+e.d+'</div></li>'}).join('');
   return '<div class="gh">RELACIONES EN LA RED</div><ul class="rl">'+it+'</ul>'})()+
-  (()=>{const st=stat(WHY[n.id],1);return '<button class="godeep"><span><b>Ir más a fondo</b><em>¿Qué causa «'+n.t+'»? '+st[0]+' causas en '+st[1]+' niveles</em></span><i>→</i></button>'})()+
+  (()=>{const st=stat(WHY[n.id],1);return '<button class="godeep"><span><b>Ir más a fondo</b><em>¿Qué causa «'+n.t+'»? '+st[0]+' causas en '+st[1]+' niveles</em></span><i>→</i></button><a class="goprop2" href="propuesta.html#p-'+n.id+'">Cómo responde la propuesta →</a>'})()+
   d.g.map(kpis).join('')+cards+
   '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
   '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
@@ -604,6 +610,7 @@ let zoomed=0;
 function resize(){const w=innerWidth,h=innerHeight;if(!zoomed&&w<h*.9){cam.position.multiplyScalar(1.7);zoomed=1}renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix()}
 addEventListener('resize',resize);resize();
 const tmp=new THREE.Vector3();
+if(location.hash&&byId[location.hash.slice(1)])setTimeout(()=>select(byId[location.hash.slice(1)]),2600);
 (function loop(t){
  requestAnimationFrame(loop);tick(t||0);ctl.update();N.map(n=>[n,cam.position.distanceTo(n.p)]).sort((p,q)=>q[1]-p[1]).forEach((q,i)=>q[0].sp.renderOrder=10+i);
  
