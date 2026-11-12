@@ -122,6 +122,49 @@ header p{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--mut)}
 .cc b{font-size:13px}
 .cc:not(:last-child) b{color:var(--mut)}
 .gl{stroke:#26262c}.pt{fill:#09090b;stroke-width:1.8}.pt.on{fill:var(--ac)}.pt.halo{fill:var(--ac);fill-opacity:.2;stroke:none}.vt{font-size:10px;font-weight:400;fill:var(--mut)}.vt.e{font-size:12px;font-weight:600;fill:var(--fg)}.xt{font-size:10px}
+
+.godeep{all:unset;box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;margin-top:20px;padding:14px 16px;border:1px solid var(--ac);border-radius:8px;cursor:pointer;background:color-mix(in srgb,var(--ac) 10%,transparent);transition:background .2s}
+.godeep:hover{background:color-mix(in srgb,var(--ac) 20%,transparent)}
+.godeep:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.godeep b{display:block;font-size:14px;font-weight:600;color:var(--ac)}
+.godeep em{display:block;font-style:normal;font-size:12px;color:#c4c4cc;margin-top:3px;line-height:1.4}
+.godeep i{font-style:normal;font-size:20px;color:var(--ac)}
+#dv{--ac:#a28fd0;position:absolute;inset:0;z-index:6;background:#09090b;display:none;grid-template-columns:1fr 340px;grid-template-rows:auto 1fr;overflow:hidden}
+#dv.on{display:grid}
+.dvb{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);min-width:0}
+.dvback,.dvt2 button{all:unset;cursor:pointer;font-size:12.5px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;white-space:nowrap;color:var(--fg)}
+.dvback:hover,.dvt2 button:hover{border-color:var(--ac)}
+.dvcr{flex:1;display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:none;min-width:0}
+.dvcr button{all:unset;cursor:pointer;font-size:12.5px;color:var(--mut);white-space:nowrap;padding:2px 0}
+.dvcr button:hover{color:var(--fg)}.dvcr button.cur{color:var(--fg)}.dvcr b{font-weight:600;color:var(--ac)}
+.dvcr i{font-style:normal;color:#44444b}
+.dvt2{display:flex;gap:8px}
+.dvw{overflow:auto;position:relative;scrollbar-width:thin}
+.dvc{position:relative}
+.dvs{position:absolute;left:0;top:0;pointer-events:none}
+.dve{fill:none;stroke:#3a3a42;stroke-width:1.5;stroke-dasharray:1;stroke-dashoffset:1;animation:dr .7s ease forwards}
+.dve.hot{stroke:var(--ac);stroke-width:2}
+.dvl{position:absolute;top:22px;font-size:11px;color:var(--mut);letter-spacing:.02em}
+.dvn{all:unset;box-sizing:border-box;position:absolute;display:flex;flex-direction:column;justify-content:space-between;padding:9px 12px 8px 14px;background:#111114;border:1px solid var(--line);border-left:3px solid var(--ac);border-radius:6px;cursor:pointer;animation:fi .35s both;transition:border-color .15s,background .15s}
+.dvn:hover{background:#17171b}
+.dvn:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.dvn.sel{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,#111114)}
+.dvn.root{background:var(--ac);border-color:var(--ac)}
+.dvn.root .dvt{color:#0b0b0d;font-weight:600}.dvn.root .dvm{color:#0b0b0dcc}
+.dvn.leaf{border-left-style:dashed}
+.dvt{font-size:12.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;color:var(--fg)}
+.dvm{font-size:10.5px;color:var(--mut)}
+.dvd{border-left:1px solid var(--line);padding:22px 22px 28px;overflow:auto;background:#0e0e11}
+.dvk{font-size:11.5px;color:var(--ac);margin-bottom:8px}
+.dvd h3{margin:0 0 10px;font-size:19px;line-height:1.25;font-weight:500;letter-spacing:-.01em}
+.dvd p{margin:0 0 14px;font-size:13px;line-height:1.6;color:#c4c4cc}
+.dvv{margin:0 0 14px;padding:10px 12px;border-left:2px solid var(--ac);background:#131316;font-size:12px;line-height:1.5;color:#c4c4cc}
+.dvv b{display:block;font-size:11px;color:var(--ac);margin-bottom:3px;font-weight:600}
+.dvs2{font-size:12.5px;color:var(--mut);margin-bottom:14px}.dvs2 b{color:var(--fg)}
+.dvlk{all:unset;cursor:pointer;display:block;font-size:12.5px;padding:10px 12px;border:1px solid var(--ac);border-radius:6px;color:var(--ac);margin-bottom:14px}
+.dvlk:hover{background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.dvh{font-size:11.5px;color:#6a6a73;line-height:1.5;border-top:1px solid var(--line);padding-top:12px}
+@media(max-width:700px){#dv.on{grid-template-columns:1fr;grid-template-rows:auto 1fr 38%}.dvb{grid-column:1;flex-wrap:wrap;gap:8px;padding:10px 14px}.dvt2{display:none}.dvcr{order:3;flex-basis:100%}.dvd{border-left:0;border-top:1px solid var(--line);padding:16px 18px}.dvd h3{font-size:16px}}
 @keyframes gx{from{transform:scaleX(0)}}
 @keyframes gy{from{transform:scaleY(0)}}
 @keyframes dr{to{stroke-dashoffset:0}}
@@ -138,6 +181,7 @@ header p{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--mut)}
 <div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="#6fb5b0" stroke-width="1.2" stroke-dasharray="4 3"/></svg>Se complementan</div>
 <small>El tamaño del nodo indica su número de conexiones.</small>
 </div>
+<div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
 <div id="tip"></div>
 <div id="panel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -328,48 +372,132 @@ function line(c){const W=360,H=190,l=14,r=18,t=34,bt=28,v=c.i.map(q=>q[1]),mn=Ma
 
 const WHY={
 F:[
- {t:'La ciudad se organizó alrededor de pocos centros',d:'Bogotá creció de forma radial desde un centro histórico y unos corredores principales; los servicios se instalaron donde ya llegaba la gente.',w:[
-  {t:'Las vías y el transporte convergen en pocos nodos',d:'Las rutas conectan periferias con centros, y pocas veces periferias entre sí. Eso deja los servicios más accesibles en esos nodos.',w:[
-   {t:'El transporte masivo se diseñó para llevar gente hacia el centro',d:'Quien vive lejos de una estación o un corredor depende de desplazamientos largos para llegar a cualquier servicio.'}]},
-  {t:'Las centralidades secundarias no se consolidaron',d:'Sin subcentros con oferta propia, cada trámite, colegio o clínica de mayor nivel se busca en los mismos lugares.'}]},
- {t:'Concentrar sale más barato para quien presta el servicio',d:'Entidades y empresas instalan sus sedes donde ya hay demanda, infraestructura y otros servicios.',w:[
-  {t:'Los equipamientos nuevos se ubican donde ya hay equipamientos',d:'Cada sede nueva refuerza el atractivo de la zona y hace más difícil justificar una sede en otra parte.'},
-  {t:'Mantener sedes dispersas cuesta más',d:'Personal, seguridad y mantenimiento se multiplican, y por eso se prefiere consolidar.'}]},
- {t:'Las normas de uso del suelo favorecen pocas zonas',d:'Los usos comerciales, dotacionales y de servicios están permitidos con más facilidad en ciertos sectores.',w:[
-  {t:'Las zonas residenciales quedan sin servicios de escala mayor',d:'Si la norma no los permite o los hace costosos, los servicios no llegan al barrio aunque haya demanda.'}]},
- {t:'La inversión pública sigue la demanda visible',d:'Se prioriza donde ya hay población organizada, cobertura y presión para pedir servicios.',w:[
-  {t:'Los barrios con menos oferta tienen menos peso para exigirla',d:'Así se mantiene un ciclo: poca oferta, poca presión visible y poca inversión nueva.'}]}],
+ {t:'La ciudad creció alrededor de pocos centros',d:'Bogotá se expandió de forma radial desde un centro histórico y unos corredores principales; los servicios se instalaron donde ya llegaba la gente.',v:'Mapa de centralidades del POT y localización de equipamientos por UPZ.',w:[
+  {t:'Las vías y el transporte convergen en pocos nodos',d:'Las rutas conectan periferias con centros y pocas veces periferias entre sí, así que los servicios más accesibles quedan en esos nodos.',v:'Matriz de viajes de la Encuesta de Movilidad y tiempos de viaje entre barrios.',w:[
+   {t:'El transporte masivo se diseñó para llevar gente hacia el centro',d:'Troncales y líneas radiales se priorizaron sobre conexiones entre periferias.',w:[
+    {t:'La inversión en movilidad siguió los flujos de viaje que ya existían',d:'Se reforzó lo que ya se usaba en lugar de crear destinos nuevos en otras zonas.',w:[
+     {t:'Los modelos de planeación del transporte predicen demanda con patrones del pasado',d:'Así, quien ya tiene demanda recibe más oferta, y quien no la tiene queda sin ella.'}]}]}]},
+  {t:'Los barrios se formaron antes que la planeación',d:'Buena parte de la ciudad se urbanizó por loteo y de manera informal, y las dotaciones llegaron después.',w:[
+   {t:'Urbanización informal sin espacio reservado para servicios',d:'Sin lotes previstos para colegios, centros de salud o plazas, resulta difícil instalarlos más tarde.',w:[
+    {t:'El suelo formal era caro o escaso para los hogares de menores ingresos',d:'El acceso al suelo depende del mercado, con poca oferta pública.',l:'C',w:[
+     {t:'El país tiene baja oferta de suelo público para vivienda',d:'Pocos instrumentos para que el Estado adquiera, reserve o regule suelo urbanizable con anticipación.'}]}]}]}]},
+ {t:'Concentrar sale más barato para quien presta el servicio',d:'Entidades y empresas instalan sus sedes donde ya hay demanda, infraestructura y otros servicios.',v:'Criterios de localización de sedes de entidades distritales y de cadenas privadas.',w:[
+  {t:'Las sedes nuevas se ubican donde ya hay sedes',d:'Cada sede refuerza el atractivo de la zona y hace más difícil justificar una en otra parte.',w:[
+   {t:'Efecto de aglomeración: proveedores, personal y clientes ya están allí',d:'Es un círculo que se refuerza solo si nadie lo interrumpe.'}]},
+  {t:'Dispersar sedes cuesta más',d:'Personal, seguridad y mantenimiento se multiplican con cada punto nuevo.',w:[
+   {t:'Los indicadores de gestión premian la eficiencia por usuario atendido',d:'Miden cuánto cuesta cada atención, no cuánto tarda en llegar el servicio a cada barrio.',w:[
+    {t:'No hay una medida de acceso por barrio que pese en las decisiones',d:'Lo que no se mide con claridad no entra en los criterios para decidir dónde invertir.'}]}]}]},
+ {t:'Las normas de uso del suelo favorecen pocas zonas',d:'Los usos comerciales, dotacionales y de servicios se permiten con más facilidad en ciertos sectores.',v:'Fichas normativas por UPZ y áreas de actividad del POT.',w:[
+  {t:'Las zonas residenciales no admiten servicios de escala mayor',d:'Si la norma no los permite o los hace costosos, no llegan al barrio aunque haya demanda.',w:[
+   {t:'El POT delimitó las áreas de actividad donde ya había actividad',d:'La norma tendió a confirmar lo existente en vez de promover subcentros nuevos.',w:[
+    {t:'Ordenar sobre lo existente es más fácil que cambiar una estructura urbana',d:'Cambiar la norma de una zona afecta derechos y valores ya consolidados, y eso genera resistencia.'}]}]}]},
+ {t:'La inversión pública sigue la demanda visible',d:'Se prioriza donde ya hay población organizada, cobertura y presión para pedir servicios.',v:'Distribución del presupuesto de inversión por localidad y UPZ.',w:[
+  {t:'Los barrios con menos oferta tienen menos peso para exigirla',d:'Así se mantiene un ciclo: poca oferta, poca presión visible, poca inversión nueva.',w:[
+   {t:'Menos canales efectivos para incidir en los presupuestos locales',d:'La participación exige tiempo, información y organización, que no están igual de repartidos.',w:[
+    {t:'Los presupuestos locales son pequeños frente a las obras que se necesitan',d:'Las decisiones grandes se toman a escala de ciudad, lejos de cada barrio.'}]}]}]},
+ {t:'El país concentra funciones y recursos en la capital',d:'Sedes de entidades nacionales, empresas y universidades se han agrupado históricamente en Bogotá y, dentro de ella, en pocas zonas.',v:'Distribución del empleo formal y de las sedes institucionales por zonas de la ciudad.',w:[
+  {t:'El empleo calificado se concentra en el centro ampliado',d:'Con él se concentra también la demanda de comercio, educación y servicios.',w:[
+   {t:'La economía del país depende de pocas ciudades',d:'Las regiones reciben menos inversión, así que llegan más personas a la capital y presionan a los mismos centros.',l:'B',w:[
+    {t:'Un modelo de desarrollo centralista en la distribución de recursos',d:'Una parte grande de las decisiones y de los recursos se define en el nivel nacional.'}]}]}]}],
 B:[
  {t:'Llegada de población a la ciudad',d:'Bogotá concentra empleo, educación y servicios que atraen a quienes vienen de otras regiones.',w:[
-  {t:'Los servicios y el empleo están concentrados',d:'Esto conecta con la causa de raíz: la centralización también atrae habitantes hacia las zonas con más oferta.'}]},
+  {t:'El empleo y los servicios están concentrados en pocas zonas',d:'La centralización también atrae habitantes hacia donde hay más oferta.',l:'F',w:[]},
+  {t:'Falta de oportunidades fuera de las ciudades grandes',d:'La migración responde a la distancia entre lo que ofrece una región y lo que ofrece la capital.',w:[
+   {t:'La economía del país se concentra en pocas ciudades',d:'Las regiones tienen menos inversión y menos empleo formal.',w:[
+    {t:'Un modelo de desarrollo que concentra recursos y decisiones en el centro',d:'Esto también explica por qué sigue creciendo la presión sobre Bogotá.',l:'F'}]}]}]},
  {t:'Oferta de vivienda asequible en la localidad',d:'Zonas con vivienda de menor costo reciben a hogares que no pueden pagar en otras partes de la ciudad.',w:[
-  {t:'El suelo bien ubicado es caro en el resto de la ciudad',d:'Eso empuja a los hogares hacia donde pueden pagar, con frecuencia lejos de la oferta de servicios.'}]},
- {t:'Cambios en la composición de los hogares',d:'Hogares más pequeños significan más viviendas por el mismo número de personas.'}],
+  {t:'El suelo bien ubicado es caro en el resto de la ciudad',d:'Eso empuja a los hogares hacia donde pueden pagar, con frecuencia lejos de la oferta de servicios.',l:'C',w:[
+   {t:'Los hogares se desplazan hacia donde pueden pagar',d:'Cuanto más se encarece el suelo central, más lejos se ubican quienes tienen menos ingresos.'}]}]},
+ {t:'Cambios en la composición de los hogares',d:'Hogares más pequeños significan más viviendas por el mismo número de personas.',w:[
+  {t:'Hogares con menos integrantes que antes',d:'Aumenta la demanda de vivienda y de suelo aunque la población crezca poco.'}]}],
 C:[
  {t:'El suelo urbanizable es escaso',d:'Cuando ya casi no queda suelo libre, el que hay se encarece.',w:[
-  {t:'La localidad está en gran parte consolidada',d:'El crecimiento se da por densificación y cambio de uso, no por suelo nuevo.'}]},
+  {t:'La localidad está en gran parte consolidada',d:'El crecimiento se da por densificación y cambio de uso, no por suelo nuevo.',w:[
+   {t:'Las normas permiten edificar más sobre el mismo lote',d:'Más edificabilidad aumenta el valor del suelo, porque se puede construir más sobre él.',w:[
+    {t:'El valor del suelo depende de lo que la norma permite construir',d:'Un cambio de norma puede subir el valor del suelo sin que cambie nada en el terreno.'}]}]}]},
  {t:'Obras e infraestructura en marcha',d:'Proyectos como el metro generan expectativas sobre el valor futuro del suelo cercano.',w:[
-  {t:'Las expectativas se anticipan a las obras',d:'Los precios pueden moverse antes de que el proyecto entre en operación.'}]},
- {t:'Cercanía a servicios',d:'Estar cerca de colegios, comercio y transporte hace al suelo más valioso. Aquí vuelve a aparecer la centralización.'}],
+  {t:'Las expectativas se anticipan a las obras',d:'Los precios pueden moverse antes de que el proyecto entre en operación.',l:'D',w:[]}]},
+ {t:'Cercanía a servicios',d:'Estar cerca de colegios, comercio y transporte hace al suelo más valioso. Aquí vuelve a aparecer la centralización.',l:'F',w:[]}],
 D:[
  {t:'Expectativas por infraestructura y cambios urbanos',d:'La anticipación de un proyecto atrae a quienes buscan comprar antes de que suba el precio.',w:[
-  {t:'Información desigual sobre lo que va a pasar',d:'Quien sabe antes o tiene más capital se mueve primero.'}]},
+  {t:'Información desigual sobre lo que va a pasar',d:'Quien sabe antes o tiene más capital se mueve primero.',w:[
+   {t:'Los proyectos se anuncian con años de anticipación y poca claridad',d:'La incertidumbre sobre trazados y fechas favorece a quienes pueden esperar.'}]}]},
  {t:'El suelo se usa como inversión',d:'Se compra para vender más caro, no para habitar ni para producir.',w:[
-  {t:'Pocos mecanismos que desincentiven retener suelo',d:'Si mantener un lote vacío o subutilizado cuesta poco, retenerlo resulta rentable.'}]},
- {t:'La valorización alimenta el ciclo',d:'Mientras el suelo sube, se justifica seguir comprando. Este es el bucle de refuerzo del mapa.'}],
+  {t:'Pocos mecanismos que desincentiven retener suelo',d:'Si mantener un lote vacío o subutilizado cuesta poco, retenerlo resulta rentable.',w:[
+   {t:'Los impuestos sobre el suelo no siguen su valor de mercado',d:'Una brecha grande entre avalúo y precio real hace barato retener.'}]}]},
+ {t:'La valorización alimenta el ciclo',d:'Mientras el suelo sube, se justifica seguir comprando. Es el bucle de refuerzo del mapa.',l:'C',w:[]}],
 A:[
  {t:'La producción de alimentos está fuera de la ciudad',d:'Una ciudad de este tamaño no produce lo que consume, y los alimentos llegan de otras regiones.',w:[
-  {t:'El suelo urbano productivo desaparece',d:'Cuando el suelo se urbaniza, sale de la producción de alimentos.'}]},
- {t:'El abastecimiento pasa por pocos puntos',d:'Una central mayorista concentra la entrada y la distribución, y eso expone a toda la ciudad si ese punto falla.',w:[
-  {t:'Los circuitos cortos de comercialización son limitados',d:'Hay pocos canales directos entre productores y barrios.'}]},
- {t:'Dependencia del transporte por carretera',d:'Los bloqueos o el mal estado de las vías afectan directamente la oferta.'}],
+  {t:'El suelo urbano productivo desaparece',d:'Cuando el suelo se urbaniza, sale de la producción de alimentos.',l:'D',w:[
+   {t:'El suelo vale más como solar que como terreno agrícola',d:'Mientras la diferencia de precio siga a favor de construir, el uso agrícola pierde.'}]}]},
+ {t:'El abastecimiento pasa por pocos puntos',d:'Una central mayorista concentra la entrada y la distribución, y eso expone a toda la ciudad si ese punto falla.',l:'F',w:[
+  {t:'Los circuitos cortos entre productores y barrios son limitados',d:'Hay pocos canales directos y la mayor parte del alimento pasa por intermediarios.',w:[
+   {t:'Faltan puntos de acopio y mercados locales con capacidad',d:'Sin infraestructura intermedia, los productores no pueden vender de forma directa y constante.'}]}]},
+ {t:'Dependencia del transporte por carretera',d:'Los bloqueos o el mal estado de las vías afectan directamente la oferta.',w:[
+  {t:'Las vías de entrada a la ciudad son pocas',d:'Una interrupción en un corredor afecta a buena parte del suministro.'}]}],
 E:[
- {t:'Más habitantes, más residuos',d:'El volumen crece con la población y con el consumo, incluidos los empaques de alimentos traídos de fuera.',w:[
-  {t:'La separación en la fuente no se hace de forma generalizada',d:'Mezclados, los residuos son más difíciles de aprovechar y se acumulan más rápido.'}]},
- {t:'Recolección desigual en zonas periféricas',d:'Donde la frecuencia o la cobertura es menor, aparecen puntos de acumulación.',w:[
-  {t:'Los servicios están concentrados',d:'De nuevo la causa de raíz: la oferta y el control se concentran, y las zonas alejadas quedan más desatendidas.'}]},
- {t:'Control débil en espacios sin vigilancia',d:'Lotes vacíos y esquinas sin uso se vuelven puntos críticos cuando nadie los cuida ni los fiscaliza.'}]};
-function tree(a){return '<ul class="tr">'+a.map(x=>'<li><button class="tb" aria-expanded="false"><i></i><span>'+x.t+'</span></button><div class="tw" hidden>'+(x.d?'<p class="td">'+x.d+'</p>':'')+(x.w?tree(x.w):'')+'</div></li>').join('')+'</ul>'}
+ {t:'Más habitantes, más residuos',d:'El volumen crece con la población y con el consumo, incluidos los empaques de alimentos traídos de fuera.',l:'B',w:[
+  {t:'La separación en la fuente no se hace de forma generalizada',d:'Mezclados, los residuos son más difíciles de aprovechar y se acumulan más rápido.',w:[
+   {t:'Falta de rutas de aprovechamiento accesibles para cada barrio',d:'Separar no tiene sentido si luego todo se recoge junto o no hay quién lo reciba.'}]}]},
+ {t:'Recolección desigual en zonas periféricas',d:'Donde la frecuencia o la cobertura es menor, aparecen puntos de acumulación.',l:'F',w:[
+  {t:'Los servicios y su control están concentrados',d:'Las zonas alejadas quedan más desatendidas, igual que ocurre con otros servicios.',w:[
+   {t:'Rutas y frecuencias definidas por densidad y accesibilidad vial',d:'Las calles estrechas o sin pavimentar son más difíciles de cubrir con la misma flota.'}]}]},
+ {t:'Control débil en espacios sin vigilancia',d:'Lotes vacíos y esquinas sin uso se vuelven puntos críticos cuando nadie los cuida ni los fiscaliza.',w:[
+  {t:'Espacio público sin uso ni apropiación',d:'Cuando no hay actividad, es más fácil que se use como botadero.'}]}]};
+const LVL=['Problema','Causas inmediatas','Detrás de eso','Más profundo','Raíz estructural','Raíz estructural'];
+
+const DV={root:null,sel:null,open:new Set(),n:null};
+const dvEl=document.getElementById('dv');
+function prep(x,k,par,lv){x.k=k;x.par=par;x.lv=lv;(x.w||[]).forEach((c,i)=>prep(c,k+'.'+i,x,lv+1))}
+function stat(a,lv){let c=0,m=lv;a.forEach(x=>{c++;if(x.w&&x.w.length){const q=stat(x.w,lv+1);c+=q[0];m=Math.max(m,q[1])}else m=Math.max(m,lv)});return[c,m]}
+function openDeep(n){
+ DV.n=n;DV.root={t:n.t,id:n.id,w:WHY[n.id],root:true};prep(DV.root,'r',null,0);
+ DV.open=new Set(['r']);DV.sel=DV.root;
+ dvEl.style.setProperty('--ac',PC[n.id]);dvEl.classList.add('on');P.style.display='none';ctl.autoRotate=false;tip.style.display='none';
+ dvRender(true)}
+function closeDeep(){dvEl.classList.remove('on');if(DV.n)select(DV.n)}
+const CW=250,GP=78,CH=70,U=86,PAD=28;
+function dvRender(first){
+ const open=DV.open,kids=x=>x.w&&x.w.length?x.w:[];
+ (function lay(x){if(!open.has(x.k)||!kids(x).length)x.h=1;else{x.h=0;kids(x).forEach(c=>{lay(c);x.h+=c.h})}})(DV.root);
+ const vis=[],edges=[];let maxLv=0;
+ (function pos(x,y0){vis.push(x);maxLv=Math.max(maxLv,x.lv);
+  if(!open.has(x.k)||!kids(x).length){x.y=y0+x.h/2;return}
+  let y=y0;kids(x).forEach(c=>{pos(c,y);edges.push([x,c]);y+=c.h});const k=kids(x);x.y=(k[0].y+k[k.length-1].y)/2})(DV.root,0);
+ const W=PAD*2+(maxLv+1)*(CW+GP)-GP,H=PAD*2+DV.root.h*U+30;
+ const X=x=>PAD+x.lv*(CW+GP),Y=x=>PAD+30+x.y*U-CH/2;
+ let h='<svg class="dvs" width="'+W+'" height="'+H+'">';
+ edges.forEach(([a,b])=>{const x1=X(a)+CW,y1=Y(a)+CH/2,x2=X(b),y2=Y(b)+CH/2,mx=(x1+x2)/2;h+='<path class="dve'+(a.k===DV.sel.k||b.k===DV.sel.k?' hot':'')+'" pathLength="1" d="M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2+'"/>'});
+ h+='</svg>';
+ for(let l=0;l<=maxLv;l++)h+='<div class="dvl" style="left:'+(PAD+l*(CW+GP))+'px">'+(l===0?'Problema':'Nivel '+l+' · '+LVL[l].toLowerCase())+'</div>';
+ vis.forEach((x,i)=>{const nk=kids(x).length,isO=open.has(x.k);
+  h+='<button class="dvn'+(x.root?' root':'')+(x===DV.sel?' sel':'')+(nk?'':' leaf')+'" data-k="'+x.k+'" style="left:'+X(x)+'px;top:'+Y(x)+'px;width:'+CW+'px;height:'+CH+'px;animation-delay:'+(first?i*40:0)+'ms"><span class="dvt">'+x.t+'</span>'+
+  '<span class="dvm">'+(x.root?'Problema de partida':nk?(isO?'▾ ':'▸ ')+nk+(nk===1?' causa':' causas'):(x.l?'↗ Conecta con el mapa':'Nivel más profundo'))+'</span></button>'});
+ const cv=dvEl.querySelector('.dvc');cv.style.width=W+'px';cv.style.height=H+'px';cv.innerHTML=h;
+ cv.querySelectorAll('.dvn').forEach(b=>b.onclick=()=>dvPick(b.dataset.k));
+ dvDetail();
+ const bc=[];for(let x=DV.sel;x;x=x.par)bc.unshift(x);
+ dvEl.querySelector('.dvb').innerHTML='<button class="dvback">← Volver a la red</button><div class="dvcr">'+bc.map((x,i)=>'<button data-k="'+x.k+'"'+(i===bc.length-1?' class="cur"':'')+'>'+(x.root?'<b>'+x.t+'</b>':x.t.length>34?x.t.slice(0,33)+'…':x.t)+'</button>').join('<i>›</i>')+'</div><div class="dvt2"><button class="oa">Abrir todo</button><button class="ca">Cerrar todo</button></div>';
+ dvEl.querySelector('.dvback').onclick=closeDeep;
+ dvEl.querySelectorAll('.dvcr button').forEach(b=>b.onclick=()=>dvPick(b.dataset.k,1));
+ dvEl.querySelector('.oa').onclick=()=>{(function a(x){if(kids(x).length){DV.open.add(x.k);kids(x).forEach(a)}})(DV.root);dvRender()};
+ dvEl.querySelector('.ca').onclick=()=>{DV.open=new Set(['r']);DV.sel=DV.root;dvRender()};
+ const sb=cv.querySelector('.dvn.sel');if(sb)sb.scrollIntoView({block:'nearest',inline:'nearest',behavior:first?'auto':'smooth'})}
+function dvFind(k,x=DV.root){if(x.k===k)return x;for(const c of x.w||[]){const r=dvFind(k,c);if(r)return r}return null}
+function dvPick(k,noToggle){const x=dvFind(k);if(!x)return;
+ if(!noToggle&&x.w&&x.w.length&&x===DV.sel)DV.open.has(k)?DV.open.delete(k):DV.open.add(k);
+ else if(x.w&&x.w.length)DV.open.add(k);
+ DV.sel=x;for(let q=x.par;q;q=q.par)DV.open.add(q.k);dvRender()}
+function dvDetail(){const x=DV.sel,d=dvEl.querySelector('.dvd'),nk=(x.w||[]).length;let n=0,deeper=0;
+ if(nk){const s=stat(x.w,x.lv+1);n=s[0];deeper=s[1]-x.lv}
+ d.innerHTML='<div class="dvk">'+(x.root?'Problema de partida':'Nivel '+x.lv+' · '+LVL[Math.min(x.lv,5)].toLowerCase())+'</div><h3>'+x.t+'</h3>'+
+ (x.root?'<p>Sigue las ramas para ver qué hay detrás de este problema. Cada tarjeta se abre al tocarla.</p>':'<p>'+(x.d||'')+'</p>')+
+ (x.v?'<div class="dvv"><b>Cómo comprobarlo</b>'+x.v+'</div>':'')+
+ (nk?'<div class="dvs2">Detrás de esto hay <b>'+n+'</b> '+(n===1?'causa':'causas')+' en '+deeper+(deeper===1?' nivel':' niveles')+'.</div>':(x.root?'':'<div class="dvs2">Hasta aquí llega el análisis. Para bajar más hace falta evidencia local.</div>'))+
+ (x.l?'<button class="dvlk" data-l="'+x.l+'">Explorar «'+byId[x.l].t+'» a fondo →</button>':'')+
+ (x.root?'':'<div class="dvh">Hipótesis explicativa, por verificar con fuentes.</div>');
+ const lk=d.querySelector('.dvlk');if(lk)lk.onclick=()=>openDeep(byId[lk.dataset.l])}
+addEventListener('keydown',e=>{if(e.key==='Escape'&&dvEl.classList.contains('on'))closeDeep()});
 function select(n){
  sel=n;focus(n);ctl.autoRotate=false;
  const d=D[n.id],ac=PC[n.id];
@@ -382,12 +510,12 @@ function select(n){
    if(e.k==='c'){if(e.a===n){tag='provoca';sym='→'}else{tag='es provocado por';sym='←'}}else if(e.k==='r'){tag='se refuerza con';sym='⇄'}else{tag='se complementa con';sym='┄'}
    return '<li><div class="rt"><i class="rs" style="color:'+c+'">'+sym+'</i> <span>'+tag+'</span> <b style="color:'+c+'">'+o.t+'</b></div><div class="rd">'+e.d+'</div></li>'}).join('');
   return '<div class="gh">RELACIONES EN LA RED</div><ul class="rl">'+it+'</ul>'})()+
-  '<div class="deep"><div class="gh">MÁS A FONDO · ¿QUÉ CAUSA ESTO?</div><small>Hipótesis explicativas para investigar, no datos verificados. Toca cada una para bajar un nivel.</small>'+tree(WHY[n.id])+'</div>'+
+  (()=>{const st=stat(WHY[n.id],1);return '<button class="godeep"><span><b>Ir más a fondo</b><em>¿Qué causa «'+n.t+'»? '+st[0]+' causas en '+st[1]+' niveles</em></span><i>→</i></button>'})()+
   d.g.map(kpis).join('')+cards+
   '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
   '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
   '<div class="gh">FUENTES</div><ul class="sl">'+d.s.map(i=>'<li><a href="'+SRC[i][1]+'" target="_blank" rel="noopener"><b>['+i+']</b> '+SRC[i][0]+'</a></li>').join('')+'</ul></div>';
- P.querySelectorAll('.tb').forEach(b=>b.onclick=()=>{const w=b.nextElementSibling,o=w.hidden;w.hidden=!o;b.setAttribute('aria-expanded',String(o))});
+ P.querySelector('.godeep').onclick=()=>openDeep(n);
  P.style.display='block';P.scrollTop=0;
  P.querySelector('.x').onclick=()=>{P.style.display='none';sel=null;focus(null);ctl.autoRotate=true};
 }
