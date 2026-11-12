@@ -175,6 +175,50 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 .ind b{font-weight:500;white-space:nowrap}
 .ind b em{font-style:normal;color:var(--mut);font-weight:400;margin:0 5px}
 .ind small{grid-column:1/3;color:var(--mut);font-size:11.5px}
+/* federación */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:0;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg2)}
+.stp{padding:20px 22px;border-right:1px solid var(--line);position:relative}
+.stp:last-child{border-right:0}
+.stp .n{font-size:12px;color:var(--pr);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.stp .n i{display:block;width:22px;height:22px;border:1px solid #e6d9b055;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11.5px}
+.stp h3{font-size:16px;margin-bottom:6px}
+.stp p{margin:0;font-size:13.5px;color:#b9b9c2;line-height:1.55}
+@media(max-width:700px){.stp{border-right:0;border-bottom:1px solid var(--line)}.stp:last-child{border-bottom:0}}
+.fed{border:1px solid var(--line);border-radius:12px;background:#0b0b0e;overflow:hidden}
+.fbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:14px 16px;border-bottom:1px solid var(--line)}
+.fbar label{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--mut);margin-left:auto}
+.fbar label b{color:var(--fg);font-weight:500;min-width:1.4em}
+input[type=range]{accent-color:var(--pr);width:min(190px,34vw);cursor:pointer}
+.fbody{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(280px,1fr)}
+.fbody svg{display:block;width:100%;height:auto;align-self:center}
+.fside{border-left:1px solid var(--line);padding:18px 20px;background:var(--bg2)}
+.fside h4{font-size:12px;color:var(--pr);font-weight:500;margin:20px 0 8px}
+.fside h4:first-child{margin-top:0}
+.fsem{display:flex;align-items:baseline;gap:10px}
+.fsem b{font-size:26px;font-weight:500;letter-spacing:-.02em}
+.fsem span{font-size:12.5px;color:var(--mut)}
+.fm{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px;margin-top:14px}
+.fm b{display:block;font-size:22px;font-weight:500;letter-spacing:-.01em;line-height:1.1}
+.fm span{font-size:11.5px;color:var(--mut);line-height:1.35;display:block;margin-top:3px}
+.wb{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:11.5px;margin:5px 0;color:#b9b9c2}
+.wb i{display:block;height:6px;border-radius:3px;background:#a98bd6;width:0;transition:width .7s cubic-bezier(.2,.8,.2,1)}
+.wb b{font-weight:500;text-align:right;color:var(--fg)}
+.wb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fpar{display:grid;gap:8px;font-size:12.5px;color:#b9b9c2}
+.fpar label{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+.fpar label b{font-weight:500;color:var(--fg)}
+.fpar input{grid-column:1/3;width:100%}
+.fleg{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--mut)}
+.fleg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px;box-sizing:border-box}
+#ftip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:250px;background:#0e0e11;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
+#ftip b{display:block;font-size:12.5px;margin-bottom:2px}
+.tbar{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:12.5px;margin:7px 0;color:#c1c1c9}
+.tbar i{display:block;height:7px;border-radius:4px;background:#7d9bd1;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.tbar.gap{color:var(--pr)}.tbar.gap i{background:repeating-linear-gradient(135deg,#e6d9b0 0 4px,#232328 4px 8px)}
+.tbar b{font-weight:500;text-align:right;color:var(--fg)}
+@media(max-width:900px){.fbody{grid-template-columns:1fr}.fside{border-left:0;border-top:1px solid var(--line)}.tbar{grid-template-columns:120px 1fr 30px}}
+.pn{fill:#09090b;stroke-width:1.6}
+.lk{stroke-width:1.2;fill:none}
 /* fuentes */
 .src{list-style:none;margin:0;padding:0;font-size:13px;line-height:1.55}
 .src li{margin:0 0 10px;padding-left:34px;position:relative;color:var(--mut)}
@@ -191,7 +235,7 @@ footer a{color:var(--fg)}
 <nav class="top">
   <a class="back" href="index.html">← Red de problemas</a>
   <div class="links">
-    <a href="#matriz">Respuesta</a><a href="#suelo">Uso del suelo</a><a href="#sintaxis">Sintaxis</a><a href="#acceso">Acceso</a><a href="#sistema">Sistema</a><a href="#problemas">Problema por problema</a><a href="#limites">Límites</a><a href="#fuentes">Fuentes</a>
+    <a href="#matriz">Respuesta</a><a href="#suelo">Uso del suelo</a><a href="#sintaxis">Sintaxis</a><a href="#acceso">Acceso</a><a href="#sistema">Sistema</a><a href="#federacion">Federación</a><a href="#problemas">Problema por problema</a><a href="#limites">Límites</a><a href="#fuentes">Fuentes</a>
   </div>
 </nav>
 
@@ -313,9 +357,85 @@ footer a{color:var(--fg)}
   </div>
 </div></section>
 
-<!-- ============ 6 PROBLEMA POR PROBLEMA ============ -->
+<!-- ============ 6 FEDERACIÓN ============ -->
+<section class="s" id="federacion"><div class="wrap">
+  <div class="sh rv"><div class="k">06 · Federación para la soberanía alimentaria</div>
+    <h2>Que todas las personas pasen por la vocería, y que pese más quien sabe y enseña</h2>
+    <p>Las asambleas de los barrios ya existen y hablan de temas distintos. La federación no crea otra capa de poder: les añade un tema común, la soberanía alimentaria<a class="cite" href="#src-22">[22]</a>, y una regla. La vocería de ese tema rota para que todas las personas la ejerzan alguna vez. Las voceras llegan a la junta del Distrito Bavaria, donde pesa más quien más sabe y más enseña.</p></div>
+
+  <div class="grid g2">
+    <div class="card rv"><h3>Lo que hay hoy</h3><div class="t">Juntas de Acción Comunal de Kennedy y sus comisiones de trabajo<a class="cite" href="#src-21">[21]</a></div>
+      <div class="fm" style="margin:0 0 18px"><div><b id="fx-n"></b><span>juntas registradas en Kennedy</span></div><div><b id="fx-c"></b><span>con comisiones identificadas, de <span id="fx-p"></span> temas en promedio</span></div></div>
+      <div id="fx-bars"></div>
+      <p style="margin:14px 0 0;font-size:13.5px;color:#c1c1c9">Ninguna de las ocho comisiones registradas es de alimentación o abasto. El tema falta justo donde la propuesta quiere decidir.</p></div>
+    <div class="card rv d1"><h3>Lo que se propone</h3><div class="t">Una comisión común y una vocería que rota</div>
+      <ul style="margin:0;padding-left:18px;color:#c1c1c9;font-size:14.5px;line-height:1.6">
+        <li style="margin:8px 0">Cada asamblea abre la comisión de <b>soberanía alimentaria</b>, sin dejar sus otros temas.</li>
+        <li style="margin:8px 0">Su vocería se sortea entre quienes se postulan, en dupla paritaria, con turno de seis meses.</li>
+        <li style="margin:8px 0">Nadie repite hasta que todas las personas postuladas hayan pasado. Así <b>todas llegan a ser voceras</b> alguna vez.</li>
+        <li style="margin:8px 0">Las voceras se coordinan por sector y llegan a la <b>junta del Distrito Bavaria</b>, donde se toman las decisiones.</li>
+        <li style="margin:8px 0">Allí el peso de cada voz crece con lo que sabe y con a cuántas personas enseña. Al terminar el turno vuelven a su asamblea a enseñar.</li></ul></div>
+  </div>
+
+  <div class="steps rv" style="margin-top:16px">
+    <div class="stp"><div class="n"><i>1</i>Asamblea</div><h3>Cada junta abre la comisión</h3><p>Se suma a los temas que ya trabaja. Las juntas mantienen su autonomía y su territorio.</p></div>
+    <div class="stp"><div class="n"><i>2</i>Sorteo y turno</div><h3>La vocería rota</h3><p>Dupla paritaria, seis meses, sorteo entre postulantes. Nadie repite hasta completar el ciclo.</p></div>
+    <div class="stp"><div class="n"><i>3</i>Sector</div><h3>Las voceras se coordinan</h3><p>Ocho sectores agrupan las juntas vecinas. Se coordinan entre sí en anillo, sin nadie arriba.</p></div>
+    <div class="stp"><div class="n"><i>4</i>Junta del Distrito</div><h3>Allí se decide</h3><p>Pesa más quien más sabe y más enseña, con tope. Al volver a su asamblea, enseña.</p></div>
+  </div>
+
+  <div class="fed rv" style="margin-top:16px;position:relative">
+    <div class="fbar" role="group" aria-label="Simulación">
+      <button class="pill" id="f-play" type="button">▶ Reproducir</button>
+      <button class="pill" id="f-step" type="button">Siguiente semestre</button>
+      <button class="pill" id="f-reset" type="button">Reiniciar</button>
+      <label>Semestre <b id="f-tl">0</b><input type="range" id="f-sl" min="0" max="16" value="0" aria-label="Semestre"></label>
+    </div>
+    <div class="fbody">
+      <svg id="fnet" viewBox="0 0 1000 760" role="img" aria-label="Red de las juntas de acción comunal cercanas al predio, agrupadas en ocho sectores, con la junta del Distrito Bavaria al centro"></svg>
+      <aside class="fside">
+        <div class="fsem"><b id="f-sem">Semestre 0</b><span id="f-año">año 0</span></div>
+        <div class="fm">
+          <div><b id="f-served">0 %</b><span>de las personas ya fueron voceras</span></div>
+          <div><b id="f-know">0 %</b><span>recibió formación</span></div>
+          <div><b id="f-del">0</b><span>delegadas hoy en la junta del distrito</span></div>
+          <div><b id="f-top">—</b><span>del peso lo tienen las 6 personas que más enseñan</span></div>
+        </div>
+        <h4>Peso de las delegadas con más enseñanza</h4><div id="f-bars"></div>
+        <h4>Quién ha pasado por la vocería y quién sabe</h4><div class="ch" id="f-chart"></div>
+        <h4>Supuestos (muévelos)</h4>
+        <div class="fpar">
+          <label>Personas que se postulan por junta<b id="f-nv">12</b><input type="range" id="f-n" min="6" max="24" value="12"></label>
+          <label>Personas que enseña cada formadora por semestre<b id="f-mv">1</b><input type="range" id="f-m" min="0" max="4" value="1"></label>
+          <label>Tope del peso por enseñar<b id="f-cv">4</b><input type="range" id="f-c" min="1" max="9" value="4"></label>
+        </div>
+      </aside>
+    </div>
+    <div class="fleg"><span><i style="background:#3b3b43"></i>Sin turno y sin formación</span><span><i style="background:#8cc084"></i>Con formación</span><span><i style="background:#a98bd6"></i>Formadora (enseñó a 3 o más)</span><span><i style="background:#e6d9b0"></i>Vocera este semestre</span><span><i style="background:none;border:1.5px solid #e6d9b0"></i>Ya fue vocera</span><span><i style="background:none;border:1.5px dashed #a98bd6"></i>Mesa de saberes</span></div>
+    <div id="ftip"></div>
+  </div>
+  <p class="note">Las 27 juntas son las de Kennedy a menos de 2 km del predio, con la ubicación de su sede (IDPAC). Las personas que se postulan y las enseñanzas por semestre son supuestos ilustrativos, no mediciones: la simulación muestra el mecanismo, no predice su resultado.</p>
+
+  <div class="grid g3" style="margin-top:34px">
+    <div class="card rv"><h3>Sorteo, turno y paridad</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">Entre quienes se postulan se sortean dos vocerías por junta, una mujer y un hombre. El turno dura seis meses. Con 12 postulantes por junta, <b id="fr-12"></b> hasta que todas hayan pasado; con 24 serían <b id="fr-24"></b>.</p></div>
+    <div class="card rv d1"><h3>Renovación escalonada</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">Si las dos vocerías cambian a la vez se pierde la memoria. Ostbelgien, en Bélgica, renueva por lotes su consejo elegido por sorteo: cada vez salen los ocho miembros que más tiempo llevan y entran ocho nuevos<a class="cite" href="#src-23">[23]</a>. Aquí una de las dos vocerías cambia cada trimestre. <span class="tag p">propuesta</span></p></div>
+    <div class="card rv d2"><h3>Escuela de saberes</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">Cada vocera pasa por el Instituto Bavaria Común durante su turno. Al terminar vuelve a su asamblea y enseña par a par. Sabe más quien enseña a más personas, no quien lleva más años.</p></div>
+    <div class="card rv"><h3>Tope y revocatoria</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">El peso por enseñar tiene un tope y se pierde si se deja de enseñar. Las asambleas pueden revocar el mandato de su vocera. Así el saber no se vuelve un poder permanente.</p></div>
+    <div class="card rv d1"><h3>Escala territorial y temática</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">Porto Alegre organizó su presupuesto participativo en asambleas regionales y temáticas que eligen delegados y consejeros<a class="cite" href="#src-24">[24]</a>. Esta propuesta usa la misma lógica: el territorio son las juntas; el tema, la soberanía alimentaria.</p></div>
+    <div class="card rv d2"><h3>Dónde encaja en la ley</h3><p style="margin:8px 0 0;font-size:14px;color:#c1c1c9">Las juntas se rigen por la Ley 2166 de 2021<a class="cite" href="#src-19">[19]</a> y el Decreto 1501 de 2023<a class="cite" href="#src-20">[20]</a>. Se propone empezar como comisión de trabajo con reglamento interno. Si la junta del distrito debe ser una junta nueva, una asociación de juntas u otra figura, debe definirse con el IDPAC. <span class="tag">por estudiar</span></p></div>
+  </div>
+
+  <div class="card rv" style="margin-top:16px"><h3>Qué decide la junta del Distrito Bavaria y quién pesa</h3><div class="t">Se separan dos tipos de decisión para que el saber no mande sobre lo que es de todas</div>
+    <div class="scroll"><table class="tb"><thead><tr><th>Tipo de decisión</th><th>Ejemplos</th><th>Quién pesa</th></tr></thead><tbody>
+      <tr><td><b>De mandato</b></td><td>Presupuesto, uso del suelo del predio, precios justos, qué tiendas y productores entran a las plazas</td><td>Cada asamblea tiene un voto. Las voceras llevan el mandato y no deciden solas.</td></tr>
+      <tr><td><b>Técnicas</b></td><td>Inocuidad, cadena de frío, protocolos de compostaje, criterios de calidad de la compra directa</td><td>El peso crece con lo que se sabe y con a cuántas personas se enseña, hasta el tope.</td></tr>
+      <tr><td><b>De las reglas</b></td><td>Cambios a esta federación, al tope o a los turnos</td><td>Mayoría calificada de las asambleas. <span class="tag p">propuesta</span></td></tr>
+    </tbody></table></div></div>
+</div></section>
+
+<!-- ============ 7 PROBLEMA POR PROBLEMA ============ -->
 <section class="s" id="problemas"><div class="wrap">
-  <div class="sh rv"><div class="k">06 · Problema por problema</div>
+  <div class="sh rv"><div class="k">07 · Problema por problema</div>
     <h2>Qué cambia, cuánto y cómo se mide</h2>
     <p>Para cada problema de la red se indica el mecanismo de respuesta y los indicadores de partida y de llegada. Los datos sin etiqueta salen de los análisis anteriores; las metas llevan la etiqueta <span class="tag p">propuesta</span> y las estimaciones <span class="tag">est.</span>.</p></div>
   <div id="pcs"></div>
@@ -323,7 +443,7 @@ footer a{color:var(--fg)}
 
 <!-- ============ 7 LÍMITES ============ -->
 <section class="s" id="limites"><div class="wrap">
-  <div class="sh rv"><div class="k">07 · Límites</div>
+  <div class="sh rv"><div class="k">08 · Límites</div>
     <h2>Lo que este análisis no demuestra</h2></div>
   <div class="rv"><ul class="lim">
     <li><b>Distancias en línea recta.</b> Las coberturas se miden sin considerar manzanas, ríos ni vías sin cruce. Con distancia caminada real la cobertura sería menor; el análisis debe repetirse sobre la red peatonal.</li>
@@ -333,6 +453,9 @@ footer a{color:var(--fg)}
     <li><b>Concentrar también puede dar resiliencia.</b> Hay estudios que defienden consolidar la distribución en pocos nodos para protegerla del clima<a class="cite" href="#fuentes">[17]</a>. Por eso la propuesta es una red mixta: Corabastos se reduce pero se mantiene como mayorista.</li>
     <li><b>Las metas de compra directa y de separación son supuestos</b> (45 % y 60 %). Hay que concertarlas con productores y hogares antes de tratarlas como compromisos.</li>
     <li><b>Los instrumentos jurídicos del suelo común</b> (derecho de superficie, fiducia de tierras, declaratoria de uso público) se mencionan como opciones y requieren estudio jurídico.</li>
+    <li><b>El peso por saber puede volverse tecnocracia.</b> Por eso lleva tope, se pierde si se deja de enseñar y no decide sobre presupuesto ni uso del suelo. Aun así, quien enseña más tiene más acceso al saber, y eso hay que vigilarlo.</li>
+    <li><b>La simulación de la federación usa supuestos ilustrativos</b> (12 postulantes por junta, 1 enseñanza por semestre). No se sabe cuántas personas se postularían, ni cuántas comisiones de las juntas siguen activas: los datos son registros de IDPAC.</li>
+    <li><b>La federación depende de que las juntas la adopten.</b> Cada junta es autónoma; la propuesta no puede imponerse y la forma jurídica de la junta del distrito está por definir con el IDPAC.</li>
     <li><b>La agricultura urbana aporta una fracción mínima</b> del alimento que consume Kennedy y no se presenta como respuesta a la dependencia externa.</li>
   </ul></div>
 </div></section>
@@ -367,7 +490,13 @@ const SRC=[
  [15,'Hillier, B., Penn, A., Hanson, J., Grajewski, T., Xu, J. (1993). «Natural movement: or, configuration and attraction in urban pedestrian movement». Environment and Planning B, 20(1).','https://econpapers.repec.org/RePEc:sae:envirb:v:20:y:1993:i:1:p:29-66'],
  [16,'Alcaldía de Bogotá. Obras de mejoramiento vial en los alrededores de Corabastos (más de 280.000 personas se movilizan a diario por el sector).','https://bogota.gov.co/mi-ciudad/movilidad/obras-de-mejoramiento-vial-en-alrededores-corabastos-bogota'],
  [17,'Harvard GSD. «Food System Resilience: Addressing the Vulnerability of Miami’s Food System Through Distribution Cluster Centralization».','https://www.gsd.harvard.edu/?p=2454202'],
- [18,'Ana Sofía Casas, Alejandra Gómez, Juan José Trujillo. Distrito Bavaria Común y simulador de Kennedy: datos, sintaxis y usos del suelo (repositorio del simulador, 2026).','https://anasoficasca-code.github.io/simulador/bavaria.html']
+ [18,'Ana Sofía Casas, Alejandra Gómez, Juan José Trujillo. Distrito Bavaria Común y simulador de Kennedy: datos, sintaxis y usos del suelo (repositorio del simulador, 2026).','https://anasoficasca-code.github.io/simulador/bavaria.html'],
+ [19,'Ley 2166 de 2021, por la cual se regula la acción comunal (deroga la Ley 743 de 2002).','https://www.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=184758'],
+ [20,'Decreto 1501 de 2023, reglamentario de la Ley 2166 de 2021.','https://www1.funcionpublica.gov.co/eva/gestornormativo/norma.php?i=219030'],
+ [21,'IDPAC. Organizaciones comunales de Bogotá D.C. (datos abiertos Bogotá), localidad Kennedy, y dignatarios y comisiones de trabajo activos (2022), procesados en el repositorio del simulador.','https://datosabiertos.bogota.gov.co'],
+ [22,'Declaración de Nyéléni (2007), Sélingué, Malí: soberanía alimentaria, firmada por más de 500 representantes de más de 80 países.','https://nyeleni.org/IMG/pdf/DeclNyeleni-es.pdf'],
+ [23,'Bertelsmann Stiftung. «The Ostbelgien model»: consejo ciudadano permanente de 24 personas, elegido por sorteo y renovado por lotes.','https://www.bertelsmann-stiftung.de/en/our-projects/democracy-and-participation-in-europe/shortcut-archive/shortcut-7-the-ostbelgien-model'],
+ [24,'IDEAS. Presupuesto participativo de Porto Alegre: asambleas regionales y temáticas, delegados y consejo.','https://www.ideassonline.org/public/pdf/br_27_57.pdf']
 ];
 const cite=a=>a.map(i=>'<a class="cite" href="#src-'+i+'" title="'+SRC.find(s=>s[0]===i)[1].replace(/"/g,'')+'">['+i+']</a>').join('');
 $('#src').innerHTML=SRC.map(s=>'<li id="src-'+s[0]+'"><b>['+s[0]+']</b><a href="'+s[2]+'" target="_blank" rel="noopener">'+s[1]+'</a></li>').join('');
@@ -402,11 +531,11 @@ $$('.card').forEach(c=>c.addEventListener('revealed',()=>c.querySelectorAll('.bi
 const PR=[['F','Centralización de servicios','Causa raíz del mapa','var(--F)'],['B','Crecimiento poblacional','1.037.929 habitantes','var(--B)'],['C','Valorización del suelo','+33,4 % valor catastral, 2022–2026','var(--C)'],['D','Especulación','Sin cifra directa; precios de oferta al alza','var(--D)'],['A','Dependencia de alimentos externos','Corabastos: 2,2 Mt en 2022','var(--A)'],['E','Gestión de residuos sólidos','77 puntos críticos en 2023','var(--E)']];
 const DE=['Plaza mayor en Bavaria','Malla de 19 plazas de barrio','Centro de consolidación','Corabastos reducido y compra directa','Ciclo de orgánicos','Suelo común y federación','Pasajes que abren el predio'];
 const MX={
-F:{0:[2,'Suma un nodo de servicios de escala distrital justo donde el comercio es '+V.cmdef+' menor que el promedio de Kennedy.'],1:[2,'Reparte el abasto en '+V.pl1+' puntos en vez de '+V.pl0+': la distancia mediana a una plaza baja de '+V.med0+' m a '+V.med1+' m.'],2:[1,'Lleva a Kennedy, en varios puntos, la consolidación, la selección y el frío que hoy se concentran en un solo lugar.'],3:[2,'Quita a una sola central el papel de paso obligado: lo que llega directo a las plazas no pasa por ella.'],6:[1,'Abre '+V.entr+' puertas y '+V.pkm+' km de pasajes: el interior entra a la red.']},
+F:{0:[2,'Suma un nodo de servicios de escala distrital justo donde el comercio es '+V.cmdef+' menor que el promedio de Kennedy.'],1:[2,'Reparte el abasto en '+V.pl1+' puntos en vez de '+V.pl0+': la distancia mediana a una plaza baja de '+V.med0+' m a '+V.med1+' m.'],2:[1,'Lleva a Kennedy, en varios puntos, la consolidación, la selección y el frío que hoy se concentran en un solo lugar.'],3:[2,'Quita a una sola central el papel de paso obligado: lo que llega directo a las plazas no pasa por ella.'],6:[1,'Abre '+V.entr+' puertas y '+V.pkm+' km de pasajes: el interior entra a la red.'],5:[1,'Descentraliza también la decisión: las juntas de los barrios deciden con voceras que rotan, no una sola instancia central.']},
 B:{1:[2,'Cada barrio nuevo o densificado cae en una malla que ya tiene punto de abasto: la capacidad crece por plazas, no por una central más grande.'],0:[1,'Absorbe en su propio borde la demanda de la UPZ 113 (40.320 personas).'],4:[1,'El crecimiento de los residuos orgánicos se trata en la fuente, en cada plaza.']},
 C:{5:[2,'El predio sale del mercado de suelo: sin torres y sin lotes en venta.'],6:[1,'Abre el interior sin loteo: la accesibilidad llega con espacio público, no con venta de suelo.'],1:[1,'Distribuye el acceso a servicios, que puede reducir la prima por vivir junto a los centros existentes (hipótesis por verificar).']},
 D:{5:[2,'Sin lotes ni derechos de edificación transables, no hay qué retener para vender más caro.'],0:[1,'Fija un uso comunitario y de abasto en 9.362 m² de nave, que ancla el lugar a lo público.']},
-A:{3:[2,'Compra directa a productores (meta de 45 % en el simulador) en lugar de pasar todo por una central.'],2:[2,'Con selección, frío y empaque en Kennedy, lo que viene de Cundinamarca puede llegar directo a las plazas.'],1:[1,'Puntos de venta cerca de cada hogar sostienen la demanda de producto fresco de origen cercano.'],0:[1,'Una plaza mayor con puestos de productores y comercio de alimentos.']},
+A:{3:[2,'Compra directa a productores (meta de 45 % en el simulador) en lugar de pasar todo por una central.'],2:[2,'Con selección, frío y empaque en Kennedy, lo que viene de Cundinamarca puede llegar directo a las plazas.'],1:[1,'Puntos de venta cerca de cada hogar sostienen la demanda de producto fresco de origen cercano.'],0:[1,'Una plaza mayor con puestos de productores y comercio de alimentos.'],5:[1,'La comisión de soberanía alimentaria de cada junta decide cómo se compra, se enseña y se distribuye el alimento.']},
 E:{4:[2,'Punto verde en cada plaza: 9,9 t/día separadas en la UPZ y 5 t/día de Corabastos van al compostaje de Bavaria.'],1:[1,'Cada plaza es punto de entrega de orgánicos con recolección en bicicarga.'],2:[1,'Empaques y mermas se clasifican donde se consolida la carga.']}};
 $('#mx').innerHTML='<thead><tr><th>Problema de la red</th>'+DE.map((d,i)=>'<th><span style="color:var(--pr)">D'+(i+1)+'</span><br>'+d+'</th>').join('')+'</tr></thead><tbody>'+
  PR.map(p=>'<tr data-p="'+p[0]+'" tabindex="0"><th><i style="background:'+p[3]+'"></i>'+p[1]+'<small>'+p[2]+'</small></th>'+DE.map((d,i)=>{const m=MX[p[0]][i];return '<td>'+(m?'<span class="dotm s'+m[0]+'" style="--c:'+p[3]+'"></span>':'')+'</td>'}).join('')+'</tr>').join('')+'</tbody>';
@@ -560,7 +689,7 @@ const DEC=[
   ['Cuánto','40.320 personas generan 32,3 t/día; 16,5 t son orgánicas (51 %). Con 60 % de separación y 5 t/día de Corabastos entran 14,9 t/día y salen 5,9 t/día de compost. Son unos 66 viajes diarios de 150 kg. <span class="tag p">propuesta</span>'],
   ['Por qué','Kennedy tuvo 77 puntos críticos de residuos en 2023<a class="cite" href="#src-7">[7]</a>. Intervenirlos sin cerrar el ciclo no cambia la causa.']]],
  ['Suelo común y federación','sin torres ni lotes',[
-  ['Qué es','El predio se mantiene como bien común. No se lotea ni se construyen torres. Lo gobierna una federación de asambleas de sector con vocerías que rotan y un asiento propio para el Colectivo Salvemos el Bosque Bavaria.'],
+  ['Qué es','El predio se mantiene como bien común. No se lotea ni se construyen torres. Lo gobierna la <a href="#federacion" style="color:var(--pr)">Federación para la soberanía alimentaria</a>: las juntas de los barrios con vocerías que rotan y una junta del Distrito Bavaria donde pesa más quien más sabe y enseña. El Colectivo Salvemos el Bosque Bavaria tiene un asiento propio.'],
   ['Dónde','Los 71,2 ha del predio. Cada puerta corresponde a un sector de barrios con su asamblea.'],
   ['Cuánto','El decreto vigente mantiene más de 14.000 viviendas en torres; la propuesta no suma ninguna dentro del predio. <span class="tag p">propuesta</span>'],
   ['Por qué','Con el precio del suelo en alza<a class="cite" href="#src-5">[5]</a>, un lote vacío bien conectado es objeto de retención. Los instrumentos jurídicos posibles son derecho de superficie, fiducia de tierras o declaratoria de uso público, y requieren estudio. <span class="tag">por estudiar</span>']]],
@@ -571,6 +700,112 @@ const DEC=[
   ['Por qué','Un muro de varios kilómetros deja a los barrios vecinos al fondo de la red aunque estén al lado. Los pasajes convierten el borde en entradas.']]]];
 $('#decs').innerHTML=DEC.map((d,i)=>'<details class="dec rv'+(i===0?' d1':'')+'"'+(i===0?' open':'')+'><summary><span class="no">'+(i+1)+'</span><h3>'+d[0]+'</h3><em>'+d[1]+'</em></summary><div class="bd">'+d[2].map(x=>'<div><h4>'+x[0]+'</h4><p>'+x[1]+'</p></div>').join('')+'</div></details>').join('');
 $$('#decs .rv').forEach(e=>io.observe(e));
+
+/* ---------- federación ---------- */
+{
+ const F=AN.fed,ST=F.stats,TM=ST.temas;
+ $('#fx-n').textContent=ST.n;$('#fx-c').textContent=ST.conTemas;$('#fx-p').textContent=fmt(ST.prom,1);
+ const rows=TM.map((t,i)=>[t,ST.cnt[i]]).sort((a,b)=>b[1]-a[1]);rows.push(['Alimentación y abasto',0]);
+ const mxv=Math.max(...rows.map(r=>r[1]));
+ $('#fx-bars').innerHTML=rows.map(r=>'<div class="tbar'+(r[1]===0?' gap':'')+'"><span>'+r[0]+'</span><i data-w="'+(100*r[1]/mxv)+'"></i><b>'+r[1]+'</b></div>').join('');
+ $('#fx-bars').closest('.card').addEventListener('revealed',()=>setTimeout(()=>$$('#fx-bars i').forEach(i=>i.style.width=Math.max(i.dataset.w,i.dataset.w==='0'?0:1)+'%'),250));
+ $('#fr-12').textContent='pasan '+(12/2/2)+' años';$('#fr-24').textContent=(24/2/2)+' años';
+ /* red */
+ const COLS=['#e3a64a','#8fc46a','#5fb3d9','#e0664f','#a98bd6','#e58aa8','#d9c06a','#6fc7b4'];
+ const svg=$('#fnet'),W=1000,NS='http://www.w3.org/2000/svg';
+ const J=F.jac.map(j=>({...j}));
+ const xs=J.map(j=>j.x).concat([0]),ys=J.map(j=>j.y).concat([0]),mnx=Math.min(...xs),mxx=Math.max(...xs),mny=Math.min(...ys),mxy=Math.max(...ys);
+ let sc=(W-170)/(mxx-mnx);if((mxy-mny)*sc+150>1300)sc=(1300-150)/(mxy-mny);
+ const H=Math.round((mxy-mny)*sc+150);svg.setAttribute('viewBox','0 0 '+W+' '+H);
+ const cx=85-mnx*sc,cy=75+mxy*sc;
+ J.forEach(j=>{j.px=cx+j.x*sc;j.py=cy-j.y*sc});
+ for(let it=0;it<120;it++){
+  for(let a=0;a<J.length;a++)for(let b=a+1;b<J.length;b++){const dx=J[b].px-J[a].px,dy=J[b].py-J[a].py,d=Math.hypot(dx,dy)||1,mn=64;if(d<mn){const f=(mn-d)/2/d;J[a].px-=dx*f;J[a].py-=dy*f;J[b].px+=dx*f;J[b].py+=dy*f}}
+  J.forEach(j=>{const dx=j.px-cx,dy=j.py-cy,d=Math.hypot(dx,dy)||1;if(d<150){j.px=cx+dx/d*150;j.py=cy+dy/d*150}j.px=Math.max(40,Math.min(W-40,j.px));j.py=Math.max(40,Math.min(H-40,j.py))})}
+ const SEC=[];for(let s=0;s<8;s++){const m=J.filter(j=>j.s===s);if(!m.length)continue;const mx=m.reduce((t,j)=>t+j.px,0)/m.length,my=m.reduce((t,j)=>t+j.py,0)/m.length;SEC.push({s,px:cx+(mx-cx)*.5,py:cy+(my-cy)*.5,ang:Math.atan2(my-cy,mx-cx)})}
+ const secOf={};SEC.forEach(q=>secOf[q.s]=q);
+ const A=J.length;
+ let h='';
+ // anillo entre sectores
+ const ord=[...SEC].sort((a,b)=>a.ang-b.ang);
+ h+='<path d="M'+ord.map(q=>q.px.toFixed(1)+' '+q.py.toFixed(1)).join('L')+'Z" class="lk" stroke="#3a3a42" stroke-dasharray="3 5"/>';
+ J.forEach(j=>{const q=secOf[j.s];h+='<path d="M'+j.px.toFixed(1)+' '+j.py.toFixed(1)+'L'+q.px.toFixed(1)+' '+q.py.toFixed(1)+'" class="lk" stroke="'+COLS[j.s]+'" opacity=".45"/>'});
+ SEC.forEach(q=>{h+='<path d="M'+q.px.toFixed(1)+' '+q.py.toFixed(1)+'L'+cx+' '+cy+'" class="lk" stroke="'+COLS[q.s]+'" opacity=".6" stroke-width="1.8"/>'});
+ h+='<g id="fpulse"></g>';
+ // centro
+ h+='<circle id="fmesa" cx="'+cx+'" cy="'+cy+'" r="60" fill="#a98bd614" stroke="#a98bd6" stroke-width="1.5" stroke-dasharray="4 5"/><circle cx="'+cx+'" cy="'+cy+'" r="40" class="pn" stroke="#e6d9b0"/><text x="'+cx+'" y="'+(cy-3)+'" font-size="12.5" font-weight="500" fill="#ececee" text-anchor="middle">Junta del</text><text x="'+cx+'" y="'+(cy+13)+'" font-size="12.5" font-weight="500" fill="#ececee" text-anchor="middle">Distrito Bavaria</text>';
+ SEC.forEach(q=>{h+='<g><rect x="'+(q.px-14).toFixed(1)+'" y="'+(q.py-14).toFixed(1)+'" width="28" height="28" rx="6" class="pn" stroke="'+COLS[q.s]+'"/><text x="'+q.px.toFixed(1)+'" y="'+(q.py+4).toFixed(1)+'" font-size="11.5" font-weight="600" fill="'+COLS[q.s]+'" text-anchor="middle">S'+(q.s+1)+'</text></g>'});
+ h+='<g id="fdots"></g>';
+ J.forEach((j,a)=>{h+='<g class="fj" data-a="'+a+'" style="cursor:pointer"><circle cx="'+j.px.toFixed(1)+'" cy="'+j.py.toFixed(1)+'" r="26" fill="transparent"/><circle cx="'+j.px.toFixed(1)+'" cy="'+j.py.toFixed(1)+'" r="6" class="pn" stroke="'+COLS[j.s]+'"/></g>'});
+ svg.innerHTML=h;
+ const gD=$('#fdots'),gP=$('#fpulse');
+ let dots=[];
+ function buildDots(N){gD.innerHTML='';dots=[];
+  const rr=N>16?19:N>10?16:13;
+  J.forEach((j,a)=>{const arr=[];for(let i=0;i<N;i++){const an=i/N*Math.PI*2-Math.PI/2,c=document.createElementNS(NS,'circle');c.setAttribute('cx',(j.px+Math.cos(an)*rr).toFixed(1));c.setAttribute('cy',(j.py+Math.sin(an)*rr).toFixed(1));c.setAttribute('r','2.7');c.style.transition='fill .5s, r .4s, stroke .4s';gD.appendChild(c);arr.push(c)}dots.push(arr)})}
+ /* modelo */
+ const mul=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+ function simulate(N,m,cap,T=16){
+  const rnd=mul(11),sv=[],kn=[],tg=[],cy2=[],snaps=[];
+  for(let a=0;a<A;a++){sv.push(new Uint8Array(N));kn.push(new Uint8Array(N));tg.push(new Uint16Array(N));cy2.push(new Uint8Array(N))}
+  const take=(arr)=>arr.splice((rnd()*arr.length)|0,1)[0];
+  const snap=(vo)=>{const dl=[];vo.forEach((p,a)=>p.forEach(i=>dl.push({a,i,t:tg[a][i],w:1+Math.min(tg[a][i],cap>=9?1e9:cap)})));
+   dl.sort((x,y)=>y.w-x.w);const tw=dl.reduce((t,d)=>t+d.w,0),top=dl.slice(0,6).reduce((t,d)=>t+d.w,0);
+   let ns=0,nk=0,nf=0;for(let a=0;a<A;a++)for(let i=0;i<N;i++){ns+=sv[a][i];nk+=kn[a][i];if(tg[a][i]>=3)nf++}
+   const tot=A*N;return{vo,sv:sv.map(x=>Uint8Array.from(x)),kn:kn.map(x=>Uint8Array.from(x)),tg:tg.map(x=>Uint16Array.from(x)),served:100*ns/tot,know:100*nk/tot,form:nf,top:dl.length&&tw?100*top/tw:0,del:dl.length,list:dl.slice(0,8)}};
+  snaps.push(snap(J.map(()=>[])));
+  for(let t=1;t<=T;t++){
+   const k0=kn.map(x=>Uint8Array.from(x)),vo=[];
+   for(let a=0;a<A;a++){let el=[];for(let i=0;i<N;i++)if(!cy2[a][i])el.push(i);if(el.length<2){cy2[a].fill(0);el=[];for(let i=0;i<N;i++)el.push(i)}
+    const i1=take(el),i2=take(el);[i1,i2].forEach(i=>{cy2[a][i]=1;sv[a][i]=1;kn[a][i]=1});vo.push([i1,i2])}
+   for(let a=0;a<A;a++){const te=[];for(let i=0;i<N;i++)if(k0[a][i])te.push(i);
+    te.forEach(ti=>{for(let q=0;q<m;q++){const ln=[];for(let j=0;j<N;j++)if(!kn[a][j])ln.push(j);if(!ln.length)break;kn[a][take(ln)]=1;tg[a][ti]++}})}
+   snaps.push(snap(vo))}
+  return snaps}
+ let N=12,Mm=1,Cap=4,snaps=simulate(N,Mm,Cap),T=0,timer=null;
+ const pulses=[];let pRAF=0;
+ function pulse(){const now=performance.now();let any=false;
+  for(let k=pulses.length-1;k>=0;k--){const p=pulses[k],q=(now-p.t0)/1100;if(q<0){any=true;continue}if(q>=1){p.el.remove();pulses.splice(k,1);continue}any=true;
+   const segs=p.pts,u=q*2,sI=Math.min(1,Math.floor(u)),f=u-sI,a=segs[sI],b=segs[sI+1];p.el.setAttribute('cx',(a[0]+(b[0]-a[0])*f).toFixed(1));p.el.setAttribute('cy',(a[1]+(b[1]-a[1])*f).toFixed(1));p.el.setAttribute('opacity',(q>.9?(1-q)*10:1).toFixed(2))}
+  if(any)pRAF=requestAnimationFrame(pulse);else pRAF=0}
+ function firePulses(vo){if(RED)return;J.forEach((j,a)=>{if(!vo[a]||!vo[a].length)return;const q=secOf[j.s];for(let k=0;k<2;k++){const el=document.createElementNS(NS,'circle');el.setAttribute('r','3.6');el.setAttribute('fill','#e6d9b0');el.setAttribute('opacity','0');gP.appendChild(el);pulses.push({el,t0:performance.now()+k*160,pts:[[j.px,j.py],[q.px,q.py],[cx,cy]]})}});if(!pRAF)pRAF=requestAnimationFrame(pulse)}
+ function view(){const s=snaps[T];$('#f-tl').textContent=T;$('#f-sl').value=T;$('#f-sem').textContent='Semestre '+T;$('#f-año').textContent='año '+fmt(T/2,1);
+  $('#f-served').textContent=fmt(s.served,0)+' %';$('#f-know').textContent=fmt(s.know,0)+' %';$('#f-del').textContent=s.vo.reduce((t,p)=>t+p.length,0);$('#f-top').textContent=T?fmt(s.top,0)+' %':'—';
+  dots.forEach((arr,a)=>arr.forEach((c,i)=>{const now=s.vo[a]&&s.vo[a].indexOf(i)>=0,f=s.tg[a][i]>=3,k=s.kn[a][i];
+   c.setAttribute('fill',now?'#e6d9b0':f?'#a98bd6':k?'#8cc084':'#3b3b43');c.setAttribute('r',now?'3.9':f?'3.2':'2.7');
+   c.setAttribute('stroke',s.sv[a][i]?'#e6d9b0':'none');c.setAttribute('stroke-width',now?'1.6':'1.1')}));
+  $('#fmesa').setAttribute('r',(56+Math.min(26,s.form*1.1)).toFixed(1));
+  const mxw=Math.max(2,...s.list.map(d=>d.w));
+  $('#f-bars').innerHTML=s.list.length&&T?s.list.map(d=>'<div class="wb"><span title="'+J[d.a].n+'">'+J[d.a].n+'</span><i style="width:0" data-w="'+(100*d.w/mxw)+'"></i><b>'+d.w+'</b></div>').join(''):'<p style="font-size:12.5px;color:var(--mut);margin:0">Aún no hay delegadas. Pulsa «Siguiente semestre».</p>';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>$$('#f-bars i').forEach(i=>i.style.width=i.dataset.w+'%')));
+  chart()}
+ function chart(){const Wc=300,Hc=110,l=8,r=8,t=8,b=18,X=i=>l+i*(Wc-l-r)/16,Y=v=>t+(1-v/100)*(Hc-t-b);
+  const ln=k=>snaps.map((s,i)=>(i?'L':'M')+X(i).toFixed(1)+' '+Y(s[k]).toFixed(1)).join('');
+  $('#f-chart').innerHTML='<svg viewBox="0 0 '+Wc+' '+Hc+'">'+[0,50,100].map(v=>'<line class="gl" x1="'+l+'" x2="'+(Wc-r)+'" y1="'+Y(v)+'" y2="'+Y(v)+'"/>').join('')+
+   '<path d="'+ln('know')+'" fill="none" stroke="#8cc084" stroke-width="2"/><path d="'+ln('served')+'" fill="none" stroke="#e6d9b0" stroke-width="2"/>'+
+   '<line x1="'+X(T)+'" x2="'+X(T)+'" y1="'+t+'" y2="'+(Hc-b)+'" stroke="#ececee" stroke-width="1" stroke-dasharray="2 3"/>'+
+   '<text class="ax" x="'+l+'" y="'+(Hc-4)+'">0</text><text class="ax" x="'+(Wc-r)+'" y="'+(Hc-4)+'" text-anchor="end">8 años</text></svg><div style="font-size:11px;color:var(--mut);margin-top:2px"><span style="color:#e6d9b0">■</span> ya fue vocera &nbsp; <span style="color:#8cc084">■</span> con formación</div>'}
+ function go(t,anim){T=Math.max(0,Math.min(16,t));view();if(anim&&T)firePulses(snaps[T].vo)}
+ function stop(){if(timer){clearInterval(timer);timer=null}$('#f-play').textContent='▶ Reproducir'}
+ function recompute(){snaps=simulate(N,Mm,Cap);view()}
+ buildDots(N);view();
+ $('#f-play').onclick=()=>{if(timer){stop();return}if(T>=16)go(0);$('#f-play').textContent='❚❚ Pausar';go(T+1,true);timer=setInterval(()=>{if(T>=16){stop();return}go(T+1,true)},1500)};
+ $('#f-step').onclick=()=>{stop();go(T>=16?0:T+1,true)};
+ $('#f-reset').onclick=()=>{stop();go(0)};
+ $('#f-sl').oninput=e=>{stop();go(+e.target.value,false)};
+ $('#f-n').oninput=e=>{N=+e.target.value;$('#f-nv').textContent=N;buildDots(N);recompute()};
+ $('#f-m').oninput=e=>{Mm=+e.target.value;$('#f-mv').textContent=Mm;recompute()};
+ $('#f-c').oninput=e=>{Cap=+e.target.value;$('#f-cv').textContent=Cap>=9?'sin tope':Cap;recompute()};
+ // al aparecer: arranca solo
+ $('.fed').addEventListener('revealed',()=>{if(RED)return;setTimeout(()=>{if(!timer&&T===0)$('#f-play').click()},1400)},{once:true});
+ // tooltip de juntas
+ const tip=$('#ftip'),fw=$('.fed');
+ $$('.fj').forEach(g=>{const j=J[+g.dataset.a];const show=()=>{const r=fw.getBoundingClientRect(),c=g.getBoundingClientRect();
+  tip.innerHTML='<b>Junta '+j.n+'</b>'+(j.t.length?'Comisiones: '+j.t.map(k=>TM[k]).join(', ')+'.':'Sin comisiones identificadas en el registro.')+'<br><span style="color:var(--pr)">Sin comisión de soberanía alimentaria hoy.</span>';
+  tip.style.display='block';tip.style.left=Math.min(c.left-r.left+24,r.width-270)+'px';tip.style.top=Math.max(48,c.top-r.top-10)+'px'};
+  g.addEventListener('mouseenter',show);g.addEventListener('click',show);g.addEventListener('mouseleave',()=>tip.style.display='none')});
+ fw.addEventListener('click',e=>{if(!e.target.closest('.fj'))tip.style.display='none'});
+}
 
 /* ---------- problema por problema ---------- */
 const hab0=Math.round(POP/AN.nPlazas/100)*100,hab1=Math.round(POP/(AN.nPlazas+NEW.length)/100)*100;
