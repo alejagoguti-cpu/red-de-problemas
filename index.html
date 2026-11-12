@@ -92,6 +92,36 @@ header p{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--mut)}
 .rd{font-size:12px;line-height:1.5;color:#a0a0a9;margin-top:3px;padding-left:20px}
 #tip{position:absolute;z-index:4;pointer-events:none;display:none;max-width:260px;background:#0e0e11;border:1px solid var(--line);border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.45}
 #tip b{display:block;font-size:12.5px;margin-bottom:3px}
+
+.rootbadge{display:inline-block;font-size:11.5px;padding:3px 10px;border:1px solid var(--ac);color:var(--ac);border-radius:99px;margin:4px 0 4px}
+.deep{margin-top:22px;padding:14px 16px 8px;border:1px dashed var(--ac);border-radius:8px}
+.deep .gh{margin:0 0 4px;color:var(--ac)}
+.deep small{display:block;font-size:11.5px;color:var(--mut);line-height:1.45;margin-bottom:4px}
+.tr{list-style:none;margin:0;padding:0}
+.tr .tr{margin:2px 0 6px 3px;padding-left:14px;border-left:1px solid var(--line)}
+.tb{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:flex-start;width:100%;padding:9px 0;cursor:pointer;font-size:13px;line-height:1.4;color:var(--fg)}
+.tb i{flex:none;width:8px;height:8px;border-radius:50%;border:1.5px solid var(--ac);margin-top:5px}
+.tb[aria-expanded=true] i{background:var(--ac)}
+.tb:after{content:'';margin-left:auto;flex:none;width:6px;height:6px;border:solid var(--mut);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);margin-top:4px;transition:transform .2s}
+.tb[aria-expanded=true]:after{transform:rotate(225deg);margin-top:8px}
+.tb:hover span{color:#fff}
+.tb:focus-visible{outline:1px solid var(--ac);outline-offset:2px}
+.tw{padding:0 0 4px 18px}
+.td{margin:0 0 6px;font-size:12px;line-height:1.55;color:#a0a0a9}
+/* gráficas */
+.br{margin:14px 0}
+.bh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:12.5px;margin-bottom:7px}
+.bh b{font-size:15px;font-weight:500;font-variant-numeric:tabular-nums}
+.bt{height:8px;background:#1a1a1f;border-radius:4px;overflow:hidden}
+.bt i{border-radius:4px}
+.br:not(:first-of-type) .bt i{opacity:.5}
+.cl{position:relative;display:flex;gap:10px;justify-content:space-around;align-items:flex-end;padding-top:6px}
+.cw{height:120px;max-width:46px;border-bottom:1px solid #34343b}
+.cw i{border-radius:4px 4px 0 0;opacity:.4}
+.cc:last-child .cw i{opacity:1}
+.cc b{font-size:13px}
+.cc:not(:last-child) b{color:var(--mut)}
+.gl{stroke:#26262c}.pt{fill:#09090b;stroke-width:1.8}.pt.on{fill:var(--ac)}.pt.halo{fill:var(--ac);fill-opacity:.2;stroke:none}.vt{font-size:10px;font-weight:400;fill:var(--mut)}.vt.e{font-size:12px;font-weight:600;fill:var(--fg)}.xt{font-size:10px}
 @keyframes gx{from{transform:scaleX(0)}}
 @keyframes gy{from{transform:scaleY(0)}}
 @keyframes dr{to{stroke-dashoffset:0}}
@@ -285,14 +315,61 @@ const cite=a=>(a||[]).map(i=>'<a class="cb" href="'+SRC[i][1]+'" target="_blank"
 function kpis(g){return (g.h?'<div class="gh">'+g.h+'</div>':'')+'<div class="kg">'+g.k.map(x=>'<div class="kp'+(x[4]?' calc':'')+'">'+'<b>'+x[0]+'</b><span>'+x[1]+'</span><em>'+x[2]+' '+cite(x[3])+(x[4]?' · cálculo propio':'')+'</em></div>').join('')+'</div>'}
 function bars(c){return c.i.map((r,i)=>'<div class="br"><div class="bh"><span>'+r[0]+((r[3]||r[5])?'<em>'+(r[3]||'')+(r[5]?(r[3]?' · ':'')+'cálculo propio':'')+'</em>':'')+'</span><b>'+r[2]+' '+cite(r[4]||c.src)+'</b></div><div class="bt"><i class="'+(r[5]?'calc':'')+'" style="width:'+(r[1]/c.max*100)+'%;animation-delay:'+(i*.12)+'s"></i></div></div>').join('')}
 function cols(c){const mx=c.max,b=c.base||0;return '<div class="cl">'+c.i.map((r,i)=>'<div class="cc"><b>'+r[2]+'</b><div class="cw"><i style="height:'+Math.max(4,(r[1]-b)/(mx-b)*100)+'%;animation-delay:'+(i*.1)+'s"></i></div><span>'+r[0]+' '+cite(r[3])+'</span></div>').join('')+'</div>'}
-function line(c){const W=340,H=170,l=28,r=28,t=26,bt=26,v=c.i.map(q=>q[1]),mn=Math.min(...v),mx=Math.max(...v),lo=mn-(mx-mn)*.3,hi=mx+(mx-mn)*.15;
- const X=i=>l+i*(W-l-r)/(v.length-1),Y=x=>t+(1-(x-lo)/(hi-lo))*(H-t-bt);
+function line(c){const W=360,H=190,l=14,r=18,t=34,bt=28,v=c.i.map(q=>q[1]),mn=Math.min(...v),mx=Math.max(...v),lo=mn-(mx-mn)*.25,hi=mx+(mx-mn)*.1;
+ const X=i=>l+i*(W-l-r)/(v.length-1),Y=x=>t+(1-(x-lo)/(hi-lo))*(H-t-bt),L=v.length-1;
  const P=v.map((x,i)=>[X(i),Y(x)]),d=P.map((q,i)=>(i?'L':'M')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ');
- let s='<svg viewBox="0 0 '+W+' '+H+'" class="ls"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ac);stop-opacity:.45"/><stop offset="1" style="stop-color:var(--ac);stop-opacity:0"/></linearGradient></defs>';
- for(let i=0;i<3;i++){const y=t+i*(H-t-bt)/2;s+='<line class="gl" x1="'+l+'" x2="'+(W-r)+'" y1="'+y+'" y2="'+y+'"/>'}
- s+='<path class="ar" fill="url(#lg)" d="'+d+' L'+P[P.length-1][0]+' '+(H-bt)+' L'+P[0][0]+' '+(H-bt)+'Z"/><path class="ln" pathLength="1" d="'+d+'"/>';
- P.forEach((q,i)=>{s+='<circle class="pt" cx="'+q[0]+'" cy="'+q[1]+'" r="4" style="animation-delay:'+(.5+i*.15)+'s"/><text class="vt" x="'+q[0]+'" y="'+(q[1]-9)+'" text-anchor="middle">'+c.i[i][2]+'</text><text class="xt" x="'+q[0]+'" y="'+(H-8)+'" text-anchor="middle">'+c.i[i][0]+'</text>'});
+ let s='<svg viewBox="0 0 '+W+' '+H+'" class="ls"><defs><linearGradient id="lg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--ac);stop-opacity:.22"/><stop offset="1" style="stop-color:var(--ac);stop-opacity:0"/></linearGradient></defs>';
+ for(let i=0;i<4;i++){const y=t+i*(H-t-bt)/3;s+='<line class="gl" x1="'+l+'" x2="'+(W-r)+'" y1="'+y+'" y2="'+y+'" stroke-dasharray="2 4"/>'}
+ s+='<path class="ar" fill="url(#lg)" d="'+d+' L'+P[L][0]+' '+(H-bt)+' L'+P[0][0]+' '+(H-bt)+'Z"/><path class="ln" pathLength="1" d="'+d+'"/>';
+ P.forEach((q,i)=>{const end=i===0||i===L;
+  s+=(i===L?'<circle class="pt halo" cx="'+q[0]+'" cy="'+q[1]+'" r="9" style="animation-delay:'+(.5+i*.15)+'s"/>':'')+'<circle class="pt'+(i===L?' on':'')+'" cx="'+q[0]+'" cy="'+q[1]+'" r="'+(i===L?4.5:3)+'" style="animation-delay:'+(.5+i*.15)+'s"/>'+
+  '<text class="vt'+(end?' e':'')+'" x="'+q[0]+'" y="'+(q[1]-(i===L?14:10))+'" text-anchor="'+(i===0?'start':i===L?'end':'middle')+'">'+c.i[i][2]+'</text><text class="xt" x="'+q[0]+'" y="'+(H-8)+'" text-anchor="'+(i===0?'start':i===L?'end':'middle')+'">'+c.i[i][0]+'</text>'});
  return s+'</svg>'}
+
+const WHY={
+F:[
+ {t:'La ciudad se organizó alrededor de pocos centros',d:'Bogotá creció de forma radial desde un centro histórico y unos corredores principales; los servicios se instalaron donde ya llegaba la gente.',w:[
+  {t:'Las vías y el transporte convergen en pocos nodos',d:'Las rutas conectan periferias con centros, y pocas veces periferias entre sí. Eso deja los servicios más accesibles en esos nodos.',w:[
+   {t:'El transporte masivo se diseñó para llevar gente hacia el centro',d:'Quien vive lejos de una estación o un corredor depende de desplazamientos largos para llegar a cualquier servicio.'}]},
+  {t:'Las centralidades secundarias no se consolidaron',d:'Sin subcentros con oferta propia, cada trámite, colegio o clínica de mayor nivel se busca en los mismos lugares.'}]},
+ {t:'Concentrar sale más barato para quien presta el servicio',d:'Entidades y empresas instalan sus sedes donde ya hay demanda, infraestructura y otros servicios.',w:[
+  {t:'Los equipamientos nuevos se ubican donde ya hay equipamientos',d:'Cada sede nueva refuerza el atractivo de la zona y hace más difícil justificar una sede en otra parte.'},
+  {t:'Mantener sedes dispersas cuesta más',d:'Personal, seguridad y mantenimiento se multiplican, y por eso se prefiere consolidar.'}]},
+ {t:'Las normas de uso del suelo favorecen pocas zonas',d:'Los usos comerciales, dotacionales y de servicios están permitidos con más facilidad en ciertos sectores.',w:[
+  {t:'Las zonas residenciales quedan sin servicios de escala mayor',d:'Si la norma no los permite o los hace costosos, los servicios no llegan al barrio aunque haya demanda.'}]},
+ {t:'La inversión pública sigue la demanda visible',d:'Se prioriza donde ya hay población organizada, cobertura y presión para pedir servicios.',w:[
+  {t:'Los barrios con menos oferta tienen menos peso para exigirla',d:'Así se mantiene un ciclo: poca oferta, poca presión visible y poca inversión nueva.'}]}],
+B:[
+ {t:'Llegada de población a la ciudad',d:'Bogotá concentra empleo, educación y servicios que atraen a quienes vienen de otras regiones.',w:[
+  {t:'Los servicios y el empleo están concentrados',d:'Esto conecta con la causa de raíz: la centralización también atrae habitantes hacia las zonas con más oferta.'}]},
+ {t:'Oferta de vivienda asequible en la localidad',d:'Zonas con vivienda de menor costo reciben a hogares que no pueden pagar en otras partes de la ciudad.',w:[
+  {t:'El suelo bien ubicado es caro en el resto de la ciudad',d:'Eso empuja a los hogares hacia donde pueden pagar, con frecuencia lejos de la oferta de servicios.'}]},
+ {t:'Cambios en la composición de los hogares',d:'Hogares más pequeños significan más viviendas por el mismo número de personas.'}],
+C:[
+ {t:'El suelo urbanizable es escaso',d:'Cuando ya casi no queda suelo libre, el que hay se encarece.',w:[
+  {t:'La localidad está en gran parte consolidada',d:'El crecimiento se da por densificación y cambio de uso, no por suelo nuevo.'}]},
+ {t:'Obras e infraestructura en marcha',d:'Proyectos como el metro generan expectativas sobre el valor futuro del suelo cercano.',w:[
+  {t:'Las expectativas se anticipan a las obras',d:'Los precios pueden moverse antes de que el proyecto entre en operación.'}]},
+ {t:'Cercanía a servicios',d:'Estar cerca de colegios, comercio y transporte hace al suelo más valioso. Aquí vuelve a aparecer la centralización.'}],
+D:[
+ {t:'Expectativas por infraestructura y cambios urbanos',d:'La anticipación de un proyecto atrae a quienes buscan comprar antes de que suba el precio.',w:[
+  {t:'Información desigual sobre lo que va a pasar',d:'Quien sabe antes o tiene más capital se mueve primero.'}]},
+ {t:'El suelo se usa como inversión',d:'Se compra para vender más caro, no para habitar ni para producir.',w:[
+  {t:'Pocos mecanismos que desincentiven retener suelo',d:'Si mantener un lote vacío o subutilizado cuesta poco, retenerlo resulta rentable.'}]},
+ {t:'La valorización alimenta el ciclo',d:'Mientras el suelo sube, se justifica seguir comprando. Este es el bucle de refuerzo del mapa.'}],
+A:[
+ {t:'La producción de alimentos está fuera de la ciudad',d:'Una ciudad de este tamaño no produce lo que consume, y los alimentos llegan de otras regiones.',w:[
+  {t:'El suelo urbano productivo desaparece',d:'Cuando el suelo se urbaniza, sale de la producción de alimentos.'}]},
+ {t:'El abastecimiento pasa por pocos puntos',d:'Una central mayorista concentra la entrada y la distribución, y eso expone a toda la ciudad si ese punto falla.',w:[
+  {t:'Los circuitos cortos de comercialización son limitados',d:'Hay pocos canales directos entre productores y barrios.'}]},
+ {t:'Dependencia del transporte por carretera',d:'Los bloqueos o el mal estado de las vías afectan directamente la oferta.'}],
+E:[
+ {t:'Más habitantes, más residuos',d:'El volumen crece con la población y con el consumo, incluidos los empaques de alimentos traídos de fuera.',w:[
+  {t:'La separación en la fuente no se hace de forma generalizada',d:'Mezclados, los residuos son más difíciles de aprovechar y se acumulan más rápido.'}]},
+ {t:'Recolección desigual en zonas periféricas',d:'Donde la frecuencia o la cobertura es menor, aparecen puntos de acumulación.',w:[
+  {t:'Los servicios están concentrados',d:'De nuevo la causa de raíz: la oferta y el control se concentran, y las zonas alejadas quedan más desatendidas.'}]},
+ {t:'Control débil en espacios sin vigilancia',d:'Lotes vacíos y esquinas sin uso se vuelven puntos críticos cuando nadie los cuida ni los fiscaliza.'}]};
+function tree(a){return '<ul class="tr">'+a.map(x=>'<li><button class="tb" aria-expanded="false"><i></i><span>'+x.t+'</span></button><div class="tw" hidden>'+(x.d?'<p class="td">'+x.d+'</p>':'')+(x.w?tree(x.w):'')+'</div></li>').join('')+'</ul>'}
 function select(n){
  sel=n;focus(n);ctl.autoRotate=false;
  const d=D[n.id],ac=PC[n.id];
@@ -301,14 +378,16 @@ function select(n){
  P.style.setProperty('--ac',ac);
  P.innerHTML='<div class="ph"><span class="dot">'+n.id+'</span><h2>'+n.t+'</h2><button class="x" aria-label="Cerrar">×</button></div><div class="pb">'+
   '<div class="lgs"><span class="v">Dato verificado, con fuente</span><span class="c">Cálculo propio</span><span>Relación explicativa</span></div>'+
-  (d.lead?'<p class="lead">'+d.lead+'</p>':'')+(()=>{const it=E.filter(e=>e.a===n||e.b===n).map(e=>{const o=e.a===n?e.b:e.a,c=PC[o.id];let tag,sym;
+  (d.lead?'<p class="lead">'+d.lead+'</p>':'')+(n.id==='F'?'<span class="rootbadge">Causa raíz dentro del mapa</span>':'')+(()=>{const it=E.filter(e=>e.a===n||e.b===n).map(e=>{const o=e.a===n?e.b:e.a,c=PC[o.id];let tag,sym;
    if(e.k==='c'){if(e.a===n){tag='provoca';sym='→'}else{tag='es provocado por';sym='←'}}else if(e.k==='r'){tag='se refuerza con';sym='⇄'}else{tag='se complementa con';sym='┄'}
    return '<li><div class="rt"><i class="rs" style="color:'+c+'">'+sym+'</i> <span>'+tag+'</span> <b style="color:'+c+'">'+o.t+'</b></div><div class="rd">'+e.d+'</div></li>'}).join('');
   return '<div class="gh">RELACIONES EN LA RED</div><ul class="rl">'+it+'</ul>'})()+
+  '<div class="deep"><div class="gh">MÁS A FONDO · ¿QUÉ CAUSA ESTO?</div><small>Hipótesis explicativas para investigar, no datos verificados. Toca cada una para bajar un nivel.</small>'+tree(WHY[n.id])+'</div>'+
   d.g.map(kpis).join('')+cards+
   '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
   '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
   '<div class="gh">FUENTES</div><ul class="sl">'+d.s.map(i=>'<li><a href="'+SRC[i][1]+'" target="_blank" rel="noopener"><b>['+i+']</b> '+SRC[i][0]+'</a></li>').join('')+'</ul></div>';
+ P.querySelectorAll('.tb').forEach(b=>b.onclick=()=>{const w=b.nextElementSibling,o=w.hidden;w.hidden=!o;b.setAttribute('aria-expanded',String(o))});
  P.style.display='block';P.scrollTop=0;
  P.querySelector('.x').onclick=()=>{P.style.display='none';sel=null;focus(null);ctl.autoRotate=true};
 }
