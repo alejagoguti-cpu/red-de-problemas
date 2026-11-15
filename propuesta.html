@@ -6,19 +6,27 @@
 <title>Abastecer sin centralizar · Propuesta Bavaria Común</title>
 <meta name="description" content="Cómo la propuesta Bavaria Común responde a los seis problemas de Kennedy: una malla de plazas de abasto, un centro de consolidación, un ciclo de orgánicos y suelo común, con análisis de uso del suelo y sintaxis espacial.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500&family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--bg:#09090b;--bg2:#0e0e11;--fg:#ececee;--mut:#8a8a93;--mut2:#5d5d66;--line:#232328;--line2:#34343b;--pr:#e6d9b0;
+:root{color-scheme:dark;--bg:#050607;--bg2:#080a0b;--fg:#eaefed;--mut:#a9b3af;--mut2:#7a8480;--line:rgba(214,228,222,.12);--line2:rgba(214,228,222,.22);--pr:#cfff5e;
+ --letra-titulo:'Barlow Condensed','Arial Narrow',ui-sans-serif,sans-serif;--letra-dato:'Geist Mono',ui-monospace,monospace;
  --A:#7fb08a;--B:#7d9bd1;--C:#d1a45c;--D:#c9779a;--E:#6fb5b0;--F:#a28fd0;
  --k0:#5fb3a1;--k1:#8cc084;--k2:#d9c36a;--k3:#e0935a;--k4:#c4574f}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
-body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 Geist,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
 a{color:inherit}
 h1,h2,h3,h4{margin:0;font-weight:500;letter-spacing:-.015em}
+/* visual Salento: títulos en condensada fina mayúscula, rótulos en mono, esquinas rectas */
+h1,h2,h3{font-family:var(--letra-titulo);font-weight:300;text-transform:uppercase;letter-spacing:.01em!important;line-height:.95!important;text-wrap:balance}
+h4{font-family:var(--letra-dato);font-weight:500;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.eyebrow,.k{font-family:var(--letra-dato);font-size:11px!important;letter-spacing:.14em!important;text-transform:uppercase}
+.stat b{font-family:var(--letra-titulo);font-weight:300!important;letter-spacing:.01em!important}
+::selection{background:#cfff5e;color:#050607}
+:focus-visible{outline:1px solid #cfff5e;outline-offset:3px}
 .wrap{max-width:1120px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
 #bar{position:fixed;left:0;top:0;height:2px;width:100%;background:var(--pr);transform-origin:0 50%;transform:scaleX(0);z-index:60}
-nav.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;padding:14px clamp(18px,4vw,40px);background:#09090bd9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-size:13px}
+nav.top{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;padding:14px clamp(18px,4vw,40px);background:#050607d9;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);font-size:13px}
 nav.top .back{color:var(--mut);text-decoration:none;white-space:nowrap}
 nav.top .back:hover{color:var(--fg)}
 nav.top .links{display:flex;gap:18px;overflow-x:auto;scrollbar-width:none;margin-left:auto}
@@ -32,7 +40,7 @@ nav.top .links a:hover,nav.top .links a.on{color:var(--fg);border-color:var(--pr
 /* hero */
 .hero{position:relative;min-height:92vh;display:flex;align-items:flex-end;overflow:hidden;border-bottom:1px solid var(--line)}
 #hmap{position:absolute;inset:0;width:100%;height:100%;opacity:.9}
-.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#09090b00 30%,#09090b 96%),radial-gradient(ellipse at 20% 80%,#09090bcc,transparent 60%);pointer-events:none}
+.hero:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#05060700 30%,#050607 96%),radial-gradient(ellipse at 20% 80%,#050607cc,transparent 60%);pointer-events:none}
 .hero .wrap{position:relative;z-index:2;padding-bottom:9vh;padding-top:120px}
 .eyebrow{font-size:12.5px;color:var(--pr);letter-spacing:.02em;margin-bottom:14px}
 .hero h1{font-size:clamp(42px,8vw,98px);line-height:.98;letter-spacing:-.035em;max-width:11ch}
@@ -48,7 +56,7 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 .sh h2{font-size:clamp(28px,4.4vw,46px);line-height:1.08}
 .sh p{color:#c1c1c9;margin:16px 0 0;font-size:16.5px}
 .tag{display:inline-block;font-size:10.5px;color:var(--mut);border:1px solid var(--line2);border-radius:99px;padding:0 7px;margin-left:6px;white-space:nowrap;vertical-align:1px;line-height:1.6}
-.tag.p{color:var(--pr);border-color:#e6d9b055}
+.tag.p{color:var(--pr);border-color:#cfff5e55}
 .cite{color:var(--pr);text-decoration:none;font-size:10.5px;font-weight:600;vertical-align:super;line-height:0;margin-left:1px}
 .cite:hover{text-decoration:underline}
 .grid{display:grid;gap:16px}
@@ -110,19 +118,19 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 .mapw{position:relative;border:1px solid var(--line);border-radius:12px;background:#0b0b0e;overflow:hidden}
 #map{display:block;width:100%;height:auto}
 .mctl{position:absolute;left:14px;top:14px;display:flex;gap:6px;z-index:2;flex-wrap:wrap}
-.pill{font:500 12.5px Inter,system-ui,sans-serif;color:var(--fg);background:#0e0e11e6;border:1px solid var(--line2);border-radius:99px;padding:7px 14px;cursor:pointer;transition:all .2s}
+.pill{font:500 12.5px Geist,system-ui,sans-serif;color:var(--fg);background:#080a0be6;border:1px solid var(--line2);border-radius:99px;padding:7px 14px;cursor:pointer;transition:all .2s}
 .pill:hover{border-color:var(--pr)}
 .pill[aria-pressed=true]{background:var(--pr);color:#111;border-color:var(--pr)}
-.mleg{position:absolute;left:14px;bottom:14px;background:#0e0e11e6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--mut);z-index:2}
+.mleg{position:absolute;left:14px;bottom:14px;background:#080a0be6;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:11.5px;color:var(--mut);z-index:2}
 .mleg div{display:flex;align-items:center;gap:8px;margin:3px 0;color:var(--fg)}
 .mleg i{width:10px;height:10px;border-radius:50%;flex:none}
 .mleg i.sq{border-radius:2px}
 .mleg i.ring{background:none;border:1.5px solid var(--fg)}
 .mleg b{display:block;font-weight:500;font-size:11px;color:var(--mut);margin-bottom:4px}
-.mread{position:absolute;right:14px;top:14px;text-align:right;background:#0e0e11e6;border:1px solid var(--line);border-radius:8px;padding:10px 14px;z-index:2}
+.mread{position:absolute;right:14px;top:14px;text-align:right;background:#080a0be6;border:1px solid var(--line);border-radius:8px;padding:10px 14px;z-index:2}
 .mread b{display:block;font-size:30px;font-weight:500;letter-spacing:-.02em;line-height:1.1}
 .mread span{font-size:11.5px;color:var(--mut);display:block;max-width:150px;line-height:1.35}
-#mtip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:240px;background:#0e0e11;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
+#mtip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:240px;background:#080a0b;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
 #mtip b{display:block;font-size:12.5px;margin-bottom:2px}
 .dd{transition:fill .9s ease}
 .k0{fill:var(--k0)}.k1{fill:var(--k1)}.k2{fill:var(--k2)}.k3{fill:var(--k3)}.k4{fill:var(--k4)}
@@ -132,7 +140,7 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 @media(max-width:700px){.mread{top:auto;bottom:14px}.mleg{display:none}.mctl{left:10px;top:10px}.pill{padding:6px 11px;font-size:12px}}
 /* gráficas svg */
 .ch svg{display:block;width:100%;height:auto;overflow:visible}
-.ch text{font-family:Inter,system-ui,sans-serif}
+.ch text{font-family:Geist,system-ui,sans-serif}
 .ch .ax{fill:var(--mut);font-size:11px}
 .ch .gl{stroke:var(--line);stroke-width:1}
 .draw{fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
@@ -141,7 +149,7 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 /* flujo */
 .flow{border:1px solid var(--line);border-radius:12px;background:var(--bg2);padding:clamp(14px,3vw,28px);overflow-x:auto}
 .flow svg{display:block;min-width:900px;width:100%;height:auto}
-.flow text{font-family:Inter,system-ui,sans-serif;fill:var(--fg)}
+.flow text{font-family:Geist,system-ui,sans-serif;fill:var(--fg)}
 .fl{fill:none;stroke-width:1.6;stroke-dasharray:3 7;animation:fd 1.1s linear infinite}
 @keyframes fd{to{stroke-dashoffset:-20}}
 .fn rect{fill:#111114;stroke:var(--line2);rx:8;transition:stroke .2s}
@@ -150,7 +158,7 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 .dec{border:1px solid var(--line);border-radius:10px;background:var(--bg2);margin-bottom:12px;overflow:hidden}
 .dec summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:16px;padding:18px 22px}
 .dec summary::-webkit-details-marker{display:none}
-.dec .no{font-size:12px;color:var(--pr);border:1px solid #e6d9b055;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none}
+.dec .no{font-size:12px;color:var(--pr);border:1px solid #cfff5e55;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none}
 .dec summary h3{font-size:18px;flex:1}
 .dec summary em{font-style:normal;font-size:12.5px;color:var(--mut)}
 .dec summary:after{content:'';flex:none;width:8px;height:8px;border:solid var(--mut);border-width:0 1.5px 1.5px 0;transform:rotate(45deg);transition:transform .3s;margin:-4px 4px 0 0}
@@ -180,7 +188,7 @@ section.s{padding:clamp(64px,10vw,120px) 0;border-bottom:1px solid var(--line)}
 .stp{padding:20px 22px;border-right:1px solid var(--line);position:relative}
 .stp:last-child{border-right:0}
 .stp .n{font-size:12px;color:var(--pr);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.stp .n i{display:block;width:22px;height:22px;border:1px solid #e6d9b055;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11.5px}
+.stp .n i{display:block;width:22px;height:22px;border:1px solid #cfff5e55;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:11.5px}
 .stp h3{font-size:16px;margin-bottom:6px}
 .stp p{margin:0;font-size:13.5px;color:#b9b9c2;line-height:1.55}
 @media(max-width:700px){.stp{border-right:0;border-bottom:1px solid var(--line)}.stp:last-child{border-bottom:0}}
@@ -210,14 +218,17 @@ input[type=range]{accent-color:var(--pr);width:min(190px,34vw);cursor:pointer}
 .fpar input{grid-column:1/3;width:100%}
 .fleg{display:flex;flex-wrap:wrap;gap:6px 18px;padding:12px 16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--mut)}
 .fleg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px;box-sizing:border-box}
-#ftip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:250px;background:#0e0e11;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
+#ftip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:250px;background:#080a0b;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
 #ftip b{display:block;font-size:12.5px;margin-bottom:2px}
 .tbar{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:12.5px;margin:7px 0;color:#c1c1c9}
 .tbar i{display:block;height:7px;border-radius:4px;background:#7d9bd1;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+/* esquinas rectas como Salento (los puntos siguen redondos) */
+.card,.mx,.mapw,.flow,.dec,.pc,.steps,.fed,.mleg,.mread,#mtip,#ftip,.pill,.tag,.stk,.bar1,.bar1 i,.wb i,.tbar i,.gtrack{border-radius:0!important}
+.pill:hover,.pill.on{border-color:#cfff5e;color:#cfff5e}
 .tbar.gap{color:var(--pr)}.tbar.gap i{background:repeating-linear-gradient(135deg,#e6d9b0 0 4px,#232328 4px 8px)}
 .tbar b{font-weight:500;text-align:right;color:var(--fg)}
 @media(max-width:900px){.fbody{grid-template-columns:1fr}.fside{border-left:0;border-top:1px solid var(--line)}.tbar{grid-template-columns:120px 1fr 30px}}
-.pn{fill:#09090b;stroke-width:1.6}
+.pn{fill:#050607;stroke-width:1.6}
 .lk{stroke-width:1.2;fill:none}
 /* fuentes */
 .src{list-style:none;margin:0;padding:0;font-size:13px;line-height:1.55}
@@ -580,9 +591,9 @@ function distTo(P,pts){let m=1e9;for(const q of pts){const d=Math.hypot(P[0]-q[0
  h+=poly(M.coraPoly,'#c4574f44','#c4574f')+poly(M.bavPoly,'#e6d9b033','#e6d9b0');
  const cx=px(M.cora[0]),cy=py(M.cora[1]);h+='<text x="'+(cx-8)+'" y="'+(cy+26)+'" fill="#e08a82" font-size="13" font-weight="500" text-anchor="end">Corabastos</text>';
  h+='<text x="'+(px(M.bav[0])+26)+'" y="'+(py(M.bav[1])+4)+'" fill="#e6d9b0" font-size="13" font-weight="500">Predio Bavaria</text>';
- h+='<g id="newc">'+NEW.map((s,i)=>'<circle class="nc" data-i="'+i+'" cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="'+(500*S).toFixed(1)+'" fill="#e6d9b00d" stroke="#e6d9b055" stroke-width=".8" style="opacity:0;transition:opacity .8s"/>').join('')+'</g>';
- h+=M.plazas.map(p=>'<circle cx="'+px(p[0]).toFixed(1)+'" cy="'+py(p[1]).toFixed(1)+'" r="5" fill="#09090b" stroke="#ececee" stroke-width="1.6"/>').join('');
- h+='<g id="newp">'+NEW.map((s,i)=>'<g class="newg" data-i="'+i+'" style="opacity:0" tabindex="0"><circle class="pulse" cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="6" fill="none" stroke="#e6d9b0" stroke-width="1.4"/><circle cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="'+(i<8?6.5:5)+'" fill="#e6d9b0" stroke="#09090b" stroke-width="1.5"/><text x="'+px(s.x).toFixed(1)+'" y="'+(py(s.y)+3.6).toFixed(1)+'" font-size="9" font-weight="600" text-anchor="middle" fill="#111" pointer-events="none">'+(i+1)+'</text></g>').join('')+'</g>';
+ h+='<g id="newc">'+NEW.map((s,i)=>'<circle class="nc" data-i="'+i+'" cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="'+(500*S).toFixed(1)+'" fill="#e6d9b00d" stroke="#cfff5e55" stroke-width=".8" style="opacity:0;transition:opacity .8s"/>').join('')+'</g>';
+ h+=M.plazas.map(p=>'<circle cx="'+px(p[0]).toFixed(1)+'" cy="'+py(p[1]).toFixed(1)+'" r="5" fill="#050607" stroke="#ececee" stroke-width="1.6"/>').join('');
+ h+='<g id="newp">'+NEW.map((s,i)=>'<g class="newg" data-i="'+i+'" style="opacity:0" tabindex="0"><circle class="pulse" cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="6" fill="none" stroke="#e6d9b0" stroke-width="1.4"/><circle cx="'+px(s.x).toFixed(1)+'" cy="'+py(s.y).toFixed(1)+'" r="'+(i<8?6.5:5)+'" fill="#e6d9b0" stroke="#050607" stroke-width="1.5"/><text x="'+px(s.x).toFixed(1)+'" y="'+(py(s.y)+3.6).toFixed(1)+'" font-size="9" font-weight="600" text-anchor="middle" fill="#111" pointer-events="none">'+(i+1)+'</text></g>').join('')+'</g>';
  svg.innerHTML=h;
  const dots=$$('#dots circle');dots.forEach((d,i)=>{d.style.transitionDelay=(Math.random()*500|0)+'ms'});
  const pts0=M.plazas;
@@ -614,7 +625,7 @@ function distTo(P,pts){let m=1e9;for(const q of pts){const d=Math.hypot(P[0]-q[0
  h+='<path d="M'+M.coraPoly.map(p=>px(p[0]).toFixed(1)+' '+py(p[1]).toFixed(1)).join('L')+'Z" fill="#c4574f33" stroke="#c4574f" stroke-width="1.2"/>';
  const c=[px(M.cora[0]),py(M.cora[1])];
  NEW.forEach((s,i)=>{const x=px(s.x),y=py(s.y);h+='<path d="M'+c[0]+' '+c[1]+' Q'+((c[0]+x)/2)+' '+((c[1]+y)/2-60)+' '+x+' '+y+'" fill="none" stroke="#e6d9b0" stroke-width=".7" stroke-dasharray="1" stroke-dashoffset="1" pathLength="1" style="animation:dr 1.6s '+(1.2+i*.12).toFixed(2)+'s ease forwards;opacity:.35"/><circle cx="'+x+'" cy="'+y+'" r="4" fill="#e6d9b0" style="opacity:0;animation:fi .6s '+(1.4+i*.12).toFixed(2)+'s forwards"/>'});
- h+=M.plazas.map(p=>'<circle cx="'+px(p[0]).toFixed(1)+'" cy="'+py(p[1]).toFixed(1)+'" r="4" fill="#09090b" stroke="#ececee" stroke-width="1.3"/>').join('');
+ h+=M.plazas.map(p=>'<circle cx="'+px(p[0]).toFixed(1)+'" cy="'+py(p[1]).toFixed(1)+'" r="4" fill="#050607" stroke="#ececee" stroke-width="1.3"/>').join('');
  svg.innerHTML='<style>@keyframes fi{to{opacity:1}}</style>'+h}
 
 /* ---------- gráficas ---------- */
@@ -627,7 +638,7 @@ function distTo(P,pts){let m=1e9;for(const q of pts){const d=Math.hypot(P[0]-q[0
  s+='<text class="ax" x="'+((l+W-r)/2)+'" y="'+(H-0)+'" text-anchor="middle">plazas nuevas</text>';
  const path=(a,mx)=>a.map((v,i)=>(i?'L':'M')+X(i,mx).toFixed(1)+' '+Y(v).toFixed(1)).join('');
  s+='<path class="draw" pathLength="1" d="'+path(c5,25)+'" stroke="#e6d9b0" stroke-width="2.2"/><path class="draw" pathLength="1" d="'+path(c8,25)+'" stroke="#8cc084" stroke-width="2.2" style="animation-delay:.3s"/>';
- [[8,c5,'#e6d9b0'],[19,c5,'#e6d9b0'],[8,c8,'#8cc084']].forEach(([i,c,col])=>{s+='<circle cx="'+X(i,25)+'" cy="'+Y(c[i])+'" r="4.5" fill="#09090b" stroke="'+col+'" stroke-width="2"/><text x="'+(X(i,25)+8)+'" y="'+(Y(c[i])+(c===c8?-8:16))+'" font-size="11" font-weight="600" fill="'+col+'">'+fmt(c[i],0)+' %</text>'});
+ [[8,c5,'#e6d9b0'],[19,c5,'#e6d9b0'],[8,c8,'#8cc084']].forEach(([i,c,col])=>{s+='<circle cx="'+X(i,25)+'" cy="'+Y(c[i])+'" r="4.5" fill="#050607" stroke="'+col+'" stroke-width="2"/><text x="'+(X(i,25)+8)+'" y="'+(Y(c[i])+(c===c8?-8:16))+'" font-size="11" font-weight="600" fill="'+col+'">'+fmt(c[i],0)+' %</text>'});
  s+='<g font-size="11.5" transform="translate(190,168)"><rect x="'+(l+10)+'" y="'+(t+6)+'" width="9" height="9" fill="#e6d9b0" rx="2"/><text x="'+(l+25)+'" y="'+(t+14)+'" fill="#ececee">Alcance de 500 m (6 a 7 minutos a pie)</text><rect x="'+(l+10)+'" y="'+(t+24)+'" width="9" height="9" fill="#8cc084" rx="2"/><text x="'+(l+25)+'" y="'+(t+32)+'" fill="#ececee">Alcance de 800 m (10 minutos a pie)</text></g></svg>';
  $('#curva').innerHTML=s+'<p style="margin:12px 0 0;font-size:13.5px;color:var(--mut)">A 800 m bastan 8 plazas para llegar al '+fmt(c8[8],0)+' %. A 500 m se necesitan 19 para el '+fmt(c5[19],0)+' %, y a partir de ahí cada plaza suma menos de un punto.</p>';
  $('#curva').closest('.card').addEventListener('revealed',()=>$$('#curva .draw').forEach(p=>p.classList.add('on')))
