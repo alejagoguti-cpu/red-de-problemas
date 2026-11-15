@@ -453,6 +453,148 @@ header h1{font-size:2rem!important}
 .hcard p{max-width:min(520px,100%)!important;text-shadow:0 0 8px #050607,0 0 18px #050607}
 .hcard small,.hcard .down{text-shadow:0 0 8px #050607}
 @media(max-width:600px){#story .hero{padding:0 16px 12vh!important}.hcard p{font-size:14px}}
+/* ============ GUION ANIMADO: gráficos de cada problema ============ */
+#story .card.esc{max-width:460px}
+#story .card.esc h2{margin:8px 0 4px!important}
+#story .tag{margin:0 0 14px!important;font:500 10.5px var(--letra-dato)!important;letter-spacing:.14em;text-transform:uppercase;color:var(--c)!important}
+#story .src{margin-top:14px;font:400 9.5px var(--letra-dato);letter-spacing:.08em;color:var(--tinta-4);text-transform:uppercase}
+#story .hip{display:inline-flex;align-items:center;gap:5px;margin-left:8px;padding:2px 7px;border:1px dashed var(--c);color:var(--c);font-weight:500}
+#story .hip .ico{width:11px;height:11px}
+.ico{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vertical-align:-4px}
+#story .frase{display:block;margin:14px 0 0!important;padding-left:27px;text-indent:-27px;font-size:13.5px!important;line-height:1.45!important;color:var(--tinta-2)!important}
+#story .frase .ico{color:var(--c);margin-right:9px;text-indent:0}
+#story em{font-style:normal;color:var(--tinta-1)}
+#story .big{font:300 30px/1 var(--letra-titulo);color:var(--tinta-1)}
+/* entrada escalonada de todo lo que hay en la tarjeta */
+#story .card.esc>*{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .8s cubic-bezier(.16,1,.3,1)}
+#story .card.esc.vis>*{opacity:1;transform:none}
+#story .card.esc.vis>*:nth-child(2){transition-delay:.08s}#story .card.esc.vis>*:nth-child(3){transition-delay:.16s}#story .card.esc.vis>*:nth-child(4){transition-delay:.3s}#story .card.esc.vis>*:nth-child(5){transition-delay:.5s}#story .card.esc.vis>*:nth-child(6){transition-delay:.7s}#story .card.esc.vis>*:nth-child(7){transition-delay:.9s}
+/* portada: los seis problemas */
+.seis{display:flex;justify-content:center;flex-wrap:wrap;gap:10px 18px;margin:26px auto 0;max-width:640px}
+.seis span{display:flex;flex-direction:column;align-items:center;gap:7px;width:84px;color:var(--c);opacity:0;transform:translateY(14px) scale(.8);transition:opacity .7s var(--d,0s),transform .9s cubic-bezier(.16,1,.3,1) var(--d,0s)}
+.vis .seis span{opacity:1;transform:none}
+.seis .ico{width:30px;height:30px;padding:9px;box-sizing:content-box;border:1px solid color-mix(in srgb,var(--c) 55%,transparent);border-radius:50%;background:color-mix(in srgb,var(--c) 12%,transparent)}
+@media(prefers-reduced-motion:no-preference){.vis .seis .ico{animation:flota 3.2s ease-in-out infinite;animation-delay:var(--d)}}
+@keyframes flota{50%{transform:translateY(-5px)}}
+.seis em{font:500 9px/1.25 var(--letra-dato);letter-spacing:.06em;text-transform:uppercase;text-align:center;color:var(--tinta-2)}
+.seis.mini{justify-content:flex-start;gap:10px;margin:14px 0 0}.seis.mini span{width:auto}.seis.mini .ico{width:20px;height:20px;padding:8px}
+.hcard .q{font-size:17px!important;color:var(--tinta-1)!important}.hcard .q b{font-family:var(--letra-dato);font-weight:500}
+/* centralización */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.duo figure{margin:0;padding:12px;border:1px solid var(--linea);background:var(--campo-1)}
+.duo figcaption{margin-top:8px;font-size:11.5px;line-height:1.4;color:var(--tinta-2)}
+.dona{position:relative}.dona svg{width:100%;max-width:120px;display:block;margin:0 auto;transform:rotate(-90deg)}
+.dona circle{fill:none;stroke:var(--linea-media);stroke-width:11}.dona .arc{stroke:var(--c);stroke-dasharray:0 100;transition:stroke-dasharray 1.8s cubic-bezier(.16,1,.3,1) .3s}
+.vis .dona .arc{stroke-dasharray:var(--p) 100}
+.dona .dc{position:absolute;left:0;right:0;top:12px;height:min(120px,calc((100% - 24px)));display:flex;align-items:center;justify-content:center;gap:1px;pointer-events:none}.dona .dc i{font:300 18px/1 var(--letra-titulo);color:var(--tinta-1)}
+.dona .dc b{font:300 34px/1 var(--letra-titulo);color:var(--tinta-1)}.dona .dc i{font-style:normal;font-size:.6em}
+.mini4{display:flex;gap:6px;margin-top:8px}.mini4 span{color:var(--tinta-4);transition:color .5s var(--d)}.vis .mini4 span.on{color:var(--c)}
+.pg{display:grid;grid-template-columns:repeat(10,1fr);gap:1px}
+.pg i{color:var(--tinta-4);opacity:.55;transition:color .3s var(--d),opacity .3s var(--d)}.pg .ico{width:100%;height:auto;stroke-width:2.2}
+.vis .pg i.on{color:var(--c);opacity:1}
+.chip{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:3px 8px;border:1px solid var(--linea-media);font:500 9.5px var(--letra-dato);letter-spacing:.06em;color:var(--tinta-2);text-transform:uppercase}
+.chip .ico{width:12px;height:12px;color:var(--c)}
+.escala{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:12px;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--c) 50%,transparent)}
+.escala span{display:flex;align-items:center;gap:7px;font:500 10.5px var(--letra-dato);letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-1)}.escala span .ico{color:var(--c)}
+.escala i{font-style:normal;font:300 26px/1 var(--letra-titulo);color:var(--c)}
+@media(prefers-reduced-motion:no-preference){.vis .escala span:first-child .ico{animation:rueda 1.6s ease-in-out infinite}}
+@keyframes rueda{50%{transform:translateX(4px)}}
+/* crecimiento */
+.hab{display:flex;align-items:center;gap:12px}.hab>.ico{width:34px;height:34px;color:var(--c)}
+.hab b{display:block;font:300 38px/1 var(--letra-titulo);color:var(--tinta-1)}.hab span{font-size:11.5px;color:var(--tinta-2)}
+.ha2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin-top:14px}
+.ha2 figure{margin:0}.ha2 figcaption{margin-top:6px;font-size:11px;color:var(--tinta-2)}.ha2 figcaption b{font:300 22px/1 var(--letra-titulo);color:var(--tinta-1)}.ha2 figcaption em{display:block;font:500 9.5px var(--letra-dato);letter-spacing:.1em;text-transform:uppercase;color:var(--c)}
+.hect{position:relative;aspect-ratio:1;border:1px solid var(--linea-media);background:var(--campo-1)}
+.hect::after{content:'1 ha';position:absolute;right:4px;bottom:3px;font:500 8.5px var(--letra-dato);color:var(--tinta-4)}
+.hect i{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--c);opacity:0;transform:scale(0);transition:opacity .3s var(--d),transform .5s cubic-bezier(.16,1,.3,1) var(--d)}
+.vis .hect i{opacity:.9;transform:none}
+.ha2 .x{font:300 30px/1 var(--letra-titulo);color:var(--c)}
+/* valorización */
+.val{display:flex;align-items:flex-end;gap:18px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:96px}
+.bar{position:relative;width:34px;height:100%;display:flex;align-items:flex-end}.bar i{display:block;width:100%;height:0;background:color-mix(in srgb,var(--c) 45%,transparent);transition:height 1.4s cubic-bezier(.16,1,.3,1) .3s}
+.bar.b2 i{background:var(--c);transition-delay:.7s}.vis .bar i{height:var(--h)}
+.bar span{position:absolute;bottom:-16px;left:0;right:0;text-align:center;font:500 9px var(--letra-dato);color:var(--tinta-3)}
+.vnum span{display:block;margin-top:4px;font-size:11.5px;color:var(--tinta-2)}.vnum small{display:flex;align-items:center;gap:4px;margin-top:6px;font:500 9.5px var(--letra-dato);color:var(--tinta-3);text-transform:uppercase}.vnum small .ico{width:13px;height:13px;color:var(--c)}
+.usos{position:relative;display:flex;justify-content:space-between;margin-top:26px;padding:22px 6px 8px;border:1px solid var(--linea)}
+.usos>span{display:flex;flex-direction:column;align-items:center;gap:4px;font:500 9.5px var(--letra-dato);text-transform:uppercase;color:var(--tinta-2)}
+.usos>span .ico{width:26px;height:26px;color:var(--tinta-1)}
+.usos .u1 .ico{color:#a3b845}
+@media(prefers-reduced-motion:no-preference){.vis .usos>span{animation:empuja 2.4s ease-in-out infinite}.vis .usos .u2{animation-delay:.8s}.vis .usos .u3{animation-delay:1.6s}}
+@keyframes empuja{0%,100%{transform:none}50%{transform:translateY(-6px) scale(1.08)}}
+.lote{position:absolute;top:-9px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:0 8px;background:var(--campo-1);font:500 9.5px var(--letra-dato);letter-spacing:.08em;text-transform:uppercase;color:var(--c);white-space:nowrap}
+.lote .ico{width:12px;height:12px}
+/* especulación */
+.cadena{display:flex;align-items:center;justify-content:space-between;gap:4px}
+.cadena span{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font:500 9.5px/1.3 var(--letra-dato);letter-spacing:.04em;text-transform:uppercase;color:var(--tinta-2)}
+.cadena span .ico{width:28px;height:28px;padding:9px;box-sizing:content-box;border:1px solid color-mix(in srgb,var(--c) 50%,transparent);border-radius:50%;color:var(--c)}
+.cadena>i{color:var(--tinta-4)}.cadena>i .ico{width:16px;height:16px}
+@media(prefers-reduced-motion:no-preference){.vis .cadena>i .ico{animation:avanza 1.4s ease-in-out infinite}.vis .cadena>i:nth-of-type(2) .ico{animation-delay:.35s}}
+@keyframes avanza{0%{transform:translateX(-4px);opacity:.3}50%{opacity:1;color:var(--c)}100%{transform:translateX(4px);opacity:.3}}
+.tend{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px}
+.tend .t{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--linea);font:500 10.5px var(--letra-dato);letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2)}
+.tend b{font:300 22px/1 var(--letra-titulo)}.tend .sube b{color:var(--c)}.tend .igual b{color:var(--tinta-3)}
+@media(prefers-reduced-motion:no-preference){.vis .tend .sube b{animation:sube 1.6s ease-in-out infinite}}
+@keyframes sube{50%{transform:translateY(-4px)}}
+/* dependencia */
+.ton{display:flex;align-items:center;gap:12px}.ton b{font:300 54px/1 var(--letra-titulo);color:var(--tinta-1)}.ton span{font-size:11.5px;line-height:1.35;color:var(--tinta-2)}
+.flujo{position:relative;height:150px;margin-top:10px}
+.flujo svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.flujo .fl{fill:none;stroke:var(--c);stroke-width:var(--w);stroke-linecap:round;opacity:.85;stroke-dasharray:6 10;stroke-dashoffset:0;vector-effect:non-scaling-stroke}
+@media(prefers-reduced-motion:no-preference){.vis .flujo .fl{animation:corre 1.1s linear infinite;animation-delay:var(--d)}}
+@keyframes corre{to{stroke-dashoffset:-16}}
+.flujo .nodo{fill:var(--c)}
+.flujo .rg{position:absolute;left:0;display:flex;flex-direction:column;font:500 9.5px/1.2 var(--letra-dato);letter-spacing:.04em;text-transform:uppercase;color:var(--tinta-2);transform:translateY(-50%)}.flujo .rg b{color:var(--tinta-1);font-weight:500}.flujo .rg span{color:var(--c)}
+.flujo .cora{position:absolute;right:0;top:calc(50% + 14px);font:500 9.5px var(--letra-dato);text-transform:uppercase;color:var(--c)}
+/* residuos */
+.goteo .ico{position:relative}
+@media(prefers-reduced-motion:no-preference){.vis .goteo .ico{animation:gotea 1.6s ease-in infinite}}
+@keyframes gotea{0%{transform:translateY(-4px);opacity:0}30%{opacity:1}100%{transform:translateY(6px);opacity:0}}
+.mp{margin-top:14px;padding:10px 12px;border:1px solid var(--linea)}
+.mpt{display:flex;align-items:center;gap:6px;font:500 9.5px var(--letra-dato);letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2)}.mpt .ico{width:13px;height:13px;color:var(--c)}
+.pesos{display:flex;align-items:flex-end;gap:16px;height:90px;margin-top:10px}
+.ps{position:relative;flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end}
+.ps i{display:block;height:0;background:color-mix(in srgb,var(--c) 55%,transparent);transition:height 1.3s cubic-bezier(.16,1,.3,1) .4s}.ps.p2 i{background:var(--c);transition-delay:.7s}
+.vis .ps i{height:var(--h)}
+.ps>b{position:absolute;left:8px;bottom:6px;font:300 24px/1 var(--letra-titulo);color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.6)}.ps>b b{font:inherit;color:inherit}.ps span{position:absolute;left:8px;top:2px;font:500 9px var(--letra-dato);text-transform:uppercase;color:var(--tinta-2)}
+/* la red: relaciones y criterios */
+.rel3,.crit{display:grid;gap:8px;margin:14px 0 0;padding:0;list-style:none}
+.rel3>div,.crit li{display:grid;gap:4px;padding:10px 12px;border:1px solid var(--linea);border-left:2px solid var(--c);opacity:0;transform:translateX(-12px);transition:opacity .6s var(--d),transform .8s cubic-bezier(.16,1,.3,1) var(--d)}
+.vis .rel3>div,.vis .crit li{opacity:1;transform:none}
+.rel3 b{display:flex;align-items:center;gap:8px;font:500 11px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--c)}
+.rel3 span{font-size:12.5px;line-height:1.45;color:var(--tinta-2)}.rel3 span i{font-style:normal;color:var(--c)}
+.crit{counter-reset:cr}.crit li{grid-template-columns:auto 1fr;align-items:center;gap:10px;font-size:13px;line-height:1.4;color:var(--tinta-2)}
+.crit li .ico{width:22px;height:22px;color:var(--c)}
+.tres{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.tres span{display:flex;align-items:center;gap:5px;padding:4px 8px;border:1px solid var(--linea-media);font:500 9.5px var(--letra-dato);text-transform:uppercase;color:var(--tinta-2)}.tres .ico{width:13px;height:13px;color:var(--c)}
+#story a.ir{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 16px;background:#cfff5e;color:#050607;text-decoration:none;font:500 11px var(--letra-dato);letter-spacing:.14em;text-transform:uppercase;pointer-events:auto}
+#story a.ir .ico{width:16px;height:16px}
+/* en la red, las dos tarjetas del guion siguen visibles (encima de la red interactiva) */
+body:not(.historia) #story .rd .card{opacity:1!important;visibility:visible!important}
+body:not(.historia) #story .rd .card:not(.vis){opacity:0!important}
+body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #lbls small{opacity:0!important;visibility:hidden}
+#story .rd{min-height:120vh}
+/* etiquetas de UPZ y regiones sobre el mapa */
+.etq{position:fixed;left:0;top:0;z-index:2;pointer-events:none;opacity:0;transform:translate(-50%,-50%);text-align:center;white-space:nowrap;text-shadow:0 0 8px #050607,0 0 16px #050607}
+.etq b{display:block;font:400 15px/1.05 var(--letra-titulo);letter-spacing:.04em;text-transform:uppercase;color:#eaefed}
+.etq span{display:block;margin-top:2px;font:500 9.5px var(--letra-dato);letter-spacing:.1em;text-transform:uppercase;color:var(--c,#cfff5e)}
+.etq.grande b{font-size:22px}
+@media(max-width:700px){
+ #story .card.esc{padding:16px 16px 14px!important}
+ #story .card.esc h2{font-size:1.75rem!important}#story .tag{margin-bottom:10px!important}
+ .duo{gap:8px}.duo figure{padding:8px}.dona svg{max-width:78px}.dona .dc{height:78px;top:8px}.dona .dc b{font-size:22px}.mini4{display:none}
+ .duo figcaption{font-size:10.5px;margin-top:6px}.pg{gap:0}.chip{font-size:8.5px;padding:2px 6px}
+ .escala{padding:8px 10px;margin-top:10px}.escala span{font-size:9px;gap:5px}.escala i{font-size:20px}
+ .hab b{font-size:30px}.ha2{grid-template-columns:1fr auto 1fr;gap:6px;margin-top:10px}.hect{max-width:120px}
+ .bars{height:72px}.usos{padding:18px 4px 6px}.usos>span .ico{width:22px;height:22px}
+ .cadena span .ico{width:22px;height:22px;padding:7px}.tend{margin-top:10px}.tend .t{padding:6px 8px;font-size:9.5px}
+ .pesos{height:70px}.rel3>div,.crit li{padding:8px 10px}
+ #story .frase{font-size:12.5px!important;margin-top:10px!important}
+ .hito{white-space:normal!important;max-width:150px}.hito small{font-size:8px!important}
+ .seis span{width:30%}
+ .flujo{height:120px}.ton b{font-size:42px}.usos{margin-top:20px}
+ .seis{gap:8px 6px}.seis span{width:72px}.seis .ico{width:24px;height:24px;padding:8px}
+ .etq b{font-size:12px}.etq.grande b{font-size:16px}
+}
 /* barra de desplazamiento como en Salento */
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--campo-0)}::-webkit-scrollbar-thumb{background:var(--tinta-4);border:3px solid var(--campo-0);border-radius:6px}
 </style>
@@ -613,7 +755,7 @@ function tick(t){
  const dvOn=dvEl.classList.contains('on');
  N.forEach((n,i)=>{n.cs+=(n.ts-n.cs)*k;n.co+=(n.to-n.co)*k;const q=cl((el-250-i*140)/950),br=1+.012*Math.sin(t*.0015+i*1.7),S=n.r*2.35*n.cs*ebk(q)*br;
   n.sp.scale.set(S,S,1);n.sp.material.opacity=n.co*cl(q*2.2);
-  if(sel===n&&!dvOn){const ph=((t+i*250)%2200)/2200,rs=n.r*2.35*(1+.6*ph);n.rp.scale.set(rs,rs,1);n.rp.material.opacity=.6*(1-ph)*(1-ph)}else n.rp.material.opacity=0});
+  if((sel===n||H.guionF===n)&&!dvOn){const ph=((t+i*250)%2200)/2200,rs=n.r*2.35*(1+.6*ph);n.rp.scale.set(rs,rs,1);n.rp.material.opacity=.6*(1-ph)*(1-ph)}else n.rp.material.opacity=0});
  E.forEach((e,i)=>{e.co+=(e.ot-e.co)*k;const o=e.co*eoc(cl((el-1000-i*110)/800));e.mats.forEach(x=>x.opacity=o)});
  if(tw){const q=eio(cl((performance.now()-tw.t0)/tw.d));ctl.target.lerpVectors(tw.fT,tw.tT,q);cam.position.lerpVectors(tw.fP,tw.tP,q);if(q>=1){tw=null;if(!sel&&!dvOn)ctl.autoRotate=MOV.on}}
  else if(el<2800&&!sel){const q=eoc(cl(el/2800));cam.position.setLength(baseLen*(1+(1-q)*.85))}
@@ -966,19 +1108,93 @@ document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;
 const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 // ---------- secciones del recorrido ----------
 const ST=document.createElement('main');ST.id='story';
-{const hab=(D.B&&D.B.g[0].k[1]&&D.B.g[0].k[1][0])||'1.037.929',ha=(D.B&&D.B.g[0].k[2]&&D.B.g[0].k[2][0])||'3.858,97 ha';
- let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p>'+esc2(hab)+' habitantes en '+esc2(ha)+'. Un territorio y seis problemas que se alimentan entre sí.</p><div class="down">Desliza para recorrerlo<i></i></div></div>'+
+/* ---------- guion: cada problema con gráficos animados, íconos y frases cortas ----------
+   Cifras del guion del proyecto (DANE-SIPSA 2025, SDP 2022, proyecciones de población 2024, Catastro 2022-2026, UNAL 2015-2023,
+   Corabastos 2022 y 2025, operativo de marzo de 2026). Densidades por UPZ: upz.json. */
+const ICO={ // íconos de línea (24×24)
+ mercado:'<path d="M3 9h18l-1.5-5h-15z"/><path d="M4 9v11h16V9"/><path d="M9 20v-6h6v6"/><path d="M3 9c0 1.7 1.3 2.5 2.25 2.5S7.5 10.7 7.5 9c0 1.7 1.3 2.5 2.25 2.5S12 10.7 12 9c0 1.7 1.3 2.5 2.25 2.5S16.5 10.7 16.5 9c0 1.7 1.3 2.5 2.25 2.5S21 10.7 21 9"/>',
+ camion:'<path d="M2 6h11v10H2z"/><path d="M13 9h4l4 4v3h-8"/><circle cx="6" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/>',
+ persona:'<circle cx="12" cy="7" r="3.2"/><path d="M5 21c0-4 3.1-7 7-7s7 3 7 7"/>',
+ casa:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+ brote:'<path d="M12 21v-9"/><path d="M12 12c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-3-2.5-5-6-5 0 3 2.5 5 6 5z"/><path d="M5 21h14"/>',
+ edificio:'<path d="M5 21V4h9v17"/><path d="M14 9h5v12"/><path d="M8 8h3M8 12h3M8 16h3"/><path d="M3 21h18"/>',
+ tienda:'<path d="M4 10v10h16V10"/><path d="M2 10l2-6h16l2 6z"/><path d="M9 20v-5h6v5"/>',
+ tren:'<rect x="5" y="3" width="14" height="13" rx="3"/><path d="M5 10h14"/><circle cx="9" cy="13" r=".8"/><circle cx="15" cy="13" r=".8"/><path d="M8 20l2-4M16 20l-2-4"/>',
+ precio:'<path d="M12 3v18"/><path d="M16.5 7.5C16 6 14.3 5 12 5S7.5 6.2 7.5 8.2c0 4.6 9 2.6 9 7.4 0 2-2 3.4-4.5 3.4S7.6 18 7 16.3"/>',
+ reloj:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/>',
+ gota:'<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+ basura:'<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/>',
+ pin:'<path d="M12 21s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>',
+ lupa:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>',
+ red:'<circle cx="5" cy="12" r="2.4"/><circle cx="19" cy="5" r="2.4"/><circle cx="19" cy="19" r="2.4"/><circle cx="12" cy="12" r="2.4"/><path d="M7.4 12h2.2M14.1 10.8l3-4M14.1 13.2l3 4"/>',
+ suelo:'<path d="M3 17l5-4 4 3 4-5 5 4"/><path d="M3 21h18"/><path d="M12 3v6M9 6h6"/>',
+ caja:'<path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/>',
+ flecha:'<path d="M4 12h15"/><path d="M14 6l6 6-6 6"/>',
+ ojo:'<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'};
+const ic=(k,c)=>'<svg class="ico'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+ICO[k]+'</svg>';
+const num=(v,dec,suf)=>'<b class="cnt" data-v="'+v+'" data-d="'+(dec||0)+'">0</b>'+(suf||'');
+const ESC={
+ F:{tag:'Servicios = abastecimiento de alimentos',
+  g:()=>'<div class="duo"><figure class="dona" style="--p:97"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50"/><circle class="arc" cx="60" cy="60" r="50" pathLength="100"/></svg><div class="dc">'+num(97,0,'<i>%</i>')+'</div>'+
+   '<figcaption>del volumen mayorista que mide el DANE entra por <em>Corabastos + Las Flores</em></figcaption><div class="mini4">'+[1,1,0,0].map((o,i)=>'<span class="'+(o?'on':'')+'" style="--d:'+(i*.15)+'s">'+ic('mercado')+'</span>').join('')+'</div></figure>'+
+   '<figure class="gente"><div class="pg" data-n="100" data-on="28"></div><figcaption><b class="big">'+num(28,0,'%')+'</b> tiene una plaza a <em>≤ 15 min</em> · suroccidente</figcaption><span class="chip">'+ic('pin')+'Tintal: la menor proximidad</span></figure></div>'+
+   '<div class="escala"><span>'+ic('camion')+'Abastecer Bogotá</span><i>≠</i><span>'+ic('casa')+'Abastecer el barrio</span></div>',
+  src:'DANE-SIPSA 2025 · SDP 2022'},
+ B:{tag:'No es cuánta gente: es dónde vive',
+  g:()=>'<div class="hab">'+ic('persona')+'<div>'+num(1037929)+'<span>habitantes en 2024 · casi igual que en 2023</span></div></div>'+
+   '<div class="ha2"><figure><div class="hect" data-n="435"></div><figcaption><b>'+num(435)+'</b> hab/ha<em>Patio Bonito</em></figcaption></figure><div class="x">×4,8</div>'+
+   '<figure><div class="hect" data-n="90"></div><figcaption><b>'+num(90)+'</b> hab/ha<em>Tintal Norte</em></figcaption></figure></div>'+
+   '<p class="frase">'+ic('tienda')+'Misma distancia a un punto de venta, <em>muy distinta presión</em>.</p>',
+  src:'Proyecciones de población 2024 por UPZ'},
+ C:{tag:'El suelo vale más: ¿qué uso se queda?',
+  g:()=>'<div class="val"><div class="bars"><div class="bar" style="--h:75%"><i></i><span>2022</span></div><div class="bar b2" style="--h:100%"><i></i><span>2026</span></div></div>'+
+   '<div class="vnum"><b class="big">+'+num(33.4,1,'%')+'</b><span>valor catastral total de Kennedy</span><small>'+ic('suelo')+'suelo + '+ic('edificio')+'construcciones</small></div></div>'+
+   '<div class="usos"><span class="u1">'+ic('brote')+'cultivo</span><span class="u2">'+ic('casa')+'vivienda</span><span class="u3">'+ic('tienda')+'comercio</span><div class="lote">'+ic('pin')+'Carvajal Osorio</div></div>'+
+   '<p class="frase">¿Qué uso permanece y <em>quién puede seguir usando ese suelo</em>?</p>',
+  src:'Catastro Bogotá 2022–2026'},
+ D:{tag:'Hipótesis',hip:1,
+  g:()=>'<div class="cadena"><span>'+ic('tren')+'nueva estación</span><i>'+ic('flecha')+'</i><span>'+ic('ojo')+'expectativa</span><i>'+ic('flecha')+'</i><span>'+ic('precio')+'precio esperado</span></div>'+
+   '<div class="tend"><div class="t sube"><b>↑</b>Américas</div><div class="t sube"><b>↑</b>Carvajal</div><div class="t igual"><b>→</b>Patio Bonito</div><div class="t igual"><b>→</b>Corabastos</div></div>'+
+   '<p class="frase">'+ic('lupa')+'Por comprobar: ¿suben los arriendos y <em>salen los comerciantes</em>?</p>',
+  src:'Universidad Nacional · manzanas residenciales 2015–2023'},
+ A:{tag:'Se cultiva lejos, llega a un solo punto',
+  g:()=>'<div class="ton">'+num(2.2,1)+'<span>millones de toneladas<br>llegaron a Corabastos (2022)</span></div>'+
+   '<div class="flujo"><svg viewBox="0 0 300 150" preserveAspectRatio="none">'+
+   [['Cundinamarca',1016649,22],['Boyacá',341000,58],['Meta',273000,92],['otras',567469,126]].map(([n,t,y],i)=>{const w=Math.max(2,t/1016649*16);return '<path class="fl" style="--w:'+w.toFixed(1)+';--d:'+(i*.25)+'s" d="M70 '+y+' C170 '+y+' 190 75 268 75"/>'}).join('')+
+   '<circle class="nodo" cx="270" cy="75" r="9"/></svg>'+
+   [['Cundinamarca','+1 M t'],['Boyacá','341 mil t'],['Meta','273 mil t'],['otras regiones','']].map(([n,t],i)=>'<div class="rg" style="top:'+(10+i*24)+'%"><b>'+n+'</b><span>'+t+'</span></div>').join('')+'<div class="cora">Corabastos</div></div>'+
+   '<p class="frase">'+ic('camion')+'Una cosecha o una vía cortada <em>se siente aquí</em>.</p>',
+  src:'Corabastos, ingresos 2022'},
+ E:{tag:'Cuando se demora el retiro, se descompone',
+  g:()=>'<div class="cadena"><span>'+ic('reloj')+'+48 h acumulados</span><i>'+ic('flecha')+'</i><span>'+ic('basura')+'materia orgánica</span><i>'+ic('flecha')+'</i><span class="goteo">'+ic('gota')+'lixiviados</span></div>'+
+   '<div class="mp"><div class="mpt">'+ic('pin')+'María Paz · Dg 38 Sur × Tv 81 · marzo 2026</div><div class="pesos"><div class="ps" style="--h:28%"><i></i><b>'+num(5)+' t</b><span>orgánicos</span></div><div class="ps p2" style="--h:100%"><i></i><b>'+num(18)+' t</b><span>voluminosos</span></div></div></div>'+
+   '<p class="frase">Saber <em>qué</em> se recoge, <em>dónde</em> y <em>cuánto tiempo</em> queda ahí.</p>',
+  src:'Informe de gestión Corabastos 2025 · operativo marzo 2026'}};
+{let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p class="q">¿Cómo llega la comida a <b>1.037.929</b> personas?</p>'+
+  '<div class="seis">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(.15+i*.12)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'<em>'+esc2(byId[id].t)+'</em></span>').join('')+'</div>'+
+  '<div class="down">Empezamos por los mercados<i></i></div></div>'+
   '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>244.147</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · Google · Microsoft</div></section>';
- ORDEN.forEach((id,i)=>{const n=byId[id],d=D[id],k=(d.g&&d.g[0]?d.g[0].k:[]).slice(0,3);
-  h+='<section class="pb" data-k="'+id+'"><article class="card" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06 · Problema</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(d.lead?'<p>'+d.lead+'</p>':'')+
-   '<div class="donde"><h3>Dónde ocurre en Kennedy</h3><ul data-donde="'+id+'"></ul></div>'+
-   (k.length?'<div class="kps">'+k.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span>'+(x[2]?'<em>'+x[2]+'</em>':'')+'</div>').join('')+'</div>':'')+'</article></section>'});
- h+='<section class="ex"><article class="card ancha"><div class="num">Todo está conectado</div><h2>Ningún problema ocurre solo</h2><p>Los seis aparecen juntos sobre el territorio. Sigue bajando: la ciudad se desarma y cada punto viaja a su problema hasta formar la red de causas.</p></article></section><section class="fin" aria-label="La red de problemas"></section>';
+ ORDEN.forEach((id,i)=>{const n=byId[id],e=ESC[id];
+  h+='<section class="pb" data-k="'+id+'"><article class="card esc" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06'+(e.hip?' <b class="hip">'+ic('lupa')+'Hipótesis</b>':'')+'</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(e.hip?'':'<p class="tag">'+e.tag+'</p>')+e.g()+'<div class="src">'+e.src+'</div></article></section>'});
+ h+='<section class="ex"><article class="card ancha esc"><div class="num">Todo está conectado</div><h2>Ningún problema ocurre solo</h2><div class="seis mini">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(i*.1)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'</span>').join('')+'</div><p class="frase">'+ic('red')+'Sigue bajando: la ciudad se desarma y <em>cada punto viaja a su problema</em>.</p></article></section>'+
+  '<section class="rd"><article class="card esc red1" style="--c:'+PC.F+'"><div class="num">La red · causas de fondo</div><h2>Centralización: el nodo con más conexiones</h2>'+
+  '<div class="rel3"><div style="--d:0s"><b>'+ic('camion')+'Territorial</b><span>producción dispersa <i>→</i> recepción concentrada <i>→</i> acceso desigual</span></div>'+
+  '<div style="--d:.2s"><b>'+ic('suelo')+'Suelo</b><span>producir, vender y construir piden espacio <i>→</i> ¿quién permanece?</span></div>'+
+  '<div style="--d:.4s"><b>'+ic('caja')+'Operativa</b><span>recibir <i>→</i> clasificar <i>→</i> retirar a tiempo</span></div></div></article></section>'+
+  '<section class="rd"><article class="card esc red2" style="--c:#cfff5e"><div class="num">De la red a la propuesta</div><h2>Tres criterios</h2>'+
+  '<ol class="crit"><li style="--d:0s">'+ic('tienda')+'<span>Acercar puntos de venta <em>donde falta acceso</em></span></li><li style="--d:.2s">'+ic('casa')+'<span>Condiciones de <em>permanencia</em> para productores y comerciantes</span></li><li style="--d:.4s">'+ic('reloj')+'<span>Menos tiempo de <em>residuos acumulados</em></span></li></ol>'+
+  '<div class="tres"><span>'+ic('casa')+'qué va a los barrios</span><span>'+ic('caja')+'qué se comparte en Bavaria</span><span>'+ic('ojo')+'cómo medimos</span></div><a class="ir" href="propuesta.html">Ver la propuesta '+ic('flecha')+'</a></article></section>'+
+  '<section class="fin" aria-label="La red de problemas"></section>';
  ST.innerHTML=h;document.body.appendChild(ST)}
+// gráficos que se arman al entrar en pantalla: personas, hectáreas y contadores
+ST.querySelectorAll('.pg').forEach(g=>{const n=+g.dataset.n,on=+g.dataset.on;let s='';for(let i=0;i<n;i++)s+='<i class="'+(i<on?'on':'')+'" style="--d:'+(i*.012).toFixed(3)+'s">'+ic('persona')+'</i>';g.innerHTML=s});
+ST.querySelectorAll('.hect').forEach(g=>{const n=+g.dataset.n;let s='';for(let i=0;i<n;i++){s+='<i style="left:'+(Math.random()*96+2).toFixed(1)+'%;top:'+(Math.random()*96+2).toFixed(1)+'%;--d:'+(Math.random()*1.4).toFixed(2)+'s"></i>'}g.innerHTML=s});
+function contar(card){card.querySelectorAll('.cnt').forEach(b=>{const v=+b.dataset.v,d=+b.dataset.d,t0=performance.now(),T=MOV.on?1600:1;
+ const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);b.textContent=(v*e).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});if(q<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
 const volver=document.createElement('button');volver.id='volver';volver.type='button';volver.textContent='↑ Volver al recorrido';document.body.appendChild(volver);
 volver.onclick=()=>scrollTo({top:0,behavior:MOV.on?'smooth':'auto'});
 const SECS=[...ST.querySelectorAll('section')];
-const vis=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('vis',e.isIntersecting)),{threshold:.35});ST.querySelectorAll('.card,.hcard').forEach(c=>vis.observe(c));
+const vis=new IntersectionObserver(es=>es.forEach(e=>{const was=e.target.classList.contains('vis');e.target.classList.toggle('vis',e.isIntersecting);if(e.isIntersecting&&!was)contar(e.target)}),{threshold:.3});ST.querySelectorAll('.card,.hcard').forEach(c=>vis.observe(c));
 function etapa(){const vh=innerHeight,y=scrollY+vh*.5;let i=0;for(let k=0;k<SECS.length;k++)if(SECS[k].offsetTop<=y)i=k;const s=SECS[i];return i+Math.max(0,Math.min(1,(y-s.offsetTop)/s.offsetHeight))}
 // ---------- la ciudad (nube de puntos) ----------
 fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
@@ -1054,7 +1270,15 @@ fetch('lugares.json').then(r=>r.json()).then(L=>{
   fragmentShader:`varying vec3 vC;varying float vA;void main(){gl_FragColor=vec4(vC*vA,vA);}`}));
  bm.frustumCulled=false;bm.renderOrder=6;scene.add(bm);H.M=MU;conectografia(L);
  // letreros de los lugares clave (Corabastos, Bavaria)
- H.hitos.forEach(h=>{const d=document.createElement('div');d.className='hito';d.style.setProperty('--c',PC[h.id]);d.innerHTML='<b>'+esc2(h.n)+'</b><small>'+esc2(h.sub)+'</small>';document.body.appendChild(d);h.el=d});
+ H.hitos.forEach(h=>{const d=document.createElement('div');d.className='hito';d.style.setProperty('--c',PC[h.id]);d.innerHTML='<b>'+esc2(h.n)+'</b><small>'+esc2(h.sub)+'</small>';document.body.appendChild(d);h.el=d;
+  // pulso en el suelo bajo cada lugar clave
+  const rm=new THREE.MeshBasicMaterial({color:new THREE.Color(PC[h.id]),transparent:true,opacity:0,depthTest:false,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending});
+  h.ring=new THREE.Mesh(new THREE.RingGeometry(.82,1,64),rm);h.ring.rotation.x=-Math.PI/2;h.ring.position.set(h.p.x,1.5,h.p.z);h.ring.renderOrder=9;scene.add(h.ring)});
+ // centralización: anillos de 15 min a pie (~1.125 m a 4,5 km/h) alrededor de las plazas distritales
+ H.anillos=[];(L.F.hitos||[]).filter(h=>/^Plaza/.test(h.n)).forEach(h=>{const r=1125*ESCALA,c=new THREE.Vector3(h.p[0]*ESCALA,1.2,h.p[1]*ESCALA);
+  const mk=(a,b,op)=>{const m=new THREE.Mesh(new THREE.RingGeometry(a,b,160),new THREE.MeshBasicMaterial({color:new THREE.Color(PC.F),transparent:true,opacity:0,depthTest:false,depthWrite:false,side:THREE.DoubleSide}));m.rotation.x=-Math.PI/2;m.position.copy(c);m.renderOrder=4;m.userData.op=op;scene.add(m);return m};
+  H.anillos.push({borde:mk(r-2.2,r,.9),area:mk(0,r,.07),pulso:mk(r*.96,r,.7),r});
+  H.etqs.push(etiqueta('15 min a pie','zona de una plaza',PC.F,new THREE.Vector3(c.x,2,c.z+r),1,false))});
 }).catch(e=>console.warn('lugares:',e));
 // ---------- edificios sólidos (edif.bin, tools/edif_build.js): una caja orientada por edificio, oscura con aristas de luz ----------
 H.B={u:{uA:{value:0},uRise:{value:0},uDim:{value:1}},mesh:null};
@@ -1084,7 +1308,7 @@ fetch('destacados.json').then(r=>r.json()).then(DS=>{
  const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);const n=DS.b.length,cat=new Float32Array(n),col=new Float32Array(n*3);
  const mat=new THREE.ShaderMaterial({uniforms:H.D.u,transparent:true,depthWrite:false,extensions:{derivatives:true},
   vertexShader:`attribute float aCat;attribute vec3 aCol;uniform float uA,uF;varying vec2 vUv;varying float vY,vS;varying vec3 vC;
-   void main(){vUv=uv;vY=position.y;vC=aCol;vS=aCat<.5?max(uA,uF):uF;vec4 p=instanceMatrix*vec4(position,1.);if(vS<.01)p.y=-1e4;gl_Position=projectionMatrix*modelViewMatrix*p;}`,
+   void main(){vUv=uv;vY=position.y;vC=aCol;vS=aCat<.5?max(uA,uF):0.;vec4 p=instanceMatrix*vec4(position,1.);if(vS<.01)p.y=-1e4;gl_Position=projectionMatrix*modelViewMatrix*p;}`,
   fragmentShader:`uniform float uT;varying vec2 vUv;varying float vY,vS;varying vec3 vC;
    void main(){vec2 e=min(vUv,1.-vUv);vec2 f=fwidth(vUv)*1.4;float edge=1.-min(smoothstep(0.,f.x,e.x),smoothstep(0.,f.y,e.y));
     float pulso=.85+.15*sin(uT*2.4);vec3 c=mix(vC*.55,vC*1.25+.12,edge)*pulso;gl_FragColor=vec4(c,vS*(.82+.18*edge));}`});
@@ -1097,10 +1321,68 @@ fetch('destacados.json').then(r=>r.json()).then(DS=>{
  const lg=new THREE.BufferGeometry();lg.setAttribute('position',new THREE.Float32BufferAttribute(P,3));lg.setAttribute('aCat',new THREE.Float32BufferAttribute(A,1));
  const lc=new Float32Array(A.length*3);A.forEach((k,i)=>lc.set([cols[k].r,cols[k].g,cols[k].b],i*3));lg.setAttribute('aCol',new THREE.BufferAttribute(lc,3));
  const ln=new THREE.LineSegments(lg,new THREE.ShaderMaterial({uniforms:H.D.u,transparent:true,depthWrite:false,depthTest:false,
-  vertexShader:`attribute float aCat;attribute vec3 aCol;uniform float uA,uF;varying float vS;varying vec3 vC;void main(){vC=aCol;vS=aCat<.5?max(uA,uF):uF;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  vertexShader:`attribute float aCat;attribute vec3 aCol;uniform float uA,uF;varying float vS;varying vec3 vC;void main(){vC=aCol;vS=aCat<.5?max(uA,uF):0.;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
   fragmentShader:`varying float vS;varying vec3 vC;void main(){gl_FragColor=vec4(vC,vS*.9);}`}));
  ln.frustumCulled=false;ln.renderOrder=8;scene.add(ln);H.D.lin=ln;
 }).catch(e=>console.warn('destacados:',e));
+// ---------- capas del guion: etiquetas, UPZ (upz.json) y llegada de alimentos desde las regiones ----------
+H.etqs=[];
+function etiqueta(n,sub,col,p,stage,grande){const d=document.createElement('div');d.className='etq'+(grande?' grande':'');d.style.setProperty('--c',col);d.innerHTML='<b>'+esc2(n)+'</b>'+(sub?'<span>'+esc2(sub)+'</span>':'');document.body.appendChild(d);return {el:d,p,stage,a:0}}
+const ETAPA=id=>ORDEN.indexOf(id)+1; // F=1, B=2, C=3, D=4, A=5, E=6
+// estilo de cada UPZ en cada etapa: color, relleno, borde y etiqueta
+function estiloUPZ(u,id){
+ const sg=n=>n===u.n;
+ if(id==='F')return sg('Tintal Norte')?{c:PC.F,a:.2,l:.9,e:['Tintal','menor proximidad a plazas']}:{c:PC.F,a:0,l:.12};
+ if(id==='B'){const q=(u.dens-90)/(434-90);return {c:PC.B,a:.06+.46*q,l:.35,e:[u.n,u.dens+' hab/ha'],g:sg('Patio Bonito')||sg('Tintal Norte')}}
+ if(id==='C')return sg('Carvajal')?{c:PC.C,a:.26,l:.95,e:['Carvajal','Carvajal Osorio · producción urbana de alimentos'],g:1}:{c:PC.C,a:0,l:.12};
+ if(id==='D'){if(sg('Américas')||sg('Carvajal'))return {c:PC.D,a:.32,l:.95,e:['↑ '+u.n,'valores en aumento'],g:1};if(sg('Patio Bonito')||sg('Corabastos'))return {c:'#a9b3af',a:.14,l:.7,e:['→ '+u.n,'valores estables'],g:1};return {c:PC.D,a:0,l:.1}}
+ return null}
+H.Z={upz:[]};
+fetch('upz.json').then(r=>r.json()).then(Z=>{
+ Z.upz.forEach(u=>{const sh=new THREE.Shape(u.poly.map(([x,z])=>new THREE.Vector2(x*ESCALA,z*ESCALA)));const g=new THREE.ShapeGeometry(sh);g.rotateX(Math.PI/2);
+  const fm=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:0,depthTest:false,depthWrite:false,side:THREE.DoubleSide});const fill=new THREE.Mesh(g,fm);fill.position.y=1;fill.renderOrder=3;scene.add(fill);
+  const lp=u.poly.map(([x,z])=>new THREE.Vector3(x*ESCALA,2,z*ESCALA));lp.push(lp[0].clone());
+  const lm=new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:0,depthTest:false,depthWrite:false});const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(lp),lm);line.renderOrder=8;scene.add(line);
+  const c=new THREE.Vector3(u.c[0]*ESCALA,3,u.c[1]*ESCALA),E={};
+  for(const id of ORDEN){const s=estiloUPZ(u,id);if(s&&s.e)E[id]=etiqueta(s.e[0],s.e[1],s.c,c,ETAPA(id),s.g)}
+  H.Z.upz.push({u,fill,line,c,E})});
+}).catch(e=>console.warn('upz:',e));
+// dependencia: arcos que traen los alimentos desde las regiones hasta Corabastos (esquemático: dirección real, distancia no a escala)
+H.R={arcos:[],u:{uA:{value:0},uT:{value:0}}};
+function regiones(cora){
+ const RG=[['Cundinamarca','+1 millón de t',1016649,300],['Boyacá','341 mil t',341000,40],['Meta','273 mil t',273000,128],['Otras regiones','',567469,188]];
+ const P=[],A=[];
+ RG.forEach(([n,t,ton,rumbo],k)=>{const b=rumbo*Math.PI/180,L=820,o=new THREE.Vector3(cora.x+Math.sin(b)*L,0,cora.z-Math.cos(b)*L);
+  const m=o.clone().lerp(cora,.5);m.y=360+k*30;const cur=new THREE.QuadraticBezierCurve3(o,m,cora.clone());
+  const r=2+ton/1016649*9,tube=new THREE.Mesh(new THREE.TubeGeometry(cur,90,r,10,false),new THREE.MeshBasicMaterial({color:new THREE.Color(PC.A),transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending}));
+  tube.renderOrder=6;tube.frustumCulled=false;scene.add(tube);H.R.arcos.push(tube);
+  const nP=Math.round(60+ton/1016649*260);for(let i=0;i<nP;i++){P.push(cur);A.push([Math.random(),.05+Math.random()*.06,(Math.random()-.5)*r*2.2,(Math.random()-.5)*r*2.2])}
+  H.etqs.push(etiqueta(n,t,PC.A,new THREE.Vector3(o.x,60,o.z),ETAPA('A'),true))});
+ const pos=new Float32Array(P.length*3),g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+ const pts=new THREE.Points(g,new THREE.PointsMaterial({size:innerWidth<700?16:12,map:dotTex,color:new THREE.Color(PC.A).lerp(new THREE.Color('#fff'),.35),transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false}));
+ pts.frustumCulled=false;pts.renderOrder=7;scene.add(pts);H.R.pts=pts;H.R.P=P;H.R.A=A;H.R.pos=pos}
+// cada cuadro: muestra la capa de la etapa activa
+const vtmp=new THREE.Vector3();
+function capasGuion(i,f,dt){
+ const k=1-Math.exp(-dt*5),id=i>=1&&i<=6?ORDEN[i-1]:null,w=id?ss(0,.16,f)*(1-ss(.86,1,f)):0;
+ H.Z.upz.forEach(z=>{const s=id?estiloUPZ(z.u,id):null;const ta=s?s.a*w:0,tl=s?s.l*w:0;if(s){z.fill.material.color.set(s.c);z.line.material.color.set(s.c)}
+  z.fill.material.opacity+=(ta-z.fill.material.opacity)*k;z.line.material.opacity+=(tl-z.line.material.opacity)*k;z.fill.visible=z.fill.material.opacity>.005;z.line.visible=z.line.material.opacity>.005});
+ // anillos de 15 min
+ const wf=id==='F'?w:0;(H.anillos||[]).forEach((a,j)=>{a.borde.material.opacity+=(a.borde.userData.op*wf-a.borde.material.opacity)*k;a.area.material.opacity+=(a.area.userData.op*wf-a.area.material.opacity)*k;
+  const ph=((H.t*.35+j*.5)%1),s=.15+ph*.85;a.pulso.scale.set(s,s,s);a.pulso.material.opacity=a.pulso.userData.op*wf*(1-ph);[a.borde,a.area,a.pulso].forEach(m=>m.visible=m.material.opacity>.005)});
+ // arcos de las regiones
+ const wa=id==='A'?w:0;if(!H.R.pts&&H.lug){const c=H.hitos.find(h=>h.n==='Corabastos');if(c)regiones(new THREE.Vector3(c.p.x,0,c.p.z))}
+ if(H.R.pts){H.R.arcos.forEach(t=>{t.material.opacity+=(.42*wa-t.material.opacity)*k;t.visible=t.material.opacity>.005});H.R.pts.material.opacity+=(wa-H.R.pts.material.opacity)*k;H.R.pts.visible=H.R.pts.material.opacity>.005;
+  if(H.R.pts.visible){H.R.A.forEach((a,j)=>{a[0]=(a[0]+a[1]*dt*(MOV.on?1:0))%1;H.R.P[j].getPoint(a[0],vtmp);H.R.pos[j*3]=vtmp.x+a[2];H.R.pos[j*3+1]=vtmp.y+a[3]*.6;H.R.pos[j*3+2]=vtmp.z+a[3]});H.R.pts.geometry.attributes.position.needsUpdate=true}}
+ // etiquetas
+ const r=renderer.domElement.getBoundingClientRect();
+ const todas=H.etqs.concat(...H.Z.upz.map(z=>Object.values(z.E)));
+ todas.forEach(e=>{const ta=e.stage===i?w:0;e.a+=(ta-e.a)*k;e.el.style.opacity=e.a.toFixed(3);if(e.a<.02)return;vtmp.copy(e.p).project(cam);if(vtmp.z>1){e.el.style.opacity=0;return}
+  e.el.style.transform='translate('+((vtmp.x+1)/2*r.width).toFixed(1)+'px,'+((1-vtmp.y)/2*r.height).toFixed(1)+'px) translate(-50%,-50%)'});
+}
+function apagarGuion(){H.Z.upz.forEach(z=>{z.fill.visible=z.line.visible=false;z.fill.material.opacity=z.line.material.opacity=0});(H.anillos||[]).forEach(a=>[a.borde,a.area,a.pulso].forEach(m=>{m.visible=false;m.material.opacity=0}));
+ H.R.arcos.forEach(t=>{t.visible=false;t.material.opacity=0});if(H.R.pts){H.R.pts.visible=false;H.R.pts.material.opacity=0}
+ H.etqs.concat(...H.Z.upz.map(z=>Object.values(z.E))).forEach(e=>{e.a=0;e.el.style.opacity=0});H.hitos.forEach(h=>{if(h.ring){h.ring.visible=false;h.ring.material.opacity=0}})}
 // ---------- vías reales y flujos reales (vias.json, tools/vias_build.js) ----------
 // vías: la red vehicular de OpenStreetMap (avenidas más marcadas). Flujos: solo donde hay un flujo físico documentado
 // (las plazas de mercado se abastecen en Corabastos: rutas por las calles). Los demás problemas solo se marcan donde ocurren.
@@ -1156,7 +1438,12 @@ function vista(i,t){ // posición y objetivo de la cámara en la etapa i
  const NA=()=>.1*Math.sin(t*.06);
  const TC=new THREE.Vector3(0,0,170); // centro algo al sur: en perspectiva el borde sur (el más cercano) es el que se corta
  if(i<=0){const a=NA();return [new THREE.Vector3(Math.sin(a)*1000*F,1020*F,Math.cos(a)*1000*F).add(TC),TC.clone()]}
- if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=NA(),d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.72,d*.9,Math.cos(a)*d*.72)),v.c.clone()]}
+ if(i<=6){const id=ORDEN[i-1];let v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);
+  if(id==='A')v={c:v.c.clone().add(new THREE.Vector3(80,0,-60)),d:1750};
+  if(id==='F')v={c:v.c,d:Math.max(v.d,700)}; // las plazas con su zona de 15 min
+  if(id==='E')v={c:v.c,d:Math.max(v.d,420)}; // dependencia: cambia la escala; se aleja para ver llegar los alimentos de las regiones
+  if(id==='B'||id==='D'||id==='C')v={c:new THREE.Vector3(0,0,120),d:1080}; // UPZ: toda la localidad
+  const a=NA(),d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.72,d*.9,Math.cos(a)*d*.72)),v.c.clone()]}
  if(i===7){const a=NA();return [new THREE.Vector3(Math.sin(a)*1040*F,1080*F,Math.cos(a)*1040*F).add(TC),TC.clone()]} // todos los problemas juntos sobre la ciudad
  return [RED_POS.clone(),O3.clone()];
 }
@@ -1171,8 +1458,10 @@ function recorrido(dt,now){
  if(!camIni){cP.copy(dp);cT.copy(dtg);camIni=true}
  const k=1-Math.exp(-dt*3.5);cP.lerp(dp,k);cT.lerp(dtg,k);cam.position.copy(cP);cam.lookAt(cT);
  // en escritorio la tarjeta ocupa la izquierda: la escena se corre a la derecha para que lo que se señala quede a la vista
- const vo=(innerWidth>700&&i>=1&&i<=6)?Math.min(320,innerWidth*.2):0;H.vo=(H.vo||0)+(vo-(H.vo||0))*k;
- if(Math.abs(H.vo)>.5)cam.setViewOffset(innerWidth,innerHeight,-H.vo,0,innerWidth,innerHeight);else cam.clearViewOffset();
+ // en celular la tarjeta ocupa la parte de abajo: la escena sube
+ const tarj=i>=1&&i<=6,vo=(innerWidth>700&&tarj)?Math.min(320,innerWidth*.2):0,vv=(innerWidth<=700&&tarj)?innerHeight*.24:0;
+ H.vo=(H.vo||0)+(vo-(H.vo||0))*k;H.vv=(H.vv||0)+(vv-(H.vv||0))*k;
+ if(Math.abs(H.vo)>.5||Math.abs(H.vv)>.5)cam.setViewOffset(innerWidth,innerHeight,-H.vo,H.vv,innerWidth,innerHeight);else cam.clearViewOffset();
  // ciudad
  const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
   const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
@@ -1187,7 +1476,10 @@ function recorrido(dt,now){
   if(H.D.mesh){const D=H.D.u;D.uA.value=M.uShow.value[IA];D.uF.value=M.uShow.value[IF];D.uT.value=H.t;H.D.mesh.visible=H.D.lin.visible=Math.max(D.uA.value,D.uF.value)>.01}}
  // letreros de lugares clave
  const r=renderer.domElement.getBoundingClientRect();
- H.hitos.forEach(h=>{const o=M?M.uShow.value[h.k]:0;h.el.style.opacity=o;if(o<.02)return;const q=h.p.clone().project(cam);if(q.z>1){h.el.style.opacity=0;return}h.el.style.transform='translate('+((q.x+1)/2*r.width).toFixed(1)+'px,'+((1-q.y)/2*r.height).toFixed(1)+'px)'});
+ H.hitos.forEach(h=>{const o=M&&!(h.id==='A'&&/^Plaza/.test(h.n))?M.uShow.value[h.k]:0;h.el.style.opacity=o;
+  if(h.ring){const ph=(H.t*.6+h.k*.37)%1,sc=14+ph*46;h.ring.scale.set(sc,sc,sc);h.ring.material.opacity=o*(1-ph)*.9;h.ring.visible=o>.02}
+  if(o<.02)return;const q=h.p.clone().project(cam);if(q.z>1){h.el.style.opacity=0;return}h.el.style.transform='translate('+((q.x+1)/2*r.width).toFixed(1)+'px,'+((1-q.y)/2*r.height).toFixed(1)+'px)'});
+ capasGuion(i,f,dt);
  return s;
 }
 // ---------- pausa del movimiento ----------
@@ -1198,9 +1490,15 @@ let LT2=performance.now();
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
  const s=etapa(),enRed=s>=8;
- if(enRed&&H.modo!=='red'){H.modo='red';H.vo=0;cam.clearViewOffset();document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;if(H.D.mesh)H.D.mesh.visible=H.D.lin.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
- if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);N.forEach(n=>n.nd.material.opacity=0);ancP.material.opacity=0;cP.copy(cam.position);H.s=s}
- if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
+ if(enRed&&H.modo!=='red'){H.modo='red';H.vo=H.vv=0;cam.clearViewOffset();document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;if(H.D.mesh)H.D.mesh.visible=H.D.lin.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0);apagarGuion()}
+ if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');document.body.classList.remove('redguion');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);N.forEach(n=>n.nd.material.opacity=0);ancP.material.opacity=0;cP.copy(cam.position);H.s=s}
+ if(H.modo==='red'){
+  // tarjetas del guion sobre la red (causas de fondo y criterios): la red se corre para dejarles espacio y la centralización se destaca
+  const g=s<SECS.length-1;document.body.classList.toggle('redguion',g);
+  if(!sel){if(g){if(innerWidth>700){vtx=-Math.min(270,innerWidth*.19);vty=0}else{vtx=0;vty=innerHeight*.24}}else if(vtx<0||(innerWidth<=700&&vty>0&&!P.open)){vtx=0;vty=0}
+   if(!hov){const want=(s>=8&&s<9)?byId.F:null;if(live!==want)focus(want)}}
+  H.guionF=(s>=8&&s<9&&!sel)?byId.F:null;
+  if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);
  pintar();
 })();

@@ -35,6 +35,12 @@ const tiendas = R('propuesta.json').nodos.filter(n => n.t === 'tienda').map(n =>
 const residuos = R('residuos.json').p.map(q => [q[0], q[1]]).filter(enK);
 const E8 = R('estrategias.json').estrategias.find(e => e.id === 'E8'), baldios = [];
 for (const c of E8.capas) if (/bald/i.test(c.n)) for (const l of c.lotes) { const P = []; for (let i = 0; i + 1 < l.length; i += 2) P.push([l[i] / 2, l[i + 1] / 2]); if (P.length > 2) baldios.push(centro(P)); }
+// María Paz: cruce de la Diagonal 38 Sur con la Transversal 81 (calles de OSM; operativo de residuos de marzo de 2026)
+let mariaPaz = null;
+{ const ws = (n) => OSM.filter(e => e.type === 'way' && e.tags && e.tags.highway && e.tags.name === n && e.geometry).map(e => e.geometry.map(g => ll2l(g.lat, g.lon)));
+  const A = ws('Diagonal 38 Sur'), B = ws('Transversal 81'); let bd = 1e9;
+  for (const a of A) for (const p of a) for (const b of B) for (const q of b) { const d = Math.hypot(p[0] - q[0], p[1] - q[1]); if (d < bd) { bd = d; mariaPaz = [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2]; } }
+  if (bd > 40) mariaPaz = null; console.log('María Paz: cruce a', Math.round(bd), 'm'); }
 // edificios altos (5 pisos o más): una muestra
 const altos = []; for (const b of R('buildings.json')) { if ((b.h || 0) < 15) continue; const p = b.pts[0]; if (enK(p)) altos.push([p[0], p[1], b.h]); }
 const muestraAltos = altos.filter(() => rnd() < Math.min(1, 1800 / altos.length));
@@ -49,11 +55,9 @@ const muestraAltos = altos.filter(() => rnd() < Math.min(1, 1800 / altos.length)
     B: { pts: muestraAltos.map(([x, y, h]) => { const [a, b] = rel([x, y]); return [a, b, Math.min(4, h / 15), 0]; }), hitos: [], cuenta: [['edificios de 5 pisos o más', altos.length]] },
     C: { pts: pts(obras, 2, 0), hitos: [], cuenta: [['obras en construcción', obras.length]] },
     D: { pts: pts(lotes, 2.4, 0).concat(pts([bav], 6, 1), pts(baldios, 2.4, 2)), hitos: [hito('Bavaria', bav, 'predio de 71 ha')], cuenta: [['lotes vacíos o abandonados', lotes.length + baldios.length]] },
-    E: { pts: pts(residuos, 1, 0), hitos: [], cuenta: [['contenedores de basura', residuos.length]] },
-    // F: equipamientos por categoría (tools/servicios.js); sus edificios se resaltan con destacados.json
-    F: { pts: pts([cora], 6, 1).concat(SV.map(s => { const [a, b] = rel(s.p); return [a, b, s.cat === 'plaza' ? 2.6 : 1.4, s.cat === 'plaza' ? 2 : s.cat === 'salud' ? 3 : 0]; })),
-      hitos: [hito('Corabastos', cora, 'abastos centralizados')].concat(plazas.map(q => hito(q.n, q.p, 'plaza distrital'))),
-      cuenta: CATS.map(c => [c.n, SV.filter(s => s.cat === c.id).length, c.col]) }
+    E: { pts: pts(residuos, 1, 0).concat(pts([cora], 5, 1), mariaPaz ? pts([mariaPaz], 5, 1) : []), hitos: [hito('Corabastos', cora, 'residuos acumulados +48 h')].concat(mariaPaz ? [hito('María Paz', mariaPaz, 'Dg 38 Sur × Tv 81 · 23 t retiradas')] : []), vista: 'hitos', cuenta: [['contenedores de basura', residuos.length]] },
+    // F: según el guion, «servicios» = abastecimiento de alimentos: Corabastos y las plazas distritales
+    F: { pts: pts([cora], 7, 1).concat(pts(plazas, 4, 2)), hitos: [hito('Corabastos', cora, 'central mayorista')].concat(plazas.map(q => hito(q.n, q.p, 'plaza distrital'))), vista: 'hitos', cuenta: [] }
   };
   fs.writeFileSync(path.join(__dirname, '..', 'lugares.json'), JSON.stringify(out));
   for (const k of 'ABCDEF') console.log(k, out[k].pts.length, JSON.stringify(out[k].cuenta));
