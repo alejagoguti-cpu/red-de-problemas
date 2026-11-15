@@ -16,7 +16,7 @@ const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
 const P = []; const pon = (x, y, h, t) => P.push([x - cx, h, -(y - cy), t]); // y norte -> -z
 const borde = (pts, paso, h, t, prob = 1) => { for (let i = 1; i < pts.length; i++) { const [ax, ay] = pts[i - 1], [bx, by] = pts[i], L = Math.hypot(bx - ax, by - ay), n = Math.max(1, Math.round(L / paso)); for (let k = 0; k < n; k++) if (rnd() < prob) { const f = k / n; pon(ax + (bx - ax) * f, ay + (by - ay) * f, h, t); } } };
 // edificios dentro de Kennedy: contorno del techo; los altos, también aristas verticales
-const B = R('buildings.json'); let nb = 0;
+const B = JSON.parse(fs.readFileSync(path.join(__dirname, 'cache', 'edif_kennedy.json'), 'utf8')) /* buildings.json + Microsoft en las zonas sin datos (tools/edif_merge.js) */; let nb = 0;
 for (const b of B) {
   const p = b.pts[0]; if (!dentro(p[0], p[1], LIM)) continue; nb++;
   const h = Math.max(3, b.h || 3), alto = h >= 15;

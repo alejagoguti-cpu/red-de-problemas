@@ -892,7 +892,7 @@ const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const ST=document.createElement('main');ST.id='story';
 {const hab=(D.B&&D.B.g[0].k[1]&&D.B.g[0].k[1][0])||'1.037.929',ha=(D.B&&D.B.g[0].k[2]&&D.B.g[0].k[2][0])||'3.858,97 ha';
  let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p>'+esc2(hab)+' habitantes en '+esc2(ha)+'. Un territorio y seis problemas que se alimentan entre sí.</p><div class="down">Desliza para recorrerlo<i></i></div></div>'+
-  '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Puntos  <b>142.762</b>\nEdificios  <b>203.783</b>\nFuente  catastro · OSM</div></section>';
+  '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>208.555</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · OSM · Microsoft</div></section>';
  ORDEN.forEach((id,i)=>{const n=byId[id],d=D[id],k=(d.g&&d.g[0]?d.g[0].k:[]).slice(0,3);
   h+='<section class="pb" data-k="'+id+'"><article class="card" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06 · Problema</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(d.lead?'<p>'+d.lead+'</p>':'')+
    '<div class="donde"><h3>Dónde ocurre en Kennedy</h3><ul data-donde="'+id+'"></ul></div>'+
@@ -997,27 +997,31 @@ fetch('edif.bin').then(r=>{if(!r.ok)throw new Error('edif');return r.arrayBuffer
   o.scale.set(dv.getInt16(b+4,true)/2*ESCALA,dv.getInt16(b+10,true)/2*ESCY,dv.getInt16(b+6,true)/2*ESCALA);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
  m.frustumCulled=false;m.renderOrder=1;scene.add(m);H.B.mesh=m;H.B.t0=performance.now();
 }).catch(e=>console.warn('edificios:',e));
-// ---------- conectografía: arcos que unen los lugares de cada problema (a su centro y a su vecino más cercano), con flujo ----------
-function conectografia(L){
- const idx=Object.fromEntries(N.map((n,i)=>[n.id,i])),P=[],A=[];
- const arco=(ax,az,bx,bz,k,w)=>{const d=Math.hypot(bx-ax,bz-az);if(d<1)return;const hh=Math.min(140,8+d*.28),S=14;let px=ax,py=2,pz=az,pu=0;
-  for(let s=1;s<=S;s++){const u=s/S,x=ax+(bx-ax)*u,z=az+(bz-az)*u,y=2+Math.sin(Math.PI*u)*hh;P.push(px,py,pz,x,y,z);A.push(k,pu,w,k,u,w);px=x;py=y;pz=z;pu=u}};
- for(const id of Object.keys(idx)){const l=L[id];if(!l)continue;const k=idx[id];
-  let pts=l.pts.map(([x,z,w])=>[x*ESCALA,z*ESCALA,w]);if(pts.length>170){const f=170/pts.length;pts=pts.filter((_,i)=>(i*2654435761>>>0)/4294967296<f)}
-  let hub;if(l.hitos.length)hub=[l.hitos[0].p[0]*ESCALA,l.hitos[0].p[1]*ESCALA];else{let sx=0,sz=0,sw=0;for(const [x,z,w] of pts){sx+=x*w;sz+=z*w;sw+=w}hub=[sx/sw,sz/sw]}
-  for(const [x,z] of pts)arco(x,z,hub[0],hub[1],k,1);                           // cada lugar con su centro
-  for(let i=0;i<pts.length;i++){let b=-1,bd=1e9;for(let j=0;j<pts.length;j++){if(j===i)continue;const d=(pts[j][0]-pts[i][0])**2+(pts[j][1]-pts[i][1])**2;if(d<bd){bd=d;b=j}}
-   if(b>i||(b>=0&&b<i))arco(pts[i][0],pts[i][1],pts[b][0],pts[b][1],k,.55)}   // y con su vecino más cercano: la trama
- }
- const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('aDat',new THREE.Float32BufferAttribute(A,3));
- const ln=new THREE.LineSegments(g,new THREE.ShaderMaterial({uniforms:H.M,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
-  vertexShader:`attribute vec3 aDat;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA,vU,vW;
-   void main(){float sh=0.;vec3 col=vec3(1.);for(int k=0;k<6;k++){if(abs(aDat.x-float(k))<.5){sh=uShow[k];col=uCol[k];}}vC=col;vA=sh;vU=aDat.y;vW=aDat.z;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`uniform float uT;varying vec3 vC;varying float vA,vU,vW;
-   void main(){float pulso=smoothstep(.82,1.,fract(vU*3.-uT*.55));float a=vA*vW*(.22+.9*pulso);gl_FragColor=vec4(vC*a,a);}`}));
- ln.frustumCulled=false;ln.renderOrder=6;scene.add(ln);
-}
-// ---------- cámara del recorrido ----------
+// ---------- vías reales y flujos reales (vias.json, tools/vias_build.js) ----------
+// vías: la red vehicular de OpenStreetMap (avenidas más marcadas). Flujos: solo donde hay un flujo físico documentado
+// (las plazas de mercado se abastecen en Corabastos: rutas por las calles). Los demás problemas solo se marcan donde ocurren.
+H.V={u:{uA:{value:0}}};
+function conectografia(){
+ fetch('vias.json').then(r=>r.json()).then(V=>{
+  const P=[],J=[];for(const v of V.vias){const j=v[0];for(let i=1;i+3<v.length;i+=2){P.push(v[i]*ESCALA,.6,v[i+1]*ESCALA,v[i+2]*ESCALA,.6,v[i+3]*ESCALA);J.push(j,j)}}
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('aJ',new THREE.Float32BufferAttribute(J,1));
+  const vm=new THREE.LineSegments(g,new THREE.ShaderMaterial({uniforms:H.V.u,transparent:true,depthWrite:false,
+   vertexShader:`attribute float aJ;varying float vJ;void main(){vJ=aJ;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+   fragmentShader:`uniform float uA;varying float vJ;void main(){float a=uA*(vJ>=4.?.85:vJ>=3.?.55:vJ>=2.?.32:.16);gl_FragColor=vec4(vec3(.78,.8,.83)*a,a);}`}));
+  vm.frustumCulled=false;vm.renderOrder=2;scene.add(vm);H.V.mesh=vm;
+  // flujos por las calles, con pulsos (índice del problema A = Dependencia de alimentos)
+  const k=N.findIndex(n=>n.id==='A'),FP=[],FA=[];
+  for(const r of V.flujos.A){let L=0;const pts=[];for(let i=0;i+1<r.length;i+=2)pts.push([r[i]*ESCALA,r[i+1]*ESCALA]);const cum=[0];for(let i=1;i<pts.length;i++){L+=Math.hypot(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]);cum.push(L)}
+   for(let i=1;i<pts.length;i++){FP.push(pts[i-1][0],1.2,pts[i-1][1],pts[i][0],1.2,pts[i][1]);FA.push(k,cum[i-1],1,k,cum[i],1)}}
+  const fg=new THREE.BufferGeometry();fg.setAttribute('position',new THREE.Float32BufferAttribute(FP,3));fg.setAttribute('aDat',new THREE.Float32BufferAttribute(FA,3));
+  const fl=new THREE.LineSegments(fg,new THREE.ShaderMaterial({uniforms:H.M,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+   vertexShader:`attribute vec3 aDat;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA,vD;
+    void main(){float sh=0.;vec3 col=vec3(1.);for(int k=0;k<6;k++){if(abs(aDat.x-float(k))<.5){sh=uShow[k];col=uCol[k];}}vC=col;vA=sh;vD=aDat.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+   fragmentShader:`uniform float uT;varying vec3 vC;varying float vA,vD;
+    void main(){float pulso=smoothstep(.75,1.,fract(vD/38.-uT*.9));float a=vA*(.75+1.8*pulso);gl_FragColor=vec4(vC*a,a);}`}));
+  fl.frustumCulled=false;fl.renderOrder=6;scene.add(fl);
+ }).catch(e=>console.warn('vías:',e));
+}// ---------- cámara del recorrido ----------
 const ss=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
 const RED_POS=START.clone().multiplyScalar(1.85),O3=new THREE.Vector3();
 function vista(i,t){ // posición y objetivo de la cámara en la etapa i
@@ -1039,7 +1043,7 @@ function recorrido(dt,now){
  const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
   const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
   const enProb=i>=1&&i<=6?1:0,dim=enProb?.55:(i===7?.55:1);U.uDim.value+=(dim-U.uDim.value)*(1-Math.exp(-dt*4));
-  N.forEach((n,j)=>U.uNA.value[j]=1);if(H.B.mesh){const B=H.B.u;B.uRise.value=U.uRise.value;B.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2);B.uDim.value=U.uDim.value;H.B.mesh.visible=B.uA.value>.01}}
+  N.forEach((n,j)=>U.uNA.value[j]=1);if(H.B.mesh){const B=H.B.u;B.uRise.value=U.uRise.value;B.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2);B.uDim.value=U.uDim.value;H.B.mesh.visible=B.uA.value>.01}H.V.u.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2)*(.6+.4*U.uDim.value);if(H.V.mesh)H.V.mesh.visible=H.V.u.uA.value>.01}
  // lugares de cada problema
  const M=H.M;if(M){M.uT.value=H.t;const want=[0,0,0,0,0,0];
   if(i>=1&&i<=6){const id=ORDEN[i-1],j=N.findIndex(n=>n.id===id);want[j]=ss(0,.18,f)*(1-ss(.8,1,f))}
@@ -1058,7 +1062,7 @@ let LT2=performance.now();
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
  const s=etapa(),enRed=s>=8;
- if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
+ if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
  if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);cP.copy(cam.position);H.s=s}
  if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);

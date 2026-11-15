@@ -12,7 +12,7 @@ const dentro = (x, y, P) => { let c = false; for (let i = 0, j = P.length - 1; i
 const nube = fs.readFileSync(path.join(__dirname, '..', 'nube.bin')), cx = nube.readFloatLE(8), cy = nube.readFloatLE(12);
 const LIM = R('giro_sim.json').limite.map(giro);
 const out = [];
-for (const b of R('buildings.json')) {
+for (const b of JSON.parse(fs.readFileSync(path.join(__dirname, 'cache', 'edif_kennedy.json'), 'utf8')) /* buildings.json + Microsoft en las zonas sin datos (tools/edif_merge.js) */) {
   const P = b.pts.map(([x, y]) => [x - cx, -(y - cy)]); if (P.length < 3) continue;
   const p0 = b.pts[0]; if (!dentro(p0[0], p0[1], LIM)) continue;
   let mx = 0, mz = 0; for (const [x, z] of P) { mx += x; mz += z; } mx /= P.length; mz /= P.length;
