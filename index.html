@@ -280,6 +280,13 @@ body.intro #lbls{opacity:0}
 .lbl:hover,.lbl.on{background:rgba(13,15,18,.86);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent),0 10px 30px rgba(0,0,0,.4)}
 .lbl:focus-visible{outline:1px solid var(--c);outline-offset:2px}
 @media(max-width:600px){.lbl{padding:5px 8px 6px}.lbl b{font-size:11.5px;white-space:normal;max-width:120px}.lbl small{font-size:8px}}
+/* texto en el centro de cada esfera */
+.lbl{border:0!important;background:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:8px!important;padding:4px 6px!important;text-align:center;white-space:normal!important;box-shadow:none!important}
+.lbl b{font-size:15px;line-height:1.2;text-shadow:0 0 6px rgba(0,0,0,.95),0 0 14px rgba(0,0,0,.85),0 1px 2px #000}
+.lbl small{order:2;margin-top:4px;white-space:nowrap;text-shadow:0 0 6px #000,0 0 12px #000}
+.lbl{display:flex!important;flex-direction:column-reverse;align-items:center}
+.lbl:hover b,.lbl.on b{color:#fff}
+@media(max-width:600px){.lbl b{font-size:11.5px}.lbl small{font-size:7.5px}}
 </style>
 </head>
 <body class="intro">
@@ -743,21 +750,21 @@ function constelacion(dt,now){
   const k=Math.sin(Math.PI*s.t)*s.b*on*aRed*1.25;sCol[i*3]=a.col.r*k;sCol[i*3+1]=a.col.g*k;sCol[i*3+2]=a.col.b*k});
  sG.attributes.position.needsUpdate=true;sG.attributes.color.needsUpdate=true;sPts.material.opacity=1;
  ARC.forEach(a=>{a.lm.opacity=.28*a.e.co*aRed});
- N.forEach(n=>{n.core.material.opacity=.75*n.co*aRed*(.85+.15*Math.sin(now*.0018+n.r));n.core.scale.setScalar(n.r*1.9*n.cs)});
+ N.forEach(n=>{n.core.visible=false}); /* sin núcleo de luz */
  if(INTRO.U){const A=INTRO.U.uNA.value;N.forEach((n,i)=>A[i]=n.co)}
  // etiquetas
  const w=innerWidth,h=innerHeight;cam.updateMatrixWorld();camR.setFromMatrixColumn(cam.matrixWorld,0);camU.setFromMatrixColumn(cam.matrixWorld,1);
  const r=renderer.domElement.getBoundingClientRect();
  N.forEach(n=>{pp.copy(n.p).project(cam);if(pp.z>1){n.lb.style.opacity=0;n.ll.setAttribute('points','');return}
   const sx=(pp.x+1)/2*r.width+r.left,sy=(1-pp.y)/2*r.height+r.top;pq.copy(n.p).addScaledVector(camR,n.r).project(cam);const rp=Math.abs((pq.x+1)/2*r.width+r.left-sx);
-  const der=sx>=w/2,ang=der?-.62:Math.PI+.62,ex=sx+Math.cos(ang)*rp*1.02,ey=sy+Math.sin(ang)*rp*1.02,kx=ex+(der?26:-26),ky=ey-26,lx=kx+(der?14:-14);
+  const der=true,ang=0,ex=sx+Math.cos(ang)*rp*1.02,ey=sy+Math.sin(ang)*rp*1.02,kx=ex+(der?26:-26),ky=ey-26,lx=kx+(der?14:-14);
   n.ll.setAttribute('points',ex.toFixed(1)+','+ey.toFixed(1)+' '+kx.toFixed(1)+','+ky.toFixed(1)+' '+lx.toFixed(1)+','+ky.toFixed(1));n.ld.setAttribute('cx',ex.toFixed(1));n.ld.setAttribute('cy',ey.toFixed(1));
   const o=(.25+.75*n.co)*aRed;n.ll.style.opacity=o;n.ld.style.opacity=o;n.lb.style.opacity=o;
-  const bw=n.lb.offsetWidth,bx=Math.max(8,Math.min(w-bw-8,der?lx+4:lx-4-bw));n.lb.style.transform='translate('+bx.toFixed(1)+'px,'+(ky-n.lb.offsetHeight/2).toFixed(1)+'px)'; /* dentro de la pantalla */n.lb.classList.toggle('on',sel===n||hov===n)});
+  n.ll.style.display=n.ld.style.display='none';n.lb.style.maxWidth=Math.max(110,rp*1.7).toFixed(0)+'px';n.lb.style.transform='translate('+(sx-n.lb.offsetWidth/2).toFixed(1)+'px,'+(sy-n.lb.offsetHeight/2).toFixed(1)+'px)'; /* el texto, en el centro de la esfera */n.lb.classList.toggle('on',sel===n||hov===n)});
 }
 // brillo (bloom) en pantallas grandes
 let COMP=null;
-try{if(innerWidth>=700&&THREE.EffectComposer&&THREE.UnrealBloomPass){COMP=new THREE.EffectComposer(renderer);COMP.addPass(new THREE.RenderPass(scene,cam));COMP.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.95,.55,.12));
+try{if(false&&THREE.EffectComposer&&THREE.UnrealBloomPass){COMP=new THREE.EffectComposer(renderer);COMP.addPass(new THREE.RenderPass(scene,cam));COMP.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.95,.55,.12));
  const rs=()=>{COMP.setSize(innerWidth,innerHeight)};addEventListener('resize',rs);rs()}}catch(e){console.warn('bloom:',e);COMP=null}
 const pintar=()=>{if(COMP)COMP.render();else renderer.render(scene,cam)};
 
@@ -772,7 +779,7 @@ const START=cam.position.clone();
  const ui=document.body,$i=id=>document.getElementById(id),ov=$i('intro'),fmt=v=>Math.round(v).toLocaleString('es-CO');
  let enAura=false;
  const aura=()=>{if(enAura||!INTRO.U)return;enAura=true;const U=INTRO.U,t1=performance.now();U.uMix.value=1;U.uRise.value=1;U.uAlpha.value=1;U.uJit.value=0;
-  (function f(){const k=Math.min(1,(performance.now()-t1)/1800);U.uFade.value=k*.38;U.uT.value=(performance.now()-INTRO.t0)/1000;requestAnimationFrame(f)})()};
+  (function f(){const k=Math.min(1,(performance.now()-t1)/1800);U.uFade.value=k*.08;U.uT.value=(performance.now()-INTRO.t0)/1000;requestAnimationFrame(f)})()};
  const fin=()=>{INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;ctl.target.set(0,0,0);T0=null;tRed=performance.now();aura()};
  if(INTRO.on){ctl.enabled=false;ctl.autoRotate=false}else fin();
  const saltar=()=>{if(!INTRO.on)return;if(!INTRO.listo){cam.position.copy(START);fin();return}if(INTRO.tMix===null)INTRO.tMix=performance.now()-400,INTRO.dur=1600};
