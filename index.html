@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Red de problemas · Kennedy</title>
 <meta name="description" content="Mapa interactivo de seis problemas interrelacionados en la localidad de Kennedy, Bogotá.">
-<link rel="preload" href="nube.bin" as="fetch" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="nube.bin" as="fetch" crossorigin><link rel="preload" href="edif.bin" as="fetch" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;--bg:#09090b;--fg:#ececee;--mut:#8a8a93;--line:#232328;--card:#0e0e11;--cy:#8a8a93;box-sizing:border-box}
@@ -939,7 +939,7 @@ fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer
     float tw=.75+.25*sin(uT*3.+aRnd*90.);
     vC=mix(b,aCol*1.15*tw,m);
     float na=1.;for(int k=0;k<6;k++){if(abs(aNode-float(k))<.5)na=uNA[k];}
-    vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m)*mix(1.,.12+.88*na,m)*mix(uDim,1.,m);
+    vA=uAlpha*(aTipo<.5?mix(.5,1.,m):1.1)*(1.-uFade*m)*mix(1.,.12+.88*na,m)*mix(uDim,1.,m); /* los puntos de edificios se atenúan: los volúmenes ya dan la forma */
    }`,
   fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=(1.-d)*(1.-d);gl_FragColor=vec4(vC*a*vA,a*vA);}`});
  const pts=new THREE.Points(g,mat);pts.frustumCulled=false;pts.renderOrder=4;scene.add(pts);H.U=U;H.t0=performance.now();
@@ -973,10 +973,50 @@ fetch('lugares.json').then(r=>r.json()).then(L=>{
  const bm=new THREE.LineSegments(bg,new THREE.ShaderMaterial({uniforms:MU,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
   vertexShader:`attribute vec2 aDat;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA;void main(){${sel6.replace(/PROB/g,'aDat.x')}gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);vC=col;vA=sh*(1.-aDat.y)*.75;}`,
   fragmentShader:`varying vec3 vC;varying float vA;void main(){gl_FragColor=vec4(vC*vA,vA);}`}));
- bm.frustumCulled=false;bm.renderOrder=6;scene.add(bm);H.M=MU;
+ bm.frustumCulled=false;bm.renderOrder=6;scene.add(bm);H.M=MU;conectografia(L);
  // letreros de los lugares clave (Corabastos, Bavaria)
  H.hitos.forEach(h=>{const d=document.createElement('div');d.className='hito';d.style.setProperty('--c',PC[h.id]);d.innerHTML='<b>'+esc2(h.n)+'</b><small>'+esc2(h.sub)+'</small>';document.body.appendChild(d);h.el=d});
 }).catch(e=>console.warn('lugares:',e));
+// ---------- edificios sólidos (edif.bin, tools/edif_build.js): una caja orientada por edificio, oscura con aristas de luz ----------
+H.B={u:{uA:{value:0},uRise:{value:0},uDim:{value:1}},mesh:null};
+fetch('edif.bin').then(r=>{if(!r.ok)throw new Error('edif');return r.arrayBuffer()}).then(buf=>{
+ const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?60000:total);
+ const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
+ const mat=new THREE.ShaderMaterial({uniforms:H.B.u,transparent:true,extensions:{derivatives:true},
+  vertexShader:`uniform float uRise;varying vec2 vUv;varying float vY,vH,vTop;
+   void main(){vUv=uv;vec4 p=instanceMatrix*vec4(position,1.);float h=instanceMatrix[1][1];p.y*=uRise;vY=position.y;vH=h;vTop=normal.y;
+    gl_Position=projectionMatrix*modelViewMatrix*p;}`,
+  fragmentShader:`uniform float uA,uDim;varying vec2 vUv;varying float vY,vH,vTop;
+   void main(){vec2 e=min(vUv,1.-vUv);vec2 f=fwidth(vUv)*1.3;float edge=1.-min(smoothstep(0.,f.x,e.x),smoothstep(0.,f.y,e.y));
+    float alto=clamp(vH/45.,0.,1.);
+    vec3 cara=mix(vec3(.055,.065,.08),vec3(.1,.115,.135),vY)+vec3(.05)*step(.5,vTop);   // caras oscuras, techo algo más claro
+    vec3 linea=vec3(.55,.6,.66)*(.45+.55*alto);
+    vec3 c=mix(cara,linea,edge)*uDim;gl_FragColor=vec4(c,uA*(.92+.08*edge));}`});
+ const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D();
+ for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2*ESCALA,0,dv.getInt16(b+2,true)/2*ESCALA);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);
+  o.scale.set(dv.getInt16(b+4,true)/2*ESCALA,dv.getInt16(b+10,true)/2*ESCY,dv.getInt16(b+6,true)/2*ESCALA);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
+ m.frustumCulled=false;m.renderOrder=1;scene.add(m);H.B.mesh=m;H.B.t0=performance.now();
+}).catch(e=>console.warn('edificios:',e));
+// ---------- conectografía: arcos que unen los lugares de cada problema (a su centro y a su vecino más cercano), con flujo ----------
+function conectografia(L){
+ const idx=Object.fromEntries(N.map((n,i)=>[n.id,i])),P=[],A=[];
+ const arco=(ax,az,bx,bz,k,w)=>{const d=Math.hypot(bx-ax,bz-az);if(d<1)return;const hh=Math.min(140,8+d*.28),S=14;let px=ax,py=2,pz=az,pu=0;
+  for(let s=1;s<=S;s++){const u=s/S,x=ax+(bx-ax)*u,z=az+(bz-az)*u,y=2+Math.sin(Math.PI*u)*hh;P.push(px,py,pz,x,y,z);A.push(k,pu,w,k,u,w);px=x;py=y;pz=z;pu=u}};
+ for(const id of Object.keys(idx)){const l=L[id];if(!l)continue;const k=idx[id];
+  let pts=l.pts.map(([x,z,w])=>[x*ESCALA,z*ESCALA,w]);if(pts.length>170){const f=170/pts.length;pts=pts.filter((_,i)=>(i*2654435761>>>0)/4294967296<f)}
+  let hub;if(l.hitos.length)hub=[l.hitos[0].p[0]*ESCALA,l.hitos[0].p[1]*ESCALA];else{let sx=0,sz=0,sw=0;for(const [x,z,w] of pts){sx+=x*w;sz+=z*w;sw+=w}hub=[sx/sw,sz/sw]}
+  for(const [x,z] of pts)arco(x,z,hub[0],hub[1],k,1);                           // cada lugar con su centro
+  for(let i=0;i<pts.length;i++){let b=-1,bd=1e9;for(let j=0;j<pts.length;j++){if(j===i)continue;const d=(pts[j][0]-pts[i][0])**2+(pts[j][1]-pts[i][1])**2;if(d<bd){bd=d;b=j}}
+   if(b>i||(b>=0&&b<i))arco(pts[i][0],pts[i][1],pts[b][0],pts[b][1],k,.55)}   // y con su vecino más cercano: la trama
+ }
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('aDat',new THREE.Float32BufferAttribute(A,3));
+ const ln=new THREE.LineSegments(g,new THREE.ShaderMaterial({uniforms:H.M,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec3 aDat;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA,vU,vW;
+   void main(){float sh=0.;vec3 col=vec3(1.);for(int k=0;k<6;k++){if(abs(aDat.x-float(k))<.5){sh=uShow[k];col=uCol[k];}}vC=col;vA=sh;vU=aDat.y;vW=aDat.z;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`uniform float uT;varying vec3 vC;varying float vA,vU,vW;
+   void main(){float pulso=smoothstep(.82,1.,fract(vU*3.-uT*.55));float a=vA*vW*(.22+.9*pulso);gl_FragColor=vec4(vC*a,a);}`}));
+ ln.frustumCulled=false;ln.renderOrder=6;scene.add(ln);
+}
 // ---------- cámara del recorrido ----------
 const ss=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
 const RED_POS=START.clone().multiplyScalar(1.85),O3=new THREE.Vector3();
@@ -999,7 +1039,7 @@ function recorrido(dt,now){
  const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
   const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
   const enProb=i>=1&&i<=6?1:0,dim=enProb?.55:(i===7?.55:1);U.uDim.value+=(dim-U.uDim.value)*(1-Math.exp(-dt*4));
-  N.forEach((n,j)=>U.uNA.value[j]=1)}
+  N.forEach((n,j)=>U.uNA.value[j]=1);if(H.B.mesh){const B=H.B.u;B.uRise.value=U.uRise.value;B.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2);B.uDim.value=U.uDim.value;H.B.mesh.visible=B.uA.value>.01}}
  // lugares de cada problema
  const M=H.M;if(M){M.uT.value=H.t;const want=[0,0,0,0,0,0];
   if(i>=1&&i<=6){const id=ORDEN[i-1],j=N.findIndex(n=>n.id===id);want[j]=ss(0,.18,f)*(1-ss(.8,1,f))}
@@ -1018,7 +1058,7 @@ let LT2=performance.now();
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
  const s=etapa(),enRed=s>=8;
- if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);H.hitos.forEach(h=>h.el.style.opacity=0)}
+ if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
  if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);cP.copy(cam.position);H.s=s}
  if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);
