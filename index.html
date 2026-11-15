@@ -129,7 +129,7 @@ header p{margin:10px 0 0;font-size:13px;line-height:1.5;color:var(--mut)}
 .godeep b{display:block;font-size:14px;font-weight:600;color:var(--ac)}
 .godeep em{display:block;font-style:normal;font-size:12px;color:#c4c4cc;margin-top:3px;line-height:1.4}
 .godeep i{font-style:normal;font-size:20px;color:var(--ac)}
-#dv{--ac:#a28fd0;position:absolute;inset:0;z-index:6;background:#09090b;display:grid;visibility:hidden;opacity:0;transform:scale(1.015);transition:opacity .4s,transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s .4s;grid-template-columns:1fr 340px;grid-template-rows:auto 1fr;overflow:hidden}
+#dv{--ac:#c98a5e;position:absolute;inset:0;z-index:6;background:#09090b;display:grid;visibility:hidden;opacity:0;transform:scale(1.015);transition:opacity .4s,transform .5s cubic-bezier(.2,.8,.2,1),visibility 0s .4s;grid-template-columns:1fr 340px;grid-template-rows:auto 1fr;overflow:hidden}
 #dv.on{visibility:visible;opacity:1;transform:none;transition:opacity .4s,transform .5s cubic-bezier(.2,.8,.2,1)}
 .dvb{grid-column:1/3;display:flex;align-items:center;gap:16px;padding:14px 20px;border-bottom:1px solid var(--line);min-width:0}
 .dvback,.dvt2 button{all:unset;cursor:pointer;font-size:12.5px;padding:6px 12px;border:1px solid var(--line);border-radius:99px;white-space:nowrap;color:var(--fg)}
@@ -423,6 +423,7 @@ header h1{font-size:2rem!important}
 #story .kps b,#panel .bh b,.cc b{font-family:var(--letra-dato)!important;font-weight:400!important}
 .lbl b,.hito b{font-family:var(--letra-titulo)!important;font-weight:400!important;text-transform:uppercase;letter-spacing:.02em!important;font-size:16px}
 @media(max-width:600px){.lbl b{font-size:12.5px}}
+.lbl small{letter-spacing:.06em!important;font-size:8.5px!important}
 /* superficies: velo negro, líneas finas, esquinas rectas */
 .panelui,header,.legend,#panel,#tip,#story .card,#volver,#intro .skip,.hito,.dvb,.dvd,#dv .dvd,#dv .dvb{background:var(--campo-velo)!important;border:1px solid var(--linea)!important;border-radius:0!important;box-shadow:none!important}
 #panel{background:rgba(5,6,7,.94)!important}
@@ -465,8 +466,8 @@ header h1{font-size:2rem!important}
 <div class="legend">
 <b>Convenciones</b>
 <div><svg viewBox="0 0 34 10"><g fill="#d9e2ec"><circle cx="3" cy="5" r="1"/><circle cx="9" cy="5" r="1.3"/><circle cx="15" cy="5" r="1.6"/><circle cx="21" cy="5" r="1.9"/><circle cx="28" cy="5" r="2.4"/></g></svg>Río de partículas: A provoca B</div>
-<div><svg viewBox="0 0 34 10"><g fill="#f2cc8f"><circle cx="3" cy="5" r="2.2"/><circle cx="10" cy="5" r="1.4"/><circle cx="17" cy="5" r="1"/><circle cx="24" cy="5" r="1.4"/><circle cx="31" cy="5" r="2.2"/></g></svg>En ambos sentidos: se refuerzan</div>
-<div><svg viewBox="0 0 34 10"><path d="M1 5h6M12 5h6M23 5h6" stroke="#81d4b0" stroke-width="1.4"/></svg>Punteado: se complementan</div>
+<div><svg viewBox="0 0 34 10"><g fill="#e3cfa4"><circle cx="3" cy="5" r="2.2"/><circle cx="10" cy="5" r="1.4"/><circle cx="17" cy="5" r="1"/><circle cx="24" cy="5" r="1.4"/><circle cx="31" cy="5" r="2.2"/></g></svg>En ambos sentidos: se refuerzan</div>
+<div><svg viewBox="0 0 34 10"><path d="M1 5h6M12 5h6M23 5h6" stroke="#a3ad8a" stroke-width="1.4"/></svg>Punteado: se complementan</div>
 <button type="button" class="mov" id="bmov">Pausar movimiento</button><small>Cada esfera es un problema; su tamaño, cuántas conexiones tiene. Las partículas son los puntos de la ciudad de Kennedy.</small></div>
 <div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
 <a class="goprop" href="propuesta.html">Ver la propuesta →</a>
@@ -495,7 +496,7 @@ const E=[
 {s:'D',t:'A',k:'c',w:2,d:'La especulación convierte suelo productivo en suelo urbano.'},
 {s:'A',t:'E',k:'c',w:1,d:'Los alimentos traídos de fuera generan empaques y residuos.'},
 {s:'D',t:'F',k:'m',w:2,d:'La inversión especulativa se concentra donde ya hay servicios.'}];
-const COL={c:0xd9e2ec,r:0xf2cc8f,m:0x81d4b0};
+const COL={c:0xd9e2ec,r:0xe3cfa4,m:0xa3ad8a};
 const NCOL={3:0x2a9d8f,4:0x457b9d,5:0xe76f51};
 const byId={};N.forEach(n=>{byId[n.id]=n;n.deg=0});
 E.forEach(e=>{e.a=byId[e.s];e.b=byId[e.t];e.a.deg++;e.b.deg++});
@@ -518,7 +519,7 @@ const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(1,1.2,1.5);scen
 const pl=new THREE.PointLight(0x88aaff,.8,0);pl.position.set(-ext,ext,ext);scene.add(pl);
 // nodos esféricos con ícono y texto, aristas finas
 const NC={A:'#3e8f6f',B:'#6f55b0',C:'#3f72a8',D:'#a24a8d',E:'#37868c',F:'#b8693f'};
-const PC={A:'#7fb08a',B:'#7d9bd1',C:'#d1a45c',D:'#c9779a',E:'#6fb5b0',F:'#a28fd0'};
+const PC={A:'#8f9a62',B:'#d6b98a',C:'#b6a36a',D:'#a8645a',E:'#8a7a6a',F:'#c98a5e'};
 const ICONS={
 A:x=>{x.strokeRect(-46,-28,54,42);x.beginPath();x.moveTo(8,-14);x.lineTo(32,-14);x.lineTo(46,2);x.lineTo(46,14);x.lineTo(8,14);x.stroke();x.beginPath();x.arc(-24,22,9,0,7);x.stroke();x.beginPath();x.arc(30,22,9,0,7);x.stroke()},
 B:x=>{[-22,22].forEach(c=>{x.beginPath();x.arc(c,-20,11,0,7);x.stroke();x.beginPath();x.arc(c,34,20,Math.PI,0);x.stroke()})},
@@ -879,7 +880,7 @@ const ARC=E.map((e,i)=>{
  const ctrl=mid.clone().addScaledVector(out,L*.28).addScaledVector(side,(i%2?1:-1)*L*.1);
  const cur=new THREE.QuadraticBezierCurve3(A.clone(),ctrl,B.clone());
  const len=cur.getLength(),t0=Math.min(.45,e.a.r*1.12/len),t1=Math.max(.55,1-e.b.r*1.12/len);
- const col=new THREE.Color(e.k==='c'?PC[e.a.id]:e.k==='r'?'#f2cc8f':'#81d4b0');
+ const col=new THREE.Color(e.k==='c'?PC[e.a.id]:e.k==='r'?'#e3cfa4':'#a3ad8a');
  const pts=[];for(let k=0;k<=72;k++)pts.push(cur.getPoint(t0+(t1-t0)*k/72));
  const lg=new THREE.BufferGeometry().setFromPoints(pts);
  const lm=e.k==='m'?new THREE.LineDashedMaterial({color:col,dashSize:9,gapSize:9,transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false})
@@ -901,8 +902,6 @@ const NODO_R=.7; // radio del disco respecto a la esfera de partículas
 function mkNodo(n){const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d'),col=PC[n.id];
  x.beginPath();x.arc(256,256,200,0,7);x.fillStyle='rgba(5,6,7,.9)';x.fill();
  x.strokeStyle=col;x.lineWidth=7;x.beginPath();x.arc(256,256,200,0,7);x.stroke();
- x.globalAlpha=.55;x.lineWidth=2;x.beginPath();x.arc(256,256,236,0,7);x.stroke();
- x.globalAlpha=1;x.lineWidth=4;for(let k=0;k<4;k++){const a=k*Math.PI/2;x.beginPath();x.moveTo(256+Math.cos(a)*226,256+Math.sin(a)*226);x.lineTo(256+Math.cos(a)*250,256+Math.sin(a)*250);x.stroke()}
  const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,opacity:0,depthWrite:false,depthTest:false}));
  n.nr=Math.max(n.r*NODO_R,62); // radio del disco: mínimo legible en los nodos pequeños
  s.position.copy(n.p);s.scale.setScalar(n.nr*2*256/200);s.renderOrder=8;scene.add(s);return s}
@@ -986,7 +985,7 @@ fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer
  const W=N.map(m=>m.r*m.r*m.r),Wt=W.reduce((a,b)=>a+b,0);
  for(let i=0;i<n;i++){const o=16+i*7;pos[i*3]=dv.getInt16(o,true)/2*ESCALA;pos[i*3+1]=dv.getInt16(o+2,true)/2*ESCY;pos[i*3+2]=dv.getInt16(o+4,true)/2*ESCALA;tip[i]=dv.getUint8(o+6);rn[i]=Math.random();
   let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];nod[i]=k;
-  const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*Math.pow(Math.random(),.35)*1.05;
+  const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=(m.nr||m.r*.7)*Math.pow(Math.random(),.35)*.9; /* las partículas terminan dentro del nodo: sin halo difuso */
   cen.set([m.p.x,m.p.y,m.p.z],i*3);off.set([q*Math.cos(a)*rr,z*rr,q*Math.sin(a)*rr],i*3);
   const c=new THREE.Color(PC[m.id]).lerp(new THREE.Color('#ffffff'),Math.random()*.35);col.set([c.r,c.g,c.b],i*3)}
  const g=new THREE.BufferGeometry();
