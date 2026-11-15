@@ -1031,7 +1031,10 @@ fetch('lugares.json').then(r=>r.json()).then(L=>{
   for(const hi of l.hitos)H.hitos.push({id,k,n:hi.n,sub:hi.sub,p:new THREE.Vector3(hi.p[0]*ESCALA,30,hi.p[1]*ESCALA)});
   // vista de la cámara para este problema: centro ponderado y extensión de sus lugares
   let sx=0,sz=0,sw=0;for(const [x,z,w] of l.pts){sx+=x*w;sz+=z*w;sw+=w}const cx=sx/sw*ESCALA,cz=sz/sw*ESCALA;let r2=0;for(const [x,z,w] of l.pts)r2+=((x*ESCALA-cx)**2+(z*ESCALA-cz)**2)*w;
-  idx[id+'v']={c:new THREE.Vector3(cx,0,cz),d:Math.max(260,Math.min(900,Math.sqrt(r2/sw)*2.6))}}
+  idx[id+'v']={c:new THREE.Vector3(cx,0,cz),d:Math.max(260,Math.min(900,Math.sqrt(r2/sw)*2.6))};
+  if(l.vista==='hitos'&&l.hitos.length>1){ // encuadra los lugares clave (p. ej. Corabastos y las plazas distritales)
+   const hx=l.hitos.map(h=>h.p[0]*ESCALA),hz=l.hitos.map(h=>h.p[1]*ESCALA),mx=(Math.min(...hx)+Math.max(...hx))/2,mz=(Math.min(...hz)+Math.max(...hz))/2;
+   idx[id+'v']={c:new THREE.Vector3(mx,0,mz),d:Math.max(300,Math.min(900,Math.max(Math.max(...hx)-Math.min(...hx),Math.max(...hz)-Math.min(...hz))*1.7))}}}
  H.vistaP=idx;
  const cols=N.map(n=>new THREE.Color(PC[n.id]));
  const MU={uT:{value:0},uPix:{value:Math.min(devicePixelRatio,2)},uShow:{value:[0,0,0,0,0,0]},uCol:{value:cols}};
@@ -1137,6 +1140,9 @@ function recorrido(dt,now){
  const dp=p0.lerp(p1,w),dtg=t0.lerp(t1,w);
  if(!camIni){cP.copy(dp);cT.copy(dtg);camIni=true}
  const k=1-Math.exp(-dt*3.5);cP.lerp(dp,k);cT.lerp(dtg,k);cam.position.copy(cP);cam.lookAt(cT);
+ // en escritorio la tarjeta ocupa la izquierda: la escena se corre a la derecha para que lo que se señala quede a la vista
+ const vo=(innerWidth>700&&i>=1&&i<=6)?Math.min(320,innerWidth*.2):0;H.vo=(H.vo||0)+(vo-(H.vo||0))*k;
+ if(Math.abs(H.vo)>.5)cam.setViewOffset(innerWidth,innerHeight,-H.vo,0,innerWidth,innerHeight);else cam.clearViewOffset();
  // ciudad
  const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
   const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
@@ -1161,7 +1167,7 @@ let LT2=performance.now();
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
  const s=etapa(),enRed=s>=8;
- if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
+ if(enRed&&H.modo!=='red'){H.modo='red';H.vo=0;cam.clearViewOffset();document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
  if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);N.forEach(n=>n.nd.material.opacity=0);ancP.material.opacity=0;cP.copy(cam.position);H.s=s}
  if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);

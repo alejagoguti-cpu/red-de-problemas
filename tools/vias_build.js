@@ -26,7 +26,10 @@ function ruta(a, b) {
 const cercano = ([x, y]) => { let b = -1, bd = Infinity; PT.forEach((p, i) => { if (!ADJ[i].length) return; const d = Math.hypot(p[0] - x, p[1] - y); if (d < bd) { bd = d; b = i; } }); return b; };
 const CO = R('corabastos.json'); const cora = [CO.poly.reduce((s, p) => s + p[0], 0) / CO.poly.length, CO.poly.reduce((s, p) => s + p[1], 0) / CO.poly.length];
 const OSM = JSON.parse(fs.readFileSync('C:/Users/ACER/simulador/tools/cache/kennedy_osm.json', 'utf8')).elements;
-const plazas = OSM.filter(e => e.tags && e.tags.amenity === 'marketplace').map(e => e.geometry ? e.geometry.map(g => ll2l(g.lat, g.lon)) : [ll2l(e.lat, e.lon)]).map(P => [P.reduce((s, p) => s + p[0], 0) / P.length, P.reduce((s, p) => s + p[1], 0) / P.length]);
+let plazas = OSM.filter(e => e.tags && e.tags.amenity === 'marketplace').map(e => e.geometry ? e.geometry.map(g => ll2l(g.lat, g.lon)) : [ll2l(e.lat, e.lon)]).map(P => [P.reduce((s, p) => s + p[0], 0) / P.length, P.reduce((s, p) => s + p[1], 0) / P.length]);
+// plazas distritales oficiales de Kennedy (tools/plazas_build.js): reemplazan a la de OSM que coincide
+{ const f = path.join(__dirname, '..', 'plazas_distritales.json'); if (fs.existsSync(f)) { const K = JSON.parse(fs.readFileSync(f, 'utf8')).plazas.filter(p => p.loc === 8).map(p => [p.c[0] + cx, cy - p.c[1]]);
+  plazas = plazas.filter(p => !K.some(k => Math.hypot(k[0] - p[0], k[1] - p[1]) < 150)).concat(K); } }
 const a = cercano(cora), flujosA = [];
 for (const p of plazas) { const r = ruta(a, cercano(p)); if (r) flujosA.push(r); }
 fs.writeFileSync(path.join(__dirname, '..', 'vias.json'), JSON.stringify({ fuente: 'OpenStreetMap (red vehicular de giro_sim.json del simulador)', vias, flujos: { A: flujosA } }));
