@@ -10,7 +10,7 @@
 <style>
 :root{color-scheme:dark;--bg:#050607;--bg2:#080a0b;--fg:#eaefed;--mut:#a9b3af;--mut2:#7a8480;--line:rgba(214,228,222,.12);--line2:rgba(214,228,222,.22);--pr:#cfff5e;
  --letra-titulo:'Barlow Condensed','Arial Narrow',ui-sans-serif,sans-serif;--letra-dato:'Geist Mono',ui-monospace,monospace;
- --A:#8f9a62;--B:#d6b98a;--C:#b6a36a;--D:#a8645a;--E:#8a7a6a;--F:#c98a5e;
+ --A:#a3b845;--B:#f2c879;--C:#dba73a;--D:#d4553f;--E:#a77b5a;--F:#ee8a45;
  --k0:#5fb3a1;--k1:#8cc084;--k2:#d9c36a;--k3:#e0935a;--k4:#c4574f}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:64px}
@@ -221,7 +221,7 @@ input[type=range]{accent-color:var(--pr);width:min(190px,34vw);cursor:pointer}
 #ftip{position:absolute;pointer-events:none;z-index:3;display:none;max-width:250px;background:#080a0b;border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font-size:12px;line-height:1.45}
 #ftip b{display:block;font-size:12.5px;margin-bottom:2px}
 .tbar{display:grid;grid-template-columns:150px 1fr 34px;gap:10px;align-items:center;font-size:12.5px;margin:7px 0;color:#c1c1c9}
-.tbar i{display:block;height:7px;border-radius:4px;background:#d6b98a;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
+.tbar i{display:block;height:7px;border-radius:4px;background:#f2c879;width:0;transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 /* esquinas rectas como Salento (los puntos siguen redondos) */
 .card,.mx,.mapw,.flow,.dec,.pc,.steps,.fed,.mleg,.mread,#mtip,#ftip,.pill,.tag,.stk,.bar1,.bar1 i,.wb i,.tbar i,.gtrack{border-radius:0!important}
 .pill:hover,.pill.on{border-color:#cfff5e;color:#cfff5e}
@@ -558,7 +558,7 @@ $('#mxd').innerHTML='<div class="hint">Toca un problema de la tabla para ver có
 pickRow('F');
 
 /* ---------- uso del suelo ---------- */
-const UC={'Residencial':'#d6b98a','Comercio':'#b6a36a','Dotacional':'#c98a5e','Industrial':'#c4574f','Otros':'#5d5d66'};
+const UC={'Residencial':'#f2c879','Comercio':'#dba73a','Dotacional':'#ee8a45','Industrial':'#c4574f','Otros':'#5d5d66'};
 function stkRow(lbl,sub,d){const t=Object.values(d).reduce((a,b)=>a+b,0),parts={};for(const k in d){const kk=UC[k]&&k!=='Parqueadero'&&k!=='Recreacional'?k:'Otros';parts[kk]=(parts[kk]||0)+d[k]}
  return '<div class="sb"><div class="h"><b style="font-weight:500">'+lbl+'</b><span>'+sub+'</span></div><div class="stk">'+Object.keys(UC).map(k=>'<i data-w="'+(parts[k]||0)+'" style="background:'+UC[k]+'" title="'+k+' '+fmt(parts[k]||0,1)+' %"></i>').join('')+'</div></div>'}
 $('#stk').innerHTML=stkRow('Kennedy','toda la localidad',AN.mix.kennedy[0])+stkRow('A 1,5 km del predio','radio de 1.500 m',AN.mix.r1500[0])+stkRow('A 800 m del predio','radio de 800 m',AN.mix.r800[0]);
@@ -566,7 +566,7 @@ $('#stk-lg').innerHTML=Object.keys(UC).map(k=>'<span><i style="background:'+UC[k
 $('#stk').closest('.card').addEventListener('revealed',()=>setTimeout(()=>$$('#stk .stk i').forEach(i=>i.style.width=i.dataset.w+'%'),200));
 // predio
 {const B=AN.bav,tot=B.area_ha,cons=B.edif_m2/10000,otros=tot-B.bosque_ha-B.libre_ha-cons;
- const rows=[['Bosque que se conserva',B.bosque_ha,'#5f8a4f'],['Suelo libre y plazas',B.libre_ha,'#d6b98a'],['Huella de edificios recuperados',cons,'#b6a36a'],['Patios, vías internas y resto',otros,'#5d5d66']];
+ const rows=[['Bosque que se conserva',B.bosque_ha,'#5f8a4f'],['Suelo libre y plazas',B.libre_ha,'#f2c879'],['Huella de edificios recuperados',cons,'#dba73a'],['Patios, vías internas y resto',otros,'#5d5d66']];
  $('#predio').innerHTML=rows.map(r=>'<div class="sb" style="margin:14px 0"><div class="h"><span style="color:var(--fg)">'+r[0]+'</span><b style="font-weight:500">'+fmt(r[1],1)+' ha <span style="color:var(--mut);font-weight:400">· '+fmt(100*r[1]/tot)+' %</span></b></div><div class="bar1"><i data-w="'+(100*r[1]/tot)+'" style="background:'+r[2]+'"></i></div></div>').join('')+'<p style="margin:14px 0 0;font-size:13px;color:var(--mut)">El bosque no se toca y ningún pasaje lo atraviesa. Las naves se recuperan en lugar de demolerlas.</p>';
  $('#predio').closest('.card').addEventListener('revealed',()=>setTimeout(()=>$$('#predio .bar1 i').forEach(i=>i.style.width=i.dataset.w+'%'),200))}
 
@@ -660,13 +660,13 @@ function distTo(P,pts){let m=1e9;for(const q of pts){const d=Math.hypot(P[0]-q[0
  {x:510,y:128,w:210,h:110,t:'Centro de consolidación',s:['Naves 0 y 2 · 6,1 ha','selección, frío y empaque'],c:'#e6d9b0'},
  {x:790,y:20,w:210,h:96,t:'Plaza mayor Bavaria',s:['9.362 m² · ≈156 puestos','destino de toda la UPZ'],c:'#e6d9b0'},
  {x:790,y:150,w:210,h:96,t:'19 plazas de barrio',s:['alcance de 500 m','fase 1: 8 · fase 2: 11'],c:'#e6d9b0'},
- {x:1070,y:150,w:140,h:96,t:'Tiendas aliadas',s:['431 tiendas OSM','95 % a 500 m'],c:'#d6b98a'},
+ {x:1070,y:150,w:140,h:96,t:'Tiendas aliadas',s:['431 tiendas OSM','95 % a 500 m'],c:'#f2c879'},
  {x:1070,y:20,w:140,h:96,t:'Hogares',s:['≈1,04 M personas'],c:'#ececee'},
  {x:510,y:330,w:210,h:84,t:'Compostaje y hongos',s:['14,9 t/día entran','5,9 t/día de compost'],c:'#b98a57'}];
  const link=(a,b,col,dy=0)=>{const A=nodes[a],B=nodes[b],x1=A.x+A.w,y1=A.y+A.h/2+dy,x2=B.x,y2=B.y+B.h/2+dy,mx=(x1+x2)/2;return '<path class="fl" d="M'+x1+' '+y1+' C'+mx+' '+y1+' '+mx+' '+y2+' '+x2+' '+y2+'" stroke="'+col+'"/>'};
  let s='<svg viewBox="0 0 1230 440" role="img" aria-label="Flujo de alimentos y residuos de la propuesta">';
- s+=link(0,1,'#8a8a93')+link(0,2,'#8cc084')+link(1,3,'#c4574f')+link(2,3,'#8cc084')+link(3,4,'#e6d9b0')+link(3,5,'#e6d9b0')+link(5,6,'#d6b98a')+link(4,7,'#e6d9b0');
- s+='<path class="fl" d="M1140 150 L1140 116" stroke="#d6b98a"/>';
+ s+=link(0,1,'#8a8a93')+link(0,2,'#8cc084')+link(1,3,'#c4574f')+link(2,3,'#8cc084')+link(3,4,'#e6d9b0')+link(3,5,'#e6d9b0')+link(5,6,'#f2c879')+link(4,7,'#e6d9b0');
+ s+='<path class="fl" d="M1140 150 L1140 116" stroke="#f2c879"/>';
  s+='<path class="fl" d="M615 238 L615 330" stroke="#b98a57"/><text x="627" y="290" font-size="11.5" fill="#b98a57">mermas y empaques</text>';
  s+='<path class="fl" d="M895 246 C895 330 820 372 720 372" stroke="#b98a57"/><text x="905" y="330" font-size="11.5" fill="#b98a57">orgánicos en bicicarga</text>';
  nodes.forEach(n=>{s+='<g class="fn"><rect x="'+n.x+'" y="'+n.y+'" width="'+n.w+'" height="'+n.h+'" stroke="'+(n.f?'#34343b':n.c)+'" rx="8"/><rect x="'+n.x+'" y="'+n.y+'" width="3" height="'+n.h+'" fill="'+n.c+'" rx="1.5"/><text x="'+(n.x+16)+'" y="'+(n.y+28)+'" font-size="14" font-weight="500">'+n.t+'</text>'+n.s.map((q,i)=>'<text x="'+(n.x+16)+'" y="'+(n.y+52+i*19)+'" font-size="12" style="fill:#8a8a93">'+q+'</text>').join('')+'</g>'});
