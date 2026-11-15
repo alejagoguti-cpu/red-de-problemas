@@ -270,6 +270,16 @@ body.intro #intro{opacity:1;pointer-events:auto;cursor:pointer}
 #intro .scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,165,91,.35),transparent);animation:scanY 3.2s linear infinite}
 @keyframes scanY{from{top:0}to{top:100%}}
 @media(max-width:600px){#intro .tr,#intro .br{display:none}#intro .hud{font-size:9.5px}#intro .skip{bottom:70px}}
+/* ============ CONSTELACIÓN: etiquetas HUD ============ */
+#lbls{position:absolute;inset:0;z-index:2;pointer-events:none}
+#lbls svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+body.intro #lbls{opacity:0}
+.lbl{all:unset;position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;display:block;padding:7px 11px 8px;border-left:2px solid var(--c);background:rgba(13,15,18,.62);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-radius:0 8px 8px 0;transition:background .2s,box-shadow .2s;white-space:nowrap;will-change:transform}
+.lbl small{display:block;font:500 9px var(--ui-mono);letter-spacing:.16em;text-transform:uppercase;color:var(--c);opacity:.9}
+.lbl b{display:block;margin-top:2px;font:500 13.5px Inter,system-ui,sans-serif;color:#e9ebec;letter-spacing:-.005em}
+.lbl:hover,.lbl.on{background:rgba(13,15,18,.86);box-shadow:0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent),0 10px 30px rgba(0,0,0,.4)}
+.lbl:focus-visible{outline:1px solid var(--c);outline-offset:2px}
+@media(max-width:600px){.lbl{padding:5px 8px 6px}.lbl b{font-size:11.5px;white-space:normal;max-width:120px}.lbl small{font-size:8px}}
 </style>
 </head>
 <body class="intro">
@@ -281,17 +291,17 @@ body.intro #intro{opacity:1;pointer-events:auto;cursor:pointer}
 <header><div class="eyebrow">Kennedy, Bogotá</div><h1>Red de problemas</h1><p>Seis problemas que se alimentan entre sí. Arrastra para girar, acerca con la rueda y toca un nodo para ver sus indicadores.</p></header>
 <div class="legend">
 <b>Convenciones</b>
-<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="28" y2="5" stroke="#9a9aa3" stroke-width="1.2"/><path d="M34 5L26 2V8z" fill="#9a9aa3"/></svg>Causa: A provoca B</div>
-<div><svg viewBox="0 0 34 10"><line x1="6" y1="5" x2="28" y2="5" stroke="#d1a45c" stroke-width="1.6"/><path d="M0 5L8 2V8zM34 5L26 2V8z" fill="#d1a45c"/></svg>Se refuerzan mutuamente</div>
-<div><svg viewBox="0 0 34 10"><line x1="0" y1="5" x2="34" y2="5" stroke="#6fb5b0" stroke-width="1.2" stroke-dasharray="4 3"/></svg>Se complementan</div>
-<small>El tamaño del nodo indica su número de conexiones.</small>
-</div>
+<div><svg viewBox="0 0 34 10"><g fill="#d9e2ec"><circle cx="3" cy="5" r="1"/><circle cx="9" cy="5" r="1.3"/><circle cx="15" cy="5" r="1.6"/><circle cx="21" cy="5" r="1.9"/><circle cx="28" cy="5" r="2.4"/></g></svg>Río de partículas: A provoca B</div>
+<div><svg viewBox="0 0 34 10"><g fill="#f2cc8f"><circle cx="3" cy="5" r="2.2"/><circle cx="10" cy="5" r="1.4"/><circle cx="17" cy="5" r="1"/><circle cx="24" cy="5" r="1.4"/><circle cx="31" cy="5" r="2.2"/></g></svg>En ambos sentidos: se refuerzan</div>
+<div><svg viewBox="0 0 34 10"><path d="M1 5h6M12 5h6M23 5h6" stroke="#81d4b0" stroke-width="1.4"/></svg>Punteado: se complementan</div>
+<small>Cada esfera es un problema; su tamaño, cuántas conexiones tiene. Las partículas son los puntos de la ciudad de Kennedy.</small></div>
 <div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
 <a class="goprop" href="propuesta.html">Ver la propuesta →</a>
 <div id="tip"></div>
 <div id="panel"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
 <script>
 const N=[
 {id:'A',t:'Dependencia de alimentos externos'},
@@ -683,69 +693,138 @@ function resize(){const w=innerWidth,h=innerHeight;if(!zoomed&&w<h*.9){cam.posit
 addEventListener('resize',resize);resize();
 const tmp=new THREE.Vector3();
 if(location.hash&&byId[location.hash.slice(1)])setTimeout(()=>select(byId[location.hash.slice(1)]),2600);
-/* ============ ENTRADA: Kennedy como nube de puntos que se transforma en la red de problemas ============
-   nube.bin (tools/nube_build.js): 142.762 puntos de edificios reales (catastro/OSM del simulador), calles, humedales,
-   Corabastos y el borde de la localidad. Un solo shader: los puntos suben a la altura de cada edificio, un barrido los escanea,
-   y luego cada punto viaja (con remolino) a la superficie de uno de los seis problemas, toma su color y queda orbitando. */
-const INTRO={on:!matchMedia('(prefers-reduced-motion: reduce)').matches,t0:null,fase:0,mix:0,tMix:null,dur:3400,listo:false,pts:null};
+/* ============ CONSTELACIÓN DE PARTÍCULAS ============
+   Cada problema es una esfera de partículas (las mismas de la nube de Kennedy), con un núcleo de luz; las relaciones son arcos
+   por donde corren ríos de partículas en el sentido de la causa (en ambos sentidos si se refuerzan); etiquetas tipo HUD con
+   línea guía; brillo (bloom) en pantallas grandes. Al pasar o tocar un problema se apaga el resto. */
+N.forEach(n=>{n.sp.visible=false});
+E.forEach(e=>e.mats.forEach(x=>{x.visible=false}));flow.visible=false;edgePick.length=0;
+const V3=THREE.Vector3,UPV=new V3(0,1,0);
+const ARC=E.map((e,i)=>{
+ const A=e.a.p,B=e.b.p,mid=A.clone().add(B).multiplyScalar(.5),d=B.clone().sub(A),L=d.length();
+ const out=mid.lengthSq()>1?mid.clone().normalize():UPV.clone(),side=new V3().crossVectors(d,out).normalize();
+ const ctrl=mid.clone().addScaledVector(out,L*.28).addScaledVector(side,(i%2?1:-1)*L*.1);
+ const cur=new THREE.QuadraticBezierCurve3(A.clone(),ctrl,B.clone());
+ const len=cur.getLength(),t0=Math.min(.45,e.a.r*1.12/len),t1=Math.max(.55,1-e.b.r*1.12/len);
+ const col=new THREE.Color(e.k==='c'?PC[e.a.id]:e.k==='r'?'#f2cc8f':'#81d4b0');
+ const pts=[];for(let k=0;k<=72;k++)pts.push(cur.getPoint(t0+(t1-t0)*k/72));
+ const lg=new THREE.BufferGeometry().setFromPoints(pts);
+ const lm=e.k==='m'?new THREE.LineDashedMaterial({color:col,dashSize:9,gapSize:9,transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false})
+   :new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false});
+ const line=new THREE.Line(lg,lm);if(e.k==='m')line.computeLineDistances();line.renderOrder=3;scene.add(line);
+ for(let k=0;k<10;k++){const p=cur.getPoint(t0+(t1-t0)*k/10),q=cur.getPoint(t0+(t1-t0)*(k+1)/10),dd=q.clone().sub(p);const m=new THREE.Mesh(new THREE.CylinderGeometry(12,12,1,6),new THREE.MeshBasicMaterial({visible:false}));m.scale.y=dd.length();m.position.copy(p).addScaledVector(dd,.5);m.quaternion.setFromUnitVectors(UPV,dd.normalize());m.userData.e=e;scene.add(m);edgePick.push(m)}
+ return {e,cur,t0,t1,lm,col,side,n:e.k==='m'?70:150+e.w*40};
+});
+// ríos de partículas
+const SP=[];ARC.forEach((a,ai)=>{for(let k=0;k<a.n;k++)SP.push({a,t:Math.random(),v:(.05+Math.random()*.07)*(a.e.k==='m'?.5:1),dir:a.e.k==='r'&&k%2?-1:1,ph:Math.random()*6.28,amp:2+Math.random()*7,b:.4+Math.random()*.6})});
+const sPos=new Float32Array(SP.length*3),sCol=new Float32Array(SP.length*3);
+const sG=new THREE.BufferGeometry();sG.setAttribute('position',new THREE.BufferAttribute(sPos,3));sG.setAttribute('color',new THREE.BufferAttribute(sCol,3));
+const sPts=new THREE.Points(sG,new THREE.PointsMaterial({size:innerWidth<700?11:9,map:dotTex,vertexColors:true,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false,opacity:0}));
+sPts.frustumCulled=false;sPts.renderOrder=6;scene.add(sPts);
+// núcleos de luz
+const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.18,'rgba(255,255,255,.55)');g.addColorStop(.5,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+N.forEach(n=>{n.core=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:new THREE.Color(PC[n.id]),transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending}));n.core.position.copy(n.p);n.core.scale.setScalar(n.r*1.9);n.core.renderOrder=5;scene.add(n.core)});
+// etiquetas HUD con línea guía
+const LB=document.createElement('div');LB.id='lbls';LB.innerHTML='<svg id="lbsvg"></svg>';document.body.appendChild(LB);
+const SVGNS='http://www.w3.org/2000/svg',svg=LB.querySelector('svg');
+N.forEach((n,i)=>{const d=document.createElement('button');d.className='lbl';d.style.setProperty('--c',PC[n.id]);
+ d.innerHTML='<small>'+String(i+1).padStart(2,'0')+' · '+n.deg+' conexiones</small><b>'+n.t+'</b>';d.onclick=()=>select(n);
+ d.onpointerenter=()=>{hov=n;focus(n)};d.onpointerleave=()=>{hov=null;focus(sel)};LB.appendChild(d);n.lb=d;
+ n.ll=document.createElementNS(SVGNS,'polyline');n.ll.setAttribute('fill','none');n.ll.setAttribute('stroke',PC[n.id]);n.ll.setAttribute('stroke-width','1');svg.appendChild(n.ll);
+ n.ld=document.createElementNS(SVGNS,'circle');n.ld.setAttribute('r','2.5');n.ld.setAttribute('fill',PC[n.id]);svg.appendChild(n.ld)});
+const camR=new V3(),camU=new V3(),pp=new V3(),pq=new V3();
+let tRed=null; // momento en que aparece la red (después de la entrada)
+function constelacion(dt,now){
+ if(tRed===null)return;const aRed=Math.min(1,(now-tRed)/1400);
+ // ríos
+ SP.forEach((s,i)=>{const a=s.a,on=a.e.co;s.t+=s.v*dt*s.dir;if(s.t>1)s.t-=1;if(s.t<0)s.t+=1;
+  const tt=a.t0+(a.t1-a.t0)*s.t;a.cur.getPoint(tt,pp);const w=Math.sin(now*.002+s.ph)*s.amp;pp.addScaledVector(a.side,w);
+  sPos[i*3]=pp.x;sPos[i*3+1]=pp.y+Math.cos(now*.0017+s.ph)*s.amp*.6;sPos[i*3+2]=pp.z;
+  const k=Math.sin(Math.PI*s.t)*s.b*on*aRed*1.25;sCol[i*3]=a.col.r*k;sCol[i*3+1]=a.col.g*k;sCol[i*3+2]=a.col.b*k});
+ sG.attributes.position.needsUpdate=true;sG.attributes.color.needsUpdate=true;sPts.material.opacity=1;
+ ARC.forEach(a=>{a.lm.opacity=.28*a.e.co*aRed});
+ N.forEach(n=>{n.core.material.opacity=.75*n.co*aRed*(.85+.15*Math.sin(now*.0018+n.r));n.core.scale.setScalar(n.r*1.9*n.cs)});
+ if(INTRO.U){const A=INTRO.U.uNA.value;N.forEach((n,i)=>A[i]=n.co)}
+ // etiquetas
+ const w=innerWidth,h=innerHeight;cam.updateMatrixWorld();camR.setFromMatrixColumn(cam.matrixWorld,0);camU.setFromMatrixColumn(cam.matrixWorld,1);
+ const r=renderer.domElement.getBoundingClientRect();
+ N.forEach(n=>{pp.copy(n.p).project(cam);if(pp.z>1){n.lb.style.opacity=0;n.ll.setAttribute('points','');return}
+  const sx=(pp.x+1)/2*r.width+r.left,sy=(1-pp.y)/2*r.height+r.top;pq.copy(n.p).addScaledVector(camR,n.r).project(cam);const rp=Math.abs((pq.x+1)/2*r.width+r.left-sx);
+  const der=sx>=w/2,ang=der?-.62:Math.PI+.62,ex=sx+Math.cos(ang)*rp*1.02,ey=sy+Math.sin(ang)*rp*1.02,kx=ex+(der?26:-26),ky=ey-26,lx=kx+(der?14:-14);
+  n.ll.setAttribute('points',ex.toFixed(1)+','+ey.toFixed(1)+' '+kx.toFixed(1)+','+ky.toFixed(1)+' '+lx.toFixed(1)+','+ky.toFixed(1));n.ld.setAttribute('cx',ex.toFixed(1));n.ld.setAttribute('cy',ey.toFixed(1));
+  const o=(.25+.75*n.co)*aRed;n.ll.style.opacity=o;n.ld.style.opacity=o;n.lb.style.opacity=o;
+  const bw=n.lb.offsetWidth,bx=Math.max(8,Math.min(w-bw-8,der?lx+4:lx-4-bw));n.lb.style.transform='translate('+bx.toFixed(1)+'px,'+(ky-n.lb.offsetHeight/2).toFixed(1)+'px)'; /* dentro de la pantalla */n.lb.classList.toggle('on',sel===n||hov===n)});
+}
+// brillo (bloom) en pantallas grandes
+let COMP=null;
+try{if(innerWidth>=700&&THREE.EffectComposer&&THREE.UnrealBloomPass){COMP=new THREE.EffectComposer(renderer);COMP.addPass(new THREE.RenderPass(scene,cam));COMP.addPass(new THREE.UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.95,.55,.12));
+ const rs=()=>{COMP.setSize(innerWidth,innerHeight)};addEventListener('resize',rs);rs()}}catch(e){console.warn('bloom:',e);COMP=null}
+const pintar=()=>{if(COMP)COMP.render();else renderer.render(scene,cam)};
+
+/* ============ ENTRADA: Kennedy como nube de puntos que se transforma en la constelación ============
+   nube.bin (tools/nube_build.js): 142.762 puntos de edificios reales (del simulador), calles, humedales, Corabastos y el borde
+   de la localidad. Los puntos suben a la altura de cada edificio, un barrido los escanea, y luego cada punto viaja con remolino
+   a la superficie de uno de los seis problemas: esas partículas SON las esferas de la constelación. */
+const INTRO={on:!matchMedia('(prefers-reduced-motion: reduce)').matches,t0:null,tMix:null,dur:3400,listo:false,U:null};
 let BASE0=null;
 const START=cam.position.clone();
 (function(){
  const ui=document.body,$i=id=>document.getElementById(id),ov=$i('intro'),fmt=v=>Math.round(v).toLocaleString('es-CO');
- const fin=()=>{INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;T0=null};
- if(!INTRO.on){fin();return}
- ctl.enabled=false;ctl.autoRotate=false;E.forEach(e=>e.mats.forEach(x=>x.opacity=0));flow.material.opacity=0; // las flechas aparecen con la red
- const saltar=()=>{if(!INTRO.listo){fin();return}if(INTRO.tMix===null)INTRO.tMix=performance.now()-400,INTRO.dur=1600};
- $i('iskip').onclick=e=>{e.stopPropagation();saltar()};ov.addEventListener('click',saltar);addEventListener('keydown',e=>{if(INTRO.on)saltar()});
- const S=1150/7600,SY=S*3.2; // la ciudad mide ~1.150 unidades (la red ~1.000); alturas exageradas ×3,2 para que se lea la ciudad
+ let enAura=false;
+ const aura=()=>{if(enAura||!INTRO.U)return;enAura=true;const U=INTRO.U,t1=performance.now();U.uMix.value=1;U.uRise.value=1;U.uAlpha.value=1;U.uJit.value=0;
+  (function f(){const k=Math.min(1,(performance.now()-t1)/1800);U.uFade.value=k*.38;U.uT.value=(performance.now()-INTRO.t0)/1000;requestAnimationFrame(f)})()};
+ const fin=()=>{INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;ctl.target.set(0,0,0);T0=null;tRed=performance.now();aura()};
+ if(INTRO.on){ctl.enabled=false;ctl.autoRotate=false}else fin();
+ const saltar=()=>{if(!INTRO.on)return;if(!INTRO.listo){cam.position.copy(START);fin();return}if(INTRO.tMix===null)INTRO.tMix=performance.now()-400,INTRO.dur=1600};
+ $i('iskip').onclick=e=>{e.stopPropagation();saltar()};ov.addEventListener('click',saltar);addEventListener('keydown',()=>saltar());
+ const S=1150/7600,SY=S*3.2; // la ciudad mide ~1.150 unidades (la red ~1.000); alturas ×3,2 para que se lea la ciudad
  fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
   const dv=new DataView(buf),n=dv.getUint32(4,true);
-  const pos=new Float32Array(n*3),cen=new Float32Array(n*3),off=new Float32Array(n*3),col=new Float32Array(n*3),tip=new Float32Array(n),rn=new Float32Array(n);
-  // reparto de puntos entre los problemas según su tamaño (r²)
-  const W=N.map(m=>m.r*m.r),Wt=W.reduce((a,b)=>a+b,0);
+  const pos=new Float32Array(n*3),cen=new Float32Array(n*3),off=new Float32Array(n*3),col=new Float32Array(n*3),tip=new Float32Array(n),rn=new Float32Array(n),nod=new Float32Array(n);
+  const W=N.map(m=>m.r*m.r*m.r),Wt=W.reduce((a,b)=>a+b,0); // más partículas en los problemas grandes
   for(let i=0;i<n;i++){const o=16+i*7;pos[i*3]=dv.getInt16(o,true)/2*S;pos[i*3+1]=dv.getInt16(o+2,true)/2*SY;pos[i*3+2]=dv.getInt16(o+4,true)/2*S;tip[i]=dv.getUint8(o+6);rn[i]=Math.random();
-   let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];
-   const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*(.88+Math.random()*.3);
+   let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];nod[i]=k;
+   const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*Math.pow(Math.random(),.35)*1.05; // volumen lleno, más denso hacia la superficie
    cen.set([m.p.x,m.p.y,m.p.z],i*3);off.set([q*Math.cos(a)*rr,z*rr,q*Math.sin(a)*rr],i*3);
-   const c=new THREE.Color(PC[m.id]);col.set([c.r,c.g,c.b],i*3)}
+   const c=new THREE.Color(PC[m.id]).lerp(new THREE.Color('#ffffff'),Math.random()*.35);col.set([c.r,c.g,c.b],i*3)}
   const g=new THREE.BufferGeometry();
   g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aCen',new THREE.BufferAttribute(cen,3));g.setAttribute('aOff',new THREE.BufferAttribute(off,3));
-  g.setAttribute('aCol',new THREE.BufferAttribute(col,3));g.setAttribute('aTipo',new THREE.BufferAttribute(tip,1));g.setAttribute('aRnd',new THREE.BufferAttribute(rn,1));
-  const U={uT:{value:0},uRise:{value:0},uMix:{value:0},uScan:{value:-900},uAlpha:{value:0},uFade:{value:0},uJit:{value:1.2},uPix:{value:Math.min(devicePixelRatio,2)},uSize:{value:innerWidth<700?2.3:3}};
+  g.setAttribute('aCol',new THREE.BufferAttribute(col,3));g.setAttribute('aTipo',new THREE.BufferAttribute(tip,1));g.setAttribute('aRnd',new THREE.BufferAttribute(rn,1));g.setAttribute('aNode',new THREE.BufferAttribute(nod,1));
+  const U={uT:{value:0},uRise:{value:0},uMix:{value:0},uScan:{value:-900},uAlpha:{value:0},uFade:{value:0},uJit:{value:1.2},uPix:{value:Math.min(devicePixelRatio,2)},uSize:{value:innerWidth<700?2.3:3},uNA:{value:[1,1,1,1,1,1]}};
   const mat=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
-   vertexShader:`attribute vec3 aCen;attribute vec3 aOff;attribute vec3 aCol;attribute float aTipo;attribute float aRnd;
-    uniform float uT,uRise,uMix,uScan,uAlpha,uFade,uJit,uPix,uSize;varying vec3 vC;varying float vA;
+   vertexShader:`attribute vec3 aCen;attribute vec3 aOff;attribute vec3 aCol;attribute float aTipo;attribute float aRnd;attribute float aNode;
+    uniform float uT,uRise,uMix,uScan,uAlpha,uFade,uJit,uPix,uSize;uniform float uNA[6];varying vec3 vC;varying float vA;
     void main(){
      float r=clamp(uRise*1.6-aRnd*.6,0.,1.);r=r*r*(3.-2.*r);
      vec3 c=position;c.y*=r;
      c+=vec3(sin(uT*1.3+aRnd*40.+c.z*.05),sin(uT*1.9+aRnd*23.)*.6,cos(uT*1.1+aRnd*31.+c.x*.05))*uJit;
      float m=clamp(uMix*1.7-aRnd*.7,0.,1.);m=m*m*(3.-2.*m);
-     float ang=uT*(.12+aRnd*.18)*(aRnd>.5?1.:-1.),ca=cos(ang),sa=sin(ang);
-     vec3 o=vec3(ca*aOff.x-sa*aOff.z,aOff.y+sin(uT*.8+aRnd*30.)*4.,sa*aOff.x+ca*aOff.z);
+     float ang=uT*(.1+aRnd*.22)*(aRnd>.5?1.:-1.),ca=cos(ang),sa=sin(ang);
+     vec3 o=vec3(ca*aOff.x-sa*aOff.z,aOff.y,sa*aOff.x+ca*aOff.z);
+     o*=1.+.035*sin(uT*1.6+aRnd*12.);                       // la esfera respira
      vec3 net=aCen+o;
      float sw=sin(m*3.14159);
      vec3 p=mix(c,net,m)+vec3(cos(aRnd*80.+uT*2.1),sin(aRnd*50.+uT*1.6)*1.3,sin(aRnd*80.+uT*2.1))*sw*(90.+aRnd*160.);
      vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;
      float big=aTipo>2.5&&aTipo<3.5?2.2:(aTipo>1.5&&aTipo<2.5?1.4:1.);
-     gl_PointSize=uSize*big*mix(1.,.8,m)*uPix*(420./-mv.z);
+     gl_PointSize=uSize*big*mix(1.,.72,m)*uPix*(420./-mv.z);
      float h=clamp(position.y/34.,0.,1.);
      vec3 b=aTipo<.5?mix(vec3(.3,.55,.8),vec3(.9,.97,1.),h):aTipo<1.5?vec3(.9,.58,.28)*.6:aTipo<2.5?vec3(.25,.85,.78):aTipo<3.5?vec3(1.,.42,.2):vec3(.75,.78,.82)*.5;
      float sc=exp(-pow((position.x-uScan)/26.,2.));b+=vec3(.55,.85,1.)*sc*1.4*(1.-m);
-     vC=mix(b,aCol*1.25,m);
-     vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m*(.7+.25*aRnd));
+     float tw=.75+.25*sin(uT*3.+aRnd*90.);                    // titileo
+     vC=mix(b,aCol*1.15*tw,m);
+     float na=1.;for(int k=0;k<6;k++){if(abs(aNode-float(k))<.5)na=uNA[k];}
+     vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m)*mix(1.,.12+.88*na,m);
     }`,
    fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=(1.-d)*(1.-d);gl_FragColor=vec4(vC*a*vA,a*vA);}`});
   const pts=new THREE.Points(g,mat);pts.frustumCulled=false;pts.renderOrder=4;scene.add(pts);
-  INTRO.pts=pts;INTRO.U=U;INTRO.listo=true;INTRO.t0=performance.now();BASE0=START.length();
-  // datos en pantalla
-  const fmt=v=>Math.round(v).toLocaleString('es-CO');
+  INTRO.U=U;INTRO.listo=true;INTRO.t0=performance.now();BASE0=START.length();INTRO.n=n;
   $i('ih1').innerHTML='<b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O';
   $i('ih2').innerHTML='Puntos  <b id="icnt">0</b>\nEdificios  <b>203.783</b>\nFuente  catastro · OSM';
   $i('ih3').innerHTML='<i>●</i> Escaneando territorio\n<span id="ifase">Nube de puntos</span>';
   $i('ih4').innerHTML='1.037.929 hab · 3.858 ha\nSimulador · Federación Policéntrica';
-  INTRO.n=n;
- }).catch(e=>{console.warn('entrada:',e);fin()});
- // línea de tiempo (la llama el bucle)
+  if(!INTRO.on)aura(); // se saltó la entrada antes de que cargara: las partículas van directo a las esferas
+ }).catch(e=>{console.warn('entrada:',e);if(INTRO.on){cam.position.copy(START);fin()}});
  INTRO.update=(now)=>{
   if(!INTRO.listo){cam.position.set(0,360,760);cam.lookAt(0,0,0);return}
   const t=(now-INTRO.t0)/1000,U=INTRO.U;U.uT.value=t;
@@ -754,7 +833,6 @@ const START=cam.position.clone();
   ov.classList.toggle('t1',t>1.2&&INTRO.tMix===null);ov.classList.toggle('t2',INTRO.tMix!==null);
   $i('ibar').style.width=Math.min(100,(INTRO.tMix===null?t/6.4*70:70+30*Math.min(1,(now-INTRO.tMix)/INTRO.dur)))+'%';
   if(INTRO.tMix===null&&t>6.4)INTRO.tMix=now;
-  // cámara: sobrevuelo lento de la ciudad, luego viaja a la vista de la red
   const ang=.55+t*.075,rad=760-Math.min(1,t/7)*230,hh=360-Math.min(1,t/7)*150; // sobrevuelo bajo, como un dron
   const pc=new THREE.Vector3(Math.sin(ang)*rad,hh,Math.cos(ang)*rad);
   if(INTRO.tMix===null){cam.position.copy(pc);cam.lookAt(0,0,0);return}
@@ -762,18 +840,16 @@ const START=cam.position.clone();
   U.uMix.value=Math.min(1,q*1.15);U.uJit.value=1.2*(1-q);
   const fp=$i('ifase');if(fp)fp.textContent=q<.5?'Desintegrando la ciudad':'Seis problemas que se alimentan entre sí';
   cam.position.lerpVectors(pc,START.clone().multiplyScalar(1.85),e);cam.lookAt(0,0,0);
-  if(q>=1){ // la red toma el relevo; las partículas quedan como aura que orbita cada problema
-   INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;ctl.target.set(0,0,0);T0=null;
-   const t1=performance.now();(function aura(){const k=Math.min(1,(performance.now()-t1)/1800);U.uFade.value=k*.9;U.uT.value=(performance.now()-INTRO.t0)/1000;U.uMix.value=1;requestAnimationFrame(aura)})();
-  }
+  if(q>=1)fin();
  };
 })();
+let LT2=performance.now();
 (function loop(t){
  requestAnimationFrame(loop);
- if(INTRO.on){INTRO.update(performance.now());renderer.render(scene,cam);return}
- tick(t||0);ctl.update();N.map(n=>[n,cam.position.distanceTo(n.p)]).sort((p,q)=>q[1]-p[1]).forEach((q,i)=>q[0].sp.renderOrder=10+i);
- 
- renderer.render(scene,cam);
+ const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
+ if(INTRO.on){INTRO.update(now);pintar();return}
+ tick(t||0);ctl.update();constelacion(dt,now);
+ pintar();
 })();
 </script>
 </body>
