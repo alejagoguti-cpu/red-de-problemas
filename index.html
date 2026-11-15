@@ -932,7 +932,7 @@ function constelacion(dt,now){
   const k=Math.sin(Math.PI*s.t)*s.b*on*aRed*2;sCol[i*3]=a.col.r*k;sCol[i*3+1]=a.col.g*k;sCol[i*3+2]=a.col.b*k});
  sG.attributes.position.needsUpdate=true;sG.attributes.color.needsUpdate=true;sPts.material.opacity=1;
  ARC.forEach(a=>{a.lm.opacity=.7*a.e.co*aRed});
- N.forEach(n=>{n.core.visible=false;n.nd.material.opacity=aRed*(.3+.7*n.co)}); /* sin núcleo de luz: el nodo es un disco con anillo */
+ N.forEach(n=>{n.core.visible=false;n.nd.material.opacity=aRed*(.3+.7*n.co)*.72}); /* sin núcleo de luz: el nodo es un disco con anillo */
  ancP.material.opacity=aRed*.95;
  
  // etiquetas
