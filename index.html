@@ -1108,12 +1108,12 @@ fetch('limite.json').then(r=>r.json()).then(Lm=>{
  const wg=new THREE.BufferGeometry();wg.setAttribute('position',new THREE.Float32BufferAttribute(W,3));wg.setAttribute('aV',new THREE.Float32BufferAttribute(V,1));wg.setAttribute('aD',new THREE.Float32BufferAttribute(D,1));
  const wall=new THREE.Mesh(wg,new THREE.ShaderMaterial({uniforms:H.L.u,transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
   vertexShader:`attribute float aV,aD;varying float vV,vD;void main(){vV=aV;vD=aD;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`uniform float uA,uT;varying float vV,vD;void main(){float g=pow(1.-vV,2.2);float barrido=.75+.25*smoothstep(.9,1.,fract(vD/260.-uT*.12));float a=uA*g*.42*barrido;gl_FragColor=vec4(vec3(.81,1.,.37)*a,a);}`}));
+  fragmentShader:`uniform float uA,uT;varying float vV,vD;void main(){float g=pow(1.-vV,2.2);float barrido=.75+.25*smoothstep(.9,1.,fract(vD/260.-uT*.12));float a=uA*g*.42*barrido;gl_FragColor=vec4(vec3(.84,.89,.87)*a*.45,a*.45);}`}));
  wall.renderOrder=3;wall.frustumCulled=false;scene.add(wall);
  // borde en el suelo (doble línea para que se lea en celular) y arista superior tenue
  const lin=(y,op,dx)=>{const pts=P.map(([x,z])=>{const c=Math.hypot(x,z)||1;return new THREE.Vector3(x+x/c*dx,y,z+z/c*dx)});pts.push(pts[0].clone());
-  const m=new THREE.LineBasicMaterial({color:0xcfff5e,transparent:true,opacity:0,depthWrite:false,depthTest:false,fog:false});const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),m);l.renderOrder=9;l.frustumCulled=false;l.userData.op=op;scene.add(l);H.L.objs.push(l)};
- lin(.8,1,0);lin(.8,.7,1.2);lin(ALTO,.22,0);
+  const m=new THREE.LineBasicMaterial({color:0xd6e4de,transparent:true,opacity:0,depthWrite:false,depthTest:false,fog:false});const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),m);l.renderOrder=9;l.frustumCulled=false;l.userData.op=op;scene.add(l);H.L.objs.push(l)};
+ lin(.8,.85,0);lin(.8,.45,1.2);lin(ALTO,.12,0); // gris claro, como la tinta de la página
  H.L.wall=wall;
 }).catch(e=>console.warn('límite:',e));
 // ---------- cámara del recorrido ----------
@@ -1123,9 +1123,9 @@ const VFIT=()=>{const a=innerWidth/innerHeight;return a>=1.3?1:Math.min(2.1,1+(1
 function vista(i,t){ // posición y objetivo de la cámara en la etapa i
  // vista alta (~65°): se ve toda la localidad dentro de su límite; en pantallas angostas la cámara se aleja para que quepa
  const F=VFIT();
- if(i<=0){const a=.55+t*.04;return [new THREE.Vector3(Math.sin(a)*520*F,1230*F,Math.cos(a)*520*F),O3.clone()]}
- if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=.4+i*.9+t*.03,d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.42,d*1.15,Math.cos(a)*d*.42)),v.c.clone()]}
- if(i===7){const a=.55+t*.03;return [new THREE.Vector3(Math.sin(a)*540*F,1300*F,Math.cos(a)*540*F),O3.clone()]} // todos los problemas juntos sobre la ciudad
+ if(i<=0){const a=.55+t*.04;return [new THREE.Vector3(Math.sin(a)*900*F,920*F,Math.cos(a)*900*F),O3.clone()]}
+ if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=.4+i*.9+t*.03,d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.72,d*.9,Math.cos(a)*d*.72)),v.c.clone()]}
+ if(i===7){const a=.55+t*.03;return [new THREE.Vector3(Math.sin(a)*940*F,980*F,Math.cos(a)*940*F),O3.clone()]} // todos los problemas juntos sobre la ciudad
  return [RED_POS.clone(),O3.clone()];
 }
 const cT=new THREE.Vector3(),cP=new THREE.Vector3();let camIni=false;
