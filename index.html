@@ -251,10 +251,33 @@ header p{font-size:12.5px;color:var(--mut)}
 .dvk{font:500 9.5px var(--ui-mono);letter-spacing:.16em;text-transform:uppercase}
 .dvh{color:var(--ui-tx3);border-top:1px solid var(--ui-bd)!important}
 @media(max-width:600px){header{left:12px;right:12px;max-width:none}.legend{left:12px;right:12px;max-width:none;bottom:calc(env(safe-area-inset-bottom,0px) + 66px)}.goprop{top:auto;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);text-align:center;padding:12px 14px!important}}
+/* ============ ENTRADA: Kennedy en nube de puntos que se vuelve la red ============ */
+body.intro header,body.intro .legend,body.intro .goprop{opacity:0!important;visibility:hidden}
+header,.legend,.goprop{transition:opacity .9s ease,visibility 0s}
+#intro{position:absolute;inset:0;z-index:5;pointer-events:none;font-family:var(--ui-mono);color:#9aa2a7;opacity:0;transition:opacity .8s}
+body.intro #intro{opacity:1;pointer-events:auto;cursor:pointer}
+#intro .hud{position:absolute;font-size:10.5px;line-height:1.75;letter-spacing:.12em;text-transform:uppercase;white-space:pre}
+#intro .hud b{color:#e9ebec;font-weight:500}#intro .hud i{font-style:normal;color:#e2a55b}
+#intro .tl{left:24px;top:22px}#intro .tr{right:24px;top:22px;text-align:right}#intro .bl{left:24px;bottom:22px}#intro .br{right:24px;bottom:22px;text-align:right}
+#intro .tit{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;pointer-events:none}
+#intro .tit small{display:block;font:500 11px var(--ui-mono);letter-spacing:.42em;text-transform:uppercase;color:#e2a55b;margin-bottom:14px;opacity:0;transition:opacity 1s}
+#intro .tit h2{margin:0;font:300 clamp(40px,8vw,104px)/1 Inter,system-ui,sans-serif;letter-spacing:-.03em;color:#e9ebec;opacity:0;transition:opacity 1.2s,letter-spacing 2.4s cubic-bezier(.2,.8,.2,1),filter 1.2s;filter:blur(8px)}
+#intro.t1 .tit small,#intro.t1 .tit h2{opacity:1;filter:none;letter-spacing:-.01em}
+#intro.t2 .tit small,#intro.t2 .tit h2{opacity:0;filter:blur(10px)}
+#intro .bar{position:absolute;left:24px;right:24px;bottom:0;height:2px;background:rgba(255,255,255,.06)}#intro .bar i{display:block;height:100%;width:0;background:#e2a55b;transition:width .25s linear}
+#intro .skip{position:absolute;left:50%;transform:translateX(-50%);bottom:28px;pointer-events:auto;font:500 10.5px var(--ui-mono);letter-spacing:.16em;text-transform:uppercase;color:#9aa2a7;background:rgba(13,15,18,.74);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:9px 14px;cursor:pointer}
+#intro .skip:hover{color:#f2c995;border-color:rgba(226,165,91,.42)}
+#intro .scan{position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(226,165,91,.35),transparent);animation:scanY 3.2s linear infinite}
+@keyframes scanY{from{top:0}to{top:100%}}
+@media(max-width:600px){#intro .tr,#intro .br{display:none}#intro .hud{font-size:9.5px}#intro .skip{bottom:70px}}
 </style>
 </head>
-<body>
+<body class="intro">
 <canvas id="c"></canvas>
+<div id="intro" aria-hidden="true"><div class="scan"></div>
+ <div class="hud tl" id="ih1"></div><div class="hud tr" id="ih2"></div><div class="hud bl" id="ih3"></div><div class="hud br" id="ih4"></div>
+ <div class="tit"><small id="itk">Kennedy · Bogotá</small><h2 id="itt">Kennedy</h2></div>
+ <button class="skip" id="iskip">Saltar ›</button><div class="bar"><i id="ibar"></i></div></div>
 <header><div class="eyebrow">Kennedy, Bogotá</div><h1>Red de problemas</h1><p>Seis problemas que se alimentan entre sí. Arrastra para girar, acerca con la rueda y toca un nodo para ver sus indicadores.</p></header>
 <div class="legend">
 <b>Convenciones</b>
@@ -394,7 +417,7 @@ function focus(n){
  E.forEach(e=>{const on=!n||e.a===n||e.b===n;e.ot=n?(on?1:.07):.85});
 }
 function tick(t){
- if(T0===null){T0=t;baseLen=cam.position.length()}
+ if(T0===null){T0=t;baseLen=BASE0||cam.position.length()} // tras la entrada: la longitud de la vista original (la cámara llega a 1,85×)
  const dt=Math.min(.05,(t-LT)/1000||.016);LT=t;const k=1-Math.exp(-dt*9),el=t-T0;
  const pa=flG.attributes.position.array;
  FL.forEach((f,i)=>{f.t+=f.v*(f.e.k==='m'?.6:1);if(f.t>1)f.t-=1;const w=f.d>0?f.t:1-f.t,A=f.e.a.p,B=f.e.b.p,off=f.e.a.r/f.L,off2=f.e.b.r/f.L,s=off+(1-off-off2)*w;
@@ -660,8 +683,95 @@ function resize(){const w=innerWidth,h=innerHeight;if(!zoomed&&w<h*.9){cam.posit
 addEventListener('resize',resize);resize();
 const tmp=new THREE.Vector3();
 if(location.hash&&byId[location.hash.slice(1)])setTimeout(()=>select(byId[location.hash.slice(1)]),2600);
+/* ============ ENTRADA: Kennedy como nube de puntos que se transforma en la red de problemas ============
+   nube.bin (tools/nube_build.js): 142.762 puntos de edificios reales (catastro/OSM del simulador), calles, humedales,
+   Corabastos y el borde de la localidad. Un solo shader: los puntos suben a la altura de cada edificio, un barrido los escanea,
+   y luego cada punto viaja (con remolino) a la superficie de uno de los seis problemas, toma su color y queda orbitando. */
+const INTRO={on:!matchMedia('(prefers-reduced-motion: reduce)').matches,t0:null,fase:0,mix:0,tMix:null,dur:3400,listo:false,pts:null};
+let BASE0=null;
+const START=cam.position.clone();
+(function(){
+ const ui=document.body,$i=id=>document.getElementById(id),ov=$i('intro'),fmt=v=>Math.round(v).toLocaleString('es-CO');
+ const fin=()=>{INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;T0=null};
+ if(!INTRO.on){fin();return}
+ ctl.enabled=false;ctl.autoRotate=false;E.forEach(e=>e.mats.forEach(x=>x.opacity=0));flow.material.opacity=0; // las flechas aparecen con la red
+ const saltar=()=>{if(!INTRO.listo){fin();return}if(INTRO.tMix===null)INTRO.tMix=performance.now()-400,INTRO.dur=1600};
+ $i('iskip').onclick=e=>{e.stopPropagation();saltar()};ov.addEventListener('click',saltar);addEventListener('keydown',e=>{if(INTRO.on)saltar()});
+ const S=1150/7600,SY=S*3.2; // la ciudad mide ~1.150 unidades (la red ~1.000); alturas exageradas ×3,2 para que se lea la ciudad
+ fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
+  const dv=new DataView(buf),n=dv.getUint32(4,true);
+  const pos=new Float32Array(n*3),cen=new Float32Array(n*3),off=new Float32Array(n*3),col=new Float32Array(n*3),tip=new Float32Array(n),rn=new Float32Array(n);
+  // reparto de puntos entre los problemas según su tamaño (r²)
+  const W=N.map(m=>m.r*m.r),Wt=W.reduce((a,b)=>a+b,0);
+  for(let i=0;i<n;i++){const o=16+i*7;pos[i*3]=dv.getInt16(o,true)/2*S;pos[i*3+1]=dv.getInt16(o+2,true)/2*SY;pos[i*3+2]=dv.getInt16(o+4,true)/2*S;tip[i]=dv.getUint8(o+6);rn[i]=Math.random();
+   let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];
+   const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*(.88+Math.random()*.3);
+   cen.set([m.p.x,m.p.y,m.p.z],i*3);off.set([q*Math.cos(a)*rr,z*rr,q*Math.sin(a)*rr],i*3);
+   const c=new THREE.Color(PC[m.id]);col.set([c.r,c.g,c.b],i*3)}
+  const g=new THREE.BufferGeometry();
+  g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aCen',new THREE.BufferAttribute(cen,3));g.setAttribute('aOff',new THREE.BufferAttribute(off,3));
+  g.setAttribute('aCol',new THREE.BufferAttribute(col,3));g.setAttribute('aTipo',new THREE.BufferAttribute(tip,1));g.setAttribute('aRnd',new THREE.BufferAttribute(rn,1));
+  const U={uT:{value:0},uRise:{value:0},uMix:{value:0},uScan:{value:-900},uAlpha:{value:0},uFade:{value:0},uJit:{value:1.2},uPix:{value:Math.min(devicePixelRatio,2)},uSize:{value:innerWidth<700?2.3:3}};
+  const mat=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+   vertexShader:`attribute vec3 aCen;attribute vec3 aOff;attribute vec3 aCol;attribute float aTipo;attribute float aRnd;
+    uniform float uT,uRise,uMix,uScan,uAlpha,uFade,uJit,uPix,uSize;varying vec3 vC;varying float vA;
+    void main(){
+     float r=clamp(uRise*1.6-aRnd*.6,0.,1.);r=r*r*(3.-2.*r);
+     vec3 c=position;c.y*=r;
+     c+=vec3(sin(uT*1.3+aRnd*40.+c.z*.05),sin(uT*1.9+aRnd*23.)*.6,cos(uT*1.1+aRnd*31.+c.x*.05))*uJit;
+     float m=clamp(uMix*1.7-aRnd*.7,0.,1.);m=m*m*(3.-2.*m);
+     float ang=uT*(.12+aRnd*.18)*(aRnd>.5?1.:-1.),ca=cos(ang),sa=sin(ang);
+     vec3 o=vec3(ca*aOff.x-sa*aOff.z,aOff.y+sin(uT*.8+aRnd*30.)*4.,sa*aOff.x+ca*aOff.z);
+     vec3 net=aCen+o;
+     float sw=sin(m*3.14159);
+     vec3 p=mix(c,net,m)+vec3(cos(aRnd*80.+uT*2.1),sin(aRnd*50.+uT*1.6)*1.3,sin(aRnd*80.+uT*2.1))*sw*(90.+aRnd*160.);
+     vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;
+     float big=aTipo>2.5&&aTipo<3.5?2.2:(aTipo>1.5&&aTipo<2.5?1.4:1.);
+     gl_PointSize=uSize*big*mix(1.,.8,m)*uPix*(420./-mv.z);
+     float h=clamp(position.y/34.,0.,1.);
+     vec3 b=aTipo<.5?mix(vec3(.3,.55,.8),vec3(.9,.97,1.),h):aTipo<1.5?vec3(.9,.58,.28)*.6:aTipo<2.5?vec3(.25,.85,.78):aTipo<3.5?vec3(1.,.42,.2):vec3(.75,.78,.82)*.5;
+     float sc=exp(-pow((position.x-uScan)/26.,2.));b+=vec3(.55,.85,1.)*sc*1.4*(1.-m);
+     vC=mix(b,aCol*1.25,m);
+     vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m*(.7+.25*aRnd));
+    }`,
+   fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=(1.-d)*(1.-d);gl_FragColor=vec4(vC*a*vA,a*vA);}`});
+  const pts=new THREE.Points(g,mat);pts.frustumCulled=false;pts.renderOrder=4;scene.add(pts);
+  INTRO.pts=pts;INTRO.U=U;INTRO.listo=true;INTRO.t0=performance.now();BASE0=START.length();
+  // datos en pantalla
+  const fmt=v=>Math.round(v).toLocaleString('es-CO');
+  $i('ih1').innerHTML='<b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O';
+  $i('ih2').innerHTML='Puntos  <b id="icnt">0</b>\nEdificios  <b>203.783</b>\nFuente  catastro · OSM';
+  $i('ih3').innerHTML='<i>●</i> Escaneando territorio\n<span id="ifase">Nube de puntos</span>';
+  $i('ih4').innerHTML='1.037.929 hab · 3.858 ha\nSimulador · Federación Policéntrica';
+  INTRO.n=n;
+ }).catch(e=>{console.warn('entrada:',e);fin()});
+ // línea de tiempo (la llama el bucle)
+ INTRO.update=(now)=>{
+  if(!INTRO.listo){cam.position.set(0,360,760);cam.lookAt(0,0,0);return}
+  const t=(now-INTRO.t0)/1000,U=INTRO.U;U.uT.value=t;
+  U.uRise.value=Math.min(1,t/2.4);U.uAlpha.value=Math.min(1,t/1.2);U.uScan.value=-700+((t*420)%1400);
+  const c=$i('icnt');if(c)c.textContent=fmt(Math.min(INTRO.n,INTRO.n*t/2.2));
+  ov.classList.toggle('t1',t>1.2&&INTRO.tMix===null);ov.classList.toggle('t2',INTRO.tMix!==null);
+  $i('ibar').style.width=Math.min(100,(INTRO.tMix===null?t/6.4*70:70+30*Math.min(1,(now-INTRO.tMix)/INTRO.dur)))+'%';
+  if(INTRO.tMix===null&&t>6.4)INTRO.tMix=now;
+  // cámara: sobrevuelo lento de la ciudad, luego viaja a la vista de la red
+  const ang=.55+t*.075,rad=760-Math.min(1,t/7)*230,hh=360-Math.min(1,t/7)*150; // sobrevuelo bajo, como un dron
+  const pc=new THREE.Vector3(Math.sin(ang)*rad,hh,Math.cos(ang)*rad);
+  if(INTRO.tMix===null){cam.position.copy(pc);cam.lookAt(0,0,0);return}
+  const q=Math.min(1,(now-INTRO.tMix)/INTRO.dur),e=q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2;
+  U.uMix.value=Math.min(1,q*1.15);U.uJit.value=1.2*(1-q);
+  const fp=$i('ifase');if(fp)fp.textContent=q<.5?'Desintegrando la ciudad':'Seis problemas que se alimentan entre sí';
+  cam.position.lerpVectors(pc,START.clone().multiplyScalar(1.85),e);cam.lookAt(0,0,0);
+  if(q>=1){ // la red toma el relevo; las partículas quedan como aura que orbita cada problema
+   INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;ctl.target.set(0,0,0);T0=null;
+   const t1=performance.now();(function aura(){const k=Math.min(1,(performance.now()-t1)/1800);U.uFade.value=k*.9;U.uT.value=(performance.now()-INTRO.t0)/1000;U.uMix.value=1;requestAnimationFrame(aura)})();
+  }
+ };
+})();
 (function loop(t){
- requestAnimationFrame(loop);tick(t||0);ctl.update();N.map(n=>[n,cam.position.distanceTo(n.p)]).sort((p,q)=>q[1]-p[1]).forEach((q,i)=>q[0].sp.renderOrder=10+i);
+ requestAnimationFrame(loop);
+ if(INTRO.on){INTRO.update(performance.now());renderer.render(scene,cam);return}
+ tick(t||0);ctl.update();N.map(n=>[n,cam.position.distanceTo(n.p)]).sort((p,q)=>q[1]-p[1]).forEach((q,i)=>q[0].sp.renderOrder=10+i);
  
  renderer.render(scene,cam);
 })();
