@@ -896,12 +896,27 @@ const sPts=new THREE.Points(sG,new THREE.PointsMaterial({size:innerWidth<700?11:
 sPts.frustumCulled=false;sPts.renderOrder=6;scene.add(sPts);
 // núcleos de luz
 const glowTex=(()=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d'),g=x.createRadialGradient(64,64,0,64,64,64);g.addColorStop(0,'rgba(255,255,255,1)');g.addColorStop(.18,'rgba(255,255,255,.55)');g.addColorStop(.5,'rgba(255,255,255,.12)');g.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=g;x.fillRect(0,0,128,128);return new THREE.CanvasTexture(c)})();
+// nodos de la red: disco oscuro con anillo del color del problema y marcas técnicas; la nube de partículas queda como halo
+const NODO_R=.7; // radio del disco respecto a la esfera de partículas
+function mkNodo(n){const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d'),col=PC[n.id];
+ x.beginPath();x.arc(256,256,200,0,7);x.fillStyle='rgba(5,6,7,.9)';x.fill();
+ x.strokeStyle=col;x.lineWidth=7;x.beginPath();x.arc(256,256,200,0,7);x.stroke();
+ x.globalAlpha=.55;x.lineWidth=2;x.beginPath();x.arc(256,256,236,0,7);x.stroke();
+ x.globalAlpha=1;x.lineWidth=4;for(let k=0;k<4;k++){const a=k*Math.PI/2;x.beginPath();x.moveTo(256+Math.cos(a)*226,256+Math.sin(a)*226);x.lineTo(256+Math.cos(a)*250,256+Math.sin(a)*250);x.stroke()}
+ const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,opacity:0,depthWrite:false,depthTest:false}));
+ n.nr=Math.max(n.r*NODO_R,62); // radio del disco: mínimo legible en los nodos pequeños
+ s.position.copy(n.p);s.scale.setScalar(n.nr*2*256/200);s.renderOrder=8;scene.add(s);return s}
+N.forEach(n=>{n.nd=mkNodo(n)});
+// puntos de anclaje donde cada relación toca un nodo
+const anc=[];ARC.forEach(a=>{const p=a.cur.getPoint(a.t0),q=a.cur.getPoint(a.t1);anc.push(p.x,p.y,p.z,a.col.r,a.col.g,a.col.b,q.x,q.y,q.z,a.col.r,a.col.g,a.col.b)});
+const ancG=new THREE.BufferGeometry(),ancA=new Float32Array(anc);ancG.setAttribute('position',new THREE.InterleavedBufferAttribute(new THREE.InterleavedBuffer(ancA,6),3,0));ancG.setAttribute('color',new THREE.InterleavedBufferAttribute(new THREE.InterleavedBuffer(ancA,6),3,3));
+const ancP=new THREE.Points(ancG,new THREE.PointsMaterial({size:innerWidth<700?16:13,map:dotTex,vertexColors:true,transparent:true,opacity:0,depthWrite:false,depthTest:false,fog:false}));ancP.renderOrder=7;ancP.frustumCulled=false;scene.add(ancP);
 N.forEach(n=>{n.core=new THREE.Sprite(new THREE.SpriteMaterial({map:glowTex,color:new THREE.Color(PC[n.id]),transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending}));n.core.position.copy(n.p);n.core.scale.setScalar(n.r*1.9);n.core.renderOrder=5;scene.add(n.core)});
 // etiquetas HUD con línea guía
 const LB=document.createElement('div');LB.id='lbls';LB.innerHTML='<svg id="lbsvg"></svg>';document.body.appendChild(LB);
 const SVGNS='http://www.w3.org/2000/svg',svg=LB.querySelector('svg');
 N.forEach((n,i)=>{const d=document.createElement('button');d.className='lbl';d.style.setProperty('--c',PC[n.id]);
- d.innerHTML='<small>'+String(i+1).padStart(2,'0')+' · '+n.deg+' conexiones</small><b>'+n.t+'</b>';d.onclick=()=>select(n);
+ d.innerHTML='<small>'+String(i+1).padStart(2,'0')+' · '+n.deg+' conex.</small><b>'+n.t+'</b>';d.onclick=()=>select(n);
  d.onpointerenter=()=>{hov=n;focus(n)};d.onpointerleave=()=>{hov=null;focus(sel)};LB.appendChild(d);n.lb=d;
  n.ll=document.createElementNS(SVGNS,'polyline');n.ll.setAttribute('fill','none');n.ll.setAttribute('stroke',PC[n.id]);n.ll.setAttribute('stroke-width','1');svg.appendChild(n.ll);
  n.ld=document.createElementNS(SVGNS,'circle');n.ld.setAttribute('r','2.5');n.ld.setAttribute('fill',PC[n.id]);svg.appendChild(n.ld)});
@@ -916,7 +931,8 @@ function constelacion(dt,now){
   const k=Math.sin(Math.PI*s.t)*s.b*on*aRed*1.25;sCol[i*3]=a.col.r*k;sCol[i*3+1]=a.col.g*k;sCol[i*3+2]=a.col.b*k});
  sG.attributes.position.needsUpdate=true;sG.attributes.color.needsUpdate=true;sPts.material.opacity=1;
  ARC.forEach(a=>{a.lm.opacity=.28*a.e.co*aRed});
- N.forEach(n=>{n.core.visible=false}); /* sin núcleo de luz */
+ N.forEach(n=>{n.core.visible=false;n.nd.material.opacity=aRed*(.3+.7*n.co)}); /* sin núcleo de luz: el nodo es un disco con anillo */
+ ancP.material.opacity=aRed*.95;
  
  // etiquetas
  const w=innerWidth,h=innerHeight;cam.updateMatrixWorld();camR.setFromMatrixColumn(cam.matrixWorld,0);camU.setFromMatrixColumn(cam.matrixWorld,1);
@@ -926,7 +942,7 @@ function constelacion(dt,now){
   const der=true,ang=0,ex=sx+Math.cos(ang)*rp*1.02,ey=sy+Math.sin(ang)*rp*1.02,kx=ex+(der?26:-26),ky=ey-26,lx=kx+(der?14:-14);
   n.ll.setAttribute('points',ex.toFixed(1)+','+ey.toFixed(1)+' '+kx.toFixed(1)+','+ky.toFixed(1)+' '+lx.toFixed(1)+','+ky.toFixed(1));n.ld.setAttribute('cx',ex.toFixed(1));n.ld.setAttribute('cy',ey.toFixed(1));
   const o=(.25+.75*n.co)*aRed;n.ll.style.opacity=o;n.ld.style.opacity=o;n.lb.style.opacity=o;
-  n.ll.style.display=n.ld.style.display='none';n.lb.style.maxWidth=Math.max(110,rp*1.7).toFixed(0)+'px';n.lb.style.transform='translate('+(sx-n.lb.offsetWidth/2).toFixed(1)+'px,'+(sy-n.lb.offsetHeight/2).toFixed(1)+'px)'; /* el texto, en el centro de la esfera */n.lb.classList.toggle('on',sel===n||hov===n)});
+  n.ll.style.display=n.ld.style.display='none';n.lb.style.maxWidth=Math.max(96,rp*n.nr/n.r*1.75).toFixed(0)+'px';n.lb.style.transform='translate('+(sx-n.lb.offsetWidth/2).toFixed(1)+'px,'+(sy-n.lb.offsetHeight/2).toFixed(1)+'px)'; /* el texto, en el centro de la esfera */n.lb.classList.toggle('on',sel===n||hov===n)});
 }
 // brillo (bloom) en pantallas grandes
 let COMP=null;
@@ -1039,7 +1055,7 @@ fetch('lugares.json').then(r=>r.json()).then(L=>{
 // ---------- edificios sólidos (edif.bin, tools/edif_build.js): una caja orientada por edificio, oscura con aristas de luz ----------
 H.B={u:{uA:{value:0},uRise:{value:0},uDim:{value:1}},mesh:null};
 fetch('edif.bin').then(r=>{if(!r.ok)throw new Error('edif');return r.arrayBuffer()}).then(buf=>{
- const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?60000:total);
+ const dv=new DataView(buf),total=dv.getUint32(4,true),n=total; // todos los edificios, también en celular
  const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
  const mat=new THREE.ShaderMaterial({uniforms:H.B.u,transparent:true,extensions:{derivatives:true},
   vertexShader:`uniform float uRise;varying vec2 vUv;varying float vY,vH,vTop;
@@ -1080,13 +1096,36 @@ function conectografia(){
     void main(){float pulso=smoothstep(.75,1.,fract(vD/38.-uT*.9));float a=vA*(.75+1.8*pulso);gl_FragColor=vec4(vC*a,a);}`}));
   fl.frustumCulled=false;fl.renderOrder=6;scene.add(fl);
  }).catch(e=>console.warn('vías:',e));
-}// ---------- cámara del recorrido ----------
+}
+// ---------- límite de la localidad (limite.json, tools/limite_build.js): línea nítida + cortina de luz que delimita Kennedy ----------
+H.L={u:{uA:{value:0},uT:{value:0}},objs:[]};
+fetch('limite.json').then(r=>r.json()).then(Lm=>{
+ const P=Lm.pts.map(([x,z])=>[x*ESCALA,z*ESCALA]),n=P.length,ALTO=26;
+ // cortina vertical: se desvanece hacia arriba
+ const W=[],V=[],D=[];let acc=0;
+ for(let i=0;i<n;i++){const [ax,az]=P[i],[bx,bz]=P[(i+1)%n],L=Math.hypot(bx-ax,bz-az);
+  W.push(ax,0,az,bx,0,bz,bx,ALTO,bz, ax,0,az,bx,ALTO,bz,ax,ALTO,az);V.push(0,0,1,0,1,1);D.push(acc,acc+L,acc+L,acc,acc+L,acc);acc+=L}
+ const wg=new THREE.BufferGeometry();wg.setAttribute('position',new THREE.Float32BufferAttribute(W,3));wg.setAttribute('aV',new THREE.Float32BufferAttribute(V,1));wg.setAttribute('aD',new THREE.Float32BufferAttribute(D,1));
+ const wall=new THREE.Mesh(wg,new THREE.ShaderMaterial({uniforms:H.L.u,transparent:true,depthWrite:false,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute float aV,aD;varying float vV,vD;void main(){vV=aV;vD=aD;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`uniform float uA,uT;varying float vV,vD;void main(){float g=pow(1.-vV,2.2);float barrido=.75+.25*smoothstep(.9,1.,fract(vD/260.-uT*.12));float a=uA*g*.42*barrido;gl_FragColor=vec4(vec3(.81,1.,.37)*a,a);}`}));
+ wall.renderOrder=3;wall.frustumCulled=false;scene.add(wall);
+ // borde en el suelo (doble línea para que se lea en celular) y arista superior tenue
+ const lin=(y,op,dx)=>{const pts=P.map(([x,z])=>{const c=Math.hypot(x,z)||1;return new THREE.Vector3(x+x/c*dx,y,z+z/c*dx)});pts.push(pts[0].clone());
+  const m=new THREE.LineBasicMaterial({color:0xcfff5e,transparent:true,opacity:0,depthWrite:false,depthTest:false,fog:false});const l=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),m);l.renderOrder=9;l.frustumCulled=false;l.userData.op=op;scene.add(l);H.L.objs.push(l)};
+ lin(.8,1,0);lin(.8,.7,1.2);lin(ALTO,.22,0);
+ H.L.wall=wall;
+}).catch(e=>console.warn('límite:',e));
+// ---------- cámara del recorrido ----------
 const ss=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
 const RED_POS=START.clone().multiplyScalar(1.85),O3=new THREE.Vector3();
+const VFIT=()=>{const a=innerWidth/innerHeight;return a>=1.3?1:Math.min(2.1,1+(1.3-a)*1.3)};
 function vista(i,t){ // posición y objetivo de la cámara en la etapa i
- if(i<=0){const a=.55+t*.04;return [new THREE.Vector3(Math.sin(a)*700,330,Math.cos(a)*700),O3.clone()]}
- if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=.4+i*.9+t*.03;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*v.d*.7,v.d*.85,Math.cos(a)*v.d*.7)),v.c.clone()]}
- if(i===7){const a=.55+t*.03;return [new THREE.Vector3(Math.sin(a)*820,560,Math.cos(a)*820),O3.clone()]} // todos los problemas juntos sobre la ciudad
+ // vista alta (~65°): se ve toda la localidad dentro de su límite; en pantallas angostas la cámara se aleja para que quepa
+ const F=VFIT();
+ if(i<=0){const a=.55+t*.04;return [new THREE.Vector3(Math.sin(a)*520*F,1230*F,Math.cos(a)*520*F),O3.clone()]}
+ if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=.4+i*.9+t*.03,d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.42,d*1.15,Math.cos(a)*d*.42)),v.c.clone()]}
+ if(i===7){const a=.55+t*.03;return [new THREE.Vector3(Math.sin(a)*540*F,1300*F,Math.cos(a)*540*F),O3.clone()]} // todos los problemas juntos sobre la ciudad
  return [RED_POS.clone(),O3.clone()];
 }
 const cT=new THREE.Vector3(),cP=new THREE.Vector3();let camIni=false;
@@ -1102,7 +1141,8 @@ function recorrido(dt,now){
  const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
   const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
   const enProb=i>=1&&i<=6?1:0,dim=enProb?.55:(i===7?.55:1);U.uDim.value+=(dim-U.uDim.value)*(1-Math.exp(-dt*4));
-  N.forEach((n,j)=>U.uNA.value[j]=1);if(H.B.mesh){const B=H.B.u;B.uRise.value=U.uRise.value;B.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2);B.uDim.value=U.uDim.value;H.B.mesh.visible=B.uA.value>.01}H.V.u.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2)*(.6+.4*U.uDim.value);if(H.V.mesh)H.V.mesh.visible=H.V.u.uA.value>.01}
+  N.forEach((n,j)=>U.uNA.value[j]=1);if(H.B.mesh){const B=H.B.u;B.uRise.value=U.uRise.value;B.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2);B.uDim.value=U.uDim.value;H.B.mesh.visible=B.uA.value>.01}H.V.u.uA.value=U.uAlpha.value*Math.max(0,1-mix*2.2)*(.6+.4*U.uDim.value);if(H.V.mesh)H.V.mesh.visible=H.V.u.uA.value>.01;
+  const la=U.uAlpha.value*Math.max(0,1-mix*1.8);H.L.u.uA.value=la;H.L.u.uT.value=H.t;H.L.objs.forEach(l=>{l.material.opacity=la*l.userData.op;l.visible=la>.01});if(H.L.wall)H.L.wall.visible=la>.01}
  // lugares de cada problema
  const M=H.M;if(M){M.uT.value=H.t;const want=[0,0,0,0,0,0];
   if(i>=1&&i<=6){const id=ORDEN[i-1],j=N.findIndex(n=>n.id===id);want[j]=ss(0,.18,f)*(1-ss(.8,1,f))}
@@ -1121,8 +1161,8 @@ let LT2=performance.now();
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
  const s=etapa(),enRed=s>=8;
- if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
- if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);cP.copy(cam.position);H.s=s}
+ if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;H.hitos.forEach(h=>h.el.style.opacity=0)}
+ if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);N.forEach(n=>n.nd.material.opacity=0);ancP.material.opacity=0;cP.copy(cam.position);H.s=s}
  if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);
  pintar();
