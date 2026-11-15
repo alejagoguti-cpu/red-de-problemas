@@ -968,7 +968,7 @@ const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const ST=document.createElement('main');ST.id='story';
 {const hab=(D.B&&D.B.g[0].k[1]&&D.B.g[0].k[1][0])||'1.037.929',ha=(D.B&&D.B.g[0].k[2]&&D.B.g[0].k[2][0])||'3.858,97 ha';
  let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p>'+esc2(hab)+' habitantes en '+esc2(ha)+'. Un territorio y seis problemas que se alimentan entre sí.</p><div class="down">Desliza para recorrerlo<i></i></div></div>'+
-  '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>208.555</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · OSM · Microsoft</div></section>';
+  '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>244.147</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · Google · Microsoft</div></section>';
  ORDEN.forEach((id,i)=>{const n=byId[id],d=D[id],k=(d.g&&d.g[0]?d.g[0].k:[]).slice(0,3);
   h+='<section class="pb" data-k="'+id+'"><article class="card" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06 · Problema</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(d.lead?'<p>'+d.lead+'</p>':'')+
    '<div class="donde"><h3>Dónde ocurre en Kennedy</h3><ul data-donde="'+id+'"></ul></div>'+
@@ -1129,9 +1129,10 @@ function vista(i,t){ // posición y objetivo de la cámara en la etapa i
  const F=VFIT();
  // norte siempre arriba (la cámara mira desde el sur), con un vaivén leve para que la escena respire
  const NA=()=>.1*Math.sin(t*.06);
- if(i<=0){const a=NA();return [new THREE.Vector3(Math.sin(a)*900*F,920*F,Math.cos(a)*900*F),O3.clone()]}
+ const TC=new THREE.Vector3(0,0,170); // centro algo al sur: en perspectiva el borde sur (el más cercano) es el que se corta
+ if(i<=0){const a=NA();return [new THREE.Vector3(Math.sin(a)*1000*F,1020*F,Math.cos(a)*1000*F).add(TC),TC.clone()]}
  if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=NA(),d=v.d*F;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*d*.72,d*.9,Math.cos(a)*d*.72)),v.c.clone()]}
- if(i===7){const a=NA();return [new THREE.Vector3(Math.sin(a)*940*F,980*F,Math.cos(a)*940*F),O3.clone()]} // todos los problemas juntos sobre la ciudad
+ if(i===7){const a=NA();return [new THREE.Vector3(Math.sin(a)*1040*F,1080*F,Math.cos(a)*1040*F).add(TC),TC.clone()]} // todos los problemas juntos sobre la ciudad
  return [RED_POS.clone(),O3.clone()];
 }
 const cT=new THREE.Vector3(),cP=new THREE.Vector3();let camIni=false;
