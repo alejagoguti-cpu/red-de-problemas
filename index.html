@@ -296,9 +296,107 @@ body{font-size-adjust:from-font} /* el texto no salta cuando llega Inter */
 .legend .mov:hover{color:#f2c995;border-color:rgba(226,165,91,.42)}
 .legend .mov:focus-visible{outline:2px solid #e2a55b;outline-offset:2px}
 @media(max-width:600px){#panel{right:0;left:0;top:auto;bottom:0;width:100%;max-height:72%}}
+/* ============ RECORRIDO CON SCROLL ============ */
+html,body{height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}
+#c{position:fixed!important}
+header,.legend,.goprop,#panel,#tip,#dv,#lbls{position:fixed!important}
+#intro{display:none!important}
+body.historia header,body.historia .legend,body.historia .goprop,body.historia #lbls{opacity:0!important;visibility:hidden;pointer-events:none}
+#story{position:relative;z-index:3;pointer-events:none}
+#story section{position:relative;min-height:125vh;display:flex;align-items:center;padding:0 6vw;box-sizing:border-box}
+#story .hero{min-height:100vh;align-items:flex-end;justify-content:center;padding-bottom:12vh}
+#story .ex{min-height:170vh;align-items:flex-start;padding-top:22vh}
+#story .fin{min-height:100vh}
+body:not(.historia) #story .card,body:not(.historia) #story .hcard,body:not(.historia) #story .hud{opacity:0!important;visibility:hidden}
+.hcard{text-align:center;pointer-events:none;opacity:0;transform:translateY(16px);transition:opacity 1s ease,transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.hcard.vis{opacity:1;transform:none}
+.hcard small{display:block;font:500 11px var(--ui-mono);letter-spacing:.42em;text-transform:uppercase;color:#9aa2a7;margin-bottom:14px}
+.hcard h1{margin:0;font:300 clamp(56px,11vw,150px)/.95 Inter,system-ui,sans-serif;letter-spacing:-.04em;color:#f1f2f3}
+.hcard p{margin:18px auto 0;max-width:520px;font-size:15px;line-height:1.55;color:#aeb5b9}
+.hcard .down{margin-top:34px;font:500 10.5px var(--ui-mono);letter-spacing:.24em;text-transform:uppercase;color:#9aa2a7;display:flex;flex-direction:column;align-items:center;gap:12px}
+.hcard .down i{width:1px;height:38px;background:linear-gradient(#e9ebec,transparent)}
+@media(prefers-reduced-motion:no-preference){.hcard .down i{animation:baja 1.8s ease-in-out infinite}}
+@keyframes baja{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+#story .hud{position:absolute;font:500 10.5px/1.75 var(--ui-mono);letter-spacing:.12em;text-transform:uppercase;color:#9aa2a7;white-space:pre}#story .hud b{color:#e9ebec;font-weight:500}
+#story .hl{left:24px;top:22px}#story .hr{right:24px;top:22px;text-align:right}
+#story .card{pointer-events:auto;max-width:430px;padding:22px 24px 22px;border-radius:14px;background:rgba(10,12,15,.78);border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 60px rgba(0,0,0,.45);-webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);
+  opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
+#story .card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c,#e2a55b)}
+#story .card.vis{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){#story .card,.hcard{transform:none}}
+#story .card.ancha{max-width:560px;margin:0 auto}
+#story .num{font:500 10px var(--ui-mono);letter-spacing:.2em;text-transform:uppercase;color:#7d858a}#story .num span{color:var(--c,#e2a55b)}
+#story .card h2{margin:10px 0 10px;font:500 clamp(24px,2.6vw,32px)/1.12 Inter,system-ui,sans-serif;letter-spacing:-.02em;color:#f1f2f3}
+#story .card p{margin:0;font-size:14px;line-height:1.6;color:#b6bcc0}
+#story .donde{margin-top:18px;padding-top:14px;border-top:1px solid rgba(255,255,255,.07)}
+#story .donde h3,#story .kps em{font:500 9.5px var(--ui-mono);letter-spacing:.16em;text-transform:uppercase;color:#7d858a;margin:0 0 9px}
+#story .donde ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+#story .donde li{display:flex;align-items:center;gap:9px;font-size:13px;color:#c9ced1}#story .donde li b{font-weight:500;color:#f1f2f3;font-variant-numeric:tabular-nums}
+#story .donde li i{width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 25%,transparent)}
+#story .kps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+#story .kps div{padding:10px 10px 9px;border-radius:9px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);min-width:0}
+#story .kps b{display:block;font:400 16px/1.15 Inter,system-ui,sans-serif;color:#f1f2f3;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#story .kps span{display:block;margin-top:5px;font-size:10.5px;line-height:1.3;color:#9aa2a7}#story .kps em{display:block;margin:5px 0 0;font-style:normal;letter-spacing:.08em}
+.hito{position:fixed;left:0;top:0;z-index:2;pointer-events:none;opacity:0;padding:6px 10px 7px;border-left:2px solid var(--c);background:rgba(10,12,15,.72);border-radius:0 7px 7px 0;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);white-space:nowrap;margin:-34px 0 0 10px}
+.hito b{display:block;font:500 12.5px Inter,system-ui,sans-serif;color:#f1f2f3}.hito small{display:block;font:500 9px var(--ui-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c)}
+#volver{all:unset;box-sizing:border-box;position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:4;padding:10px 16px;border-radius:10px;background:rgba(13,15,18,.8);border:1px solid rgba(255,255,255,.1);font:500 11px var(--ui-mono);letter-spacing:.14em;text-transform:uppercase;color:#c9ced1;cursor:pointer;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+#volver:hover{color:#f2c995;border-color:rgba(226,165,91,.42)}#volver:focus-visible{outline:2px solid #e2a55b;outline-offset:2px}
+body.historia #volver{opacity:0;visibility:hidden}
+@media(max-width:700px){#story section{padding:0 14px;align-items:flex-end;padding-bottom:10vh}#story .card{max-width:none;padding:18px 18px}#story .kps{grid-template-columns:1fr 1fr 1fr}#story .kps b{font-size:13.5px}#story .hr{display:none}#volver{bottom:auto;top:16px;left:auto;right:12px;transform:none}}
+/* ============ DASHBOARD: panel de datos de cada problema ============ */
+#panel{width:min(520px,calc(100% - 32px))!important;background:rgba(9,11,14,.9)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:14px!important;box-shadow:0 30px 80px rgba(0,0,0,.55)!important}
+#panel .ph{padding:18px 48px 16px 20px!important;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 22%,rgba(9,11,14,.96)),rgba(9,11,14,.96) 62%)!important;border-bottom:1px solid color-mix(in srgb,var(--ac) 35%,transparent)!important;align-items:center!important}
+#panel .ph::after{content:'PROBLEMA · ANÁLISIS';position:absolute;left:20px;top:8px;font:500 8.5px var(--ui-mono);letter-spacing:.22em;color:color-mix(in srgb,var(--ac) 80%,#fff)}
+#panel .ph h2{font-size:22px!important;letter-spacing:-.02em;margin-top:6px!important}
+#panel .dot{width:34px!important;height:34px!important;border-radius:9px!important;font:500 13px var(--ui-mono)!important;background:color-mix(in srgb,var(--ac) 18%,transparent);transform:none!important;margin-top:6px}
+#panel .pb{padding:16px 20px 26px!important;counter-reset:sec}
+#panel .gh{counter-increment:sec;display:flex;align-items:center;gap:10px}
+#panel .gh::before{content:counter(sec,decimal-leading-zero);color:var(--ac);font:500 9.5px var(--ui-mono)}
+#panel .gh::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,rgba(255,255,255,.1),transparent)}
+#panel .kg{gap:8px!important}
+#panel .kp{position:relative;overflow:hidden;padding:14px 14px 12px!important;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015))!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:10px!important}
+#panel .kp::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,var(--ac),transparent 80%)}
+#panel .kp b{font:300 26px/1.05 Inter,system-ui,sans-serif!important;letter-spacing:-.02em;color:#f4f5f6!important}
+#panel .kp.calc b{color:var(--ac)!important}
+#panel .kp span{font-size:11.5px!important;color:#c3c8cb}
+#panel .kp em{font:500 9px var(--ui-mono)!important;letter-spacing:.12em;text-transform:uppercase}
+#panel .cd{padding:16px 16px 14px!important;margin-top:16px!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:10px;background:rgba(255,255,255,.02)}
+#panel .cd h4{font-size:13.5px!important;font-weight:500!important}
+#panel .bt{height:10px!important;border-radius:5px!important;background:rgba(255,255,255,.05)!important}
+#panel .bt i{border-radius:5px!important;background:linear-gradient(90deg,color-mix(in srgb,var(--ac) 55%,transparent),var(--ac))!important;box-shadow:0 0 12px color-mix(in srgb,var(--ac) 40%,transparent)}
+#panel .bh b{font:400 16px Inter,system-ui,sans-serif!important}
+#panel .cw i{background:linear-gradient(0deg,color-mix(in srgb,var(--ac) 30%,transparent),var(--ac))!important;border-radius:6px 6px 0 0!important}
+#panel .godeep{border-radius:10px!important;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 18%,transparent),transparent)!important;padding:16px 16px!important}
+#panel .godeep b{font:500 9.5px var(--ui-mono)!important;letter-spacing:.2em;text-transform:uppercase}
+#panel .godeep em{font-size:13.5px!important;color:#e9ebec!important}
+#panel .rl li{padding:11px 0!important;border-bottom:1px solid rgba(255,255,255,.05)!important}
+#panel .rel{border-radius:0 10px 10px 0!important}
+#panel .sl a b{font-family:var(--ui-mono)}
+/* ============ DASHBOARD: vista «Ir más a fondo» (árbol de causas) ============ */
+#dv{background:#080a0d!important}
+#dv .dvw{background-image:radial-gradient(rgba(255,255,255,.07) 1px,transparent 1.2px);background-size:22px 22px;background-position:11px 11px}
+#dv .dvb{background:rgba(9,11,14,.88)!important;border-bottom:1px solid color-mix(in srgb,var(--ac) 28%,rgba(255,255,255,.06))!important}
+#dv .dvcr b{font-weight:500}
+#dv .dvl{color:color-mix(in srgb,var(--ac) 70%,#9aa2a7)!important;font-size:9px!important}
+#dv .dve{stroke:rgba(255,255,255,.14)!important;stroke-width:1.2!important}
+#dv .dve.hot{stroke:var(--ac)!important;stroke-width:1.8!important;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--ac) 70%,transparent))}
+@media(prefers-reduced-motion:no-preference){#dv .dve.hot{stroke-dasharray:6 6;animation:flujo 1.2s linear infinite}}
+@keyframes flujo{to{stroke-dashoffset:-12}}
+#dv .dvn{background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.02))!important;border:1px solid rgba(255,255,255,.08)!important;border-left:3px solid var(--ac)!important;border-radius:10px!important;padding:10px 12px 9px 14px!important;transition:transform .2s,background .2s,box-shadow .2s,border-color .2s!important}
+#dv .dvn:hover{transform:translateY(-1px);box-shadow:0 10px 30px rgba(0,0,0,.5),0 0 0 1px color-mix(in srgb,var(--ac) 30%,transparent)!important}
+#dv .dvn.sel{background:linear-gradient(180deg,color-mix(in srgb,var(--ac) 22%,transparent),color-mix(in srgb,var(--ac) 8%,transparent))!important;border-color:color-mix(in srgb,var(--ac) 60%,transparent)!important;box-shadow:0 0 0 1px color-mix(in srgb,var(--ac) 50%,transparent),0 0 30px color-mix(in srgb,var(--ac) 25%,transparent)!important}
+#dv .dvn.root{background:linear-gradient(135deg,var(--ac),color-mix(in srgb,var(--ac) 60%,#000))!important;box-shadow:0 0 40px color-mix(in srgb,var(--ac) 35%,transparent)!important}
+#dv .dvt{font-weight:500}
+#dv .dvm{font:500 9px var(--ui-mono)!important;letter-spacing:.12em;text-transform:uppercase}
+#dv .dvd{background:rgba(9,11,14,.92)!important;border-left:1px solid color-mix(in srgb,var(--ac) 22%,rgba(255,255,255,.06))!important}
+#dv .dvd h3{font-size:22px!important;letter-spacing:-.02em}
+#dv .dvk{color:var(--ac)!important}
+#dv .dvs2{padding:12px 14px;border:1px solid rgba(255,255,255,.07);border-radius:10px;background:rgba(255,255,255,.025)}
+#dv .dvs2 b{font:300 22px Inter,system-ui,sans-serif;color:var(--ac)}
+#dv .dvlk{border-radius:10px!important;background:color-mix(in srgb,var(--ac) 12%,transparent)}
 </style>
 </head>
-<body class="intro">
+<body>
 <canvas id="c"></canvas>
 <div id="intro" aria-hidden="true"><div class="scan"></div>
  <div class="hud tl" id="ih1"></div><div class="hud tr" id="ih2"></div><div class="hud bl" id="ih3"></div><div class="hud br" id="ih4"></div>
@@ -760,7 +858,7 @@ function constelacion(dt,now){
  sG.attributes.position.needsUpdate=true;sG.attributes.color.needsUpdate=true;sPts.material.opacity=1;
  ARC.forEach(a=>{a.lm.opacity=.28*a.e.co*aRed});
  N.forEach(n=>{n.core.visible=false}); /* sin núcleo de luz */
- if(INTRO.U){const A=INTRO.U.uNA.value;N.forEach((n,i)=>A[i]=n.co)}
+ 
  // etiquetas
  const w=innerWidth,h=innerHeight;cam.updateMatrixWorld();camR.setFromMatrixColumn(cam.matrixWorld,0);camU.setFromMatrixColumn(cam.matrixWorld,1);
  const r=renderer.domElement.getBoundingClientRect();
@@ -777,97 +875,153 @@ try{if(false&&THREE.EffectComposer&&THREE.UnrealBloomPass){COMP=new THREE.Effect
  const rs=()=>{COMP.setSize(innerWidth,innerHeight)};addEventListener('resize',rs);rs()}}catch(e){console.warn('bloom:',e);COMP=null}
 const pintar=()=>{if(COMP)COMP.render();else renderer.render(scene,cam)};
 
-/* ============ ENTRADA: Kennedy como nube de puntos que se transforma en la constelación ============
-   nube.bin (tools/nube_build.js): 142.762 puntos de edificios reales (del simulador), calles, humedales, Corabastos y el borde
-   de la localidad. Los puntos suben a la altura de cada edificio, un barrido los escanea, y luego cada punto viaja con remolino
-   a la superficie de uno de los seis problemas: esas partículas SON las esferas de la constelación. */
-const MOV={on:!matchMedia('(prefers-reduced-motion: reduce)').matches}; // movimiento continuo (giro, ríos, esferas): se puede pausar; con movimiento reducido empieza quieto
-const INTRO={on:MOV.on,t0:null,tMix:null,dur:3400,listo:false,U:null};
-let BASE0=null;
-const START=cam.position.clone();
-(function(){
- const ui=document.body,$i=id=>document.getElementById(id),ov=$i('intro'),fmt=v=>Math.round(v).toLocaleString('es-CO');
- let enAura=false;
- const aura=()=>{if(enAura||!INTRO.U)return;enAura=true;const U=INTRO.U,t1=performance.now();U.uMix.value=1;U.uRise.value=1;U.uAlpha.value=1;U.uJit.value=0;
-  let tA=(performance.now()-INTRO.t0)/1000,tP=performance.now();(function f(){const ah=performance.now(),k=Math.min(1,(ah-t1)/1800);U.uFade.value=k*.08;if(MOV.on)tA+=(ah-tP)/1000;tP=ah;U.uT.value=tA;requestAnimationFrame(f)})()}; // con el movimiento en pausa, las esferas dejan de girar y respirar
- const fin=()=>{INTRO.on=false;ui.classList.remove('intro');ctl.enabled=true;ctl.autoRotate=MOV.on;ctl.target.set(0,0,0);T0=null;tRed=performance.now();aura()};
- if(INTRO.on){ctl.enabled=false;ctl.autoRotate=false}else fin();
- const saltar=()=>{if(!INTRO.on)return;if(!INTRO.listo){cam.position.copy(START);fin();return}if(INTRO.tMix===null)INTRO.tMix=performance.now()-400,INTRO.dur=1600};
- $i('iskip').onclick=e=>{e.stopPropagation();saltar()};ov.addEventListener('click',saltar);addEventListener('keydown',()=>saltar());
- const S=1150/7600,SY=S*3.2; // la ciudad mide ~1.150 unidades (la red ~1.000); alturas ×3,2 para que se lea la ciudad
- fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
-  const dv=new DataView(buf),n=dv.getUint32(4,true);
-  const pos=new Float32Array(n*3),cen=new Float32Array(n*3),off=new Float32Array(n*3),col=new Float32Array(n*3),tip=new Float32Array(n),rn=new Float32Array(n),nod=new Float32Array(n);
-  const W=N.map(m=>m.r*m.r*m.r),Wt=W.reduce((a,b)=>a+b,0); // más partículas en los problemas grandes
-  for(let i=0;i<n;i++){const o=16+i*7;pos[i*3]=dv.getInt16(o,true)/2*S;pos[i*3+1]=dv.getInt16(o+2,true)/2*SY;pos[i*3+2]=dv.getInt16(o+4,true)/2*S;tip[i]=dv.getUint8(o+6);rn[i]=Math.random();
-   let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];nod[i]=k;
-   const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*Math.pow(Math.random(),.35)*1.05; // volumen lleno, más denso hacia la superficie
-   cen.set([m.p.x,m.p.y,m.p.z],i*3);off.set([q*Math.cos(a)*rr,z*rr,q*Math.sin(a)*rr],i*3);
-   const c=new THREE.Color(PC[m.id]).lerp(new THREE.Color('#ffffff'),Math.random()*.35);col.set([c.r,c.g,c.b],i*3)}
-  const g=new THREE.BufferGeometry();
-  g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aCen',new THREE.BufferAttribute(cen,3));g.setAttribute('aOff',new THREE.BufferAttribute(off,3));
-  g.setAttribute('aCol',new THREE.BufferAttribute(col,3));g.setAttribute('aTipo',new THREE.BufferAttribute(tip,1));g.setAttribute('aRnd',new THREE.BufferAttribute(rn,1));g.setAttribute('aNode',new THREE.BufferAttribute(nod,1));
-  const U={uT:{value:0},uRise:{value:0},uMix:{value:0},uScan:{value:-900},uAlpha:{value:0},uFade:{value:0},uJit:{value:1.2},uPix:{value:Math.min(devicePixelRatio,2)},uSize:{value:innerWidth<700?2.3:3},uNA:{value:[1,1,1,1,1,1]}};
-  const mat=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
-   vertexShader:`attribute vec3 aCen;attribute vec3 aOff;attribute vec3 aCol;attribute float aTipo;attribute float aRnd;attribute float aNode;
-    uniform float uT,uRise,uMix,uScan,uAlpha,uFade,uJit,uPix,uSize;uniform float uNA[6];varying vec3 vC;varying float vA;
-    void main(){
-     float r=clamp(uRise*1.6-aRnd*.6,0.,1.);r=r*r*(3.-2.*r);
-     vec3 c=position;c.y*=r;
-     c+=vec3(sin(uT*1.3+aRnd*40.+c.z*.05),sin(uT*1.9+aRnd*23.)*.6,cos(uT*1.1+aRnd*31.+c.x*.05))*uJit;
-     float m=clamp(uMix*1.7-aRnd*.7,0.,1.);m=m*m*(3.-2.*m);
-     float ang=uT*(.1+aRnd*.22)*(aRnd>.5?1.:-1.),ca=cos(ang),sa=sin(ang);
-     vec3 o=vec3(ca*aOff.x-sa*aOff.z,aOff.y,sa*aOff.x+ca*aOff.z);
-     o*=1.+.035*sin(uT*1.6+aRnd*12.);                       // la esfera respira
-     vec3 net=aCen+o;
-     float sw=sin(m*3.14159);
-     vec3 p=mix(c,net,m)+vec3(cos(aRnd*80.+uT*2.1),sin(aRnd*50.+uT*1.6)*1.3,sin(aRnd*80.+uT*2.1))*sw*(90.+aRnd*160.);
-     vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;
-     float big=aTipo>2.5&&aTipo<3.5?1.5:(aTipo>1.5&&aTipo<2.5?1.2:1.);
-     gl_PointSize=uSize*big*mix(1.,.72,m)*uPix*(420./-mv.z);
-     float h=clamp(position.y/34.,0.,1.);
-     // paleta monocromática (blanco y plata sobre negro): más brillo cuanto más alto el edificio
-     vec3 b=aTipo<.5?vec3(mix(.32,1.,pow(h,.7))):aTipo<1.5?vec3(.26):aTipo<2.5?vec3(.62):aTipo<3.5?vec3(.85):vec3(.4);
-     float sc=exp(-pow((position.x-uScan)/26.,2.));b+=vec3(1.)*sc*1.1*(1.-m);
-     float tw=.75+.25*sin(uT*3.+aRnd*90.);                    // titileo
-     vC=mix(b,aCol*1.15*tw,m);
-     float na=1.;for(int k=0;k<6;k++){if(abs(aNode-float(k))<.5)na=uNA[k];}
-     vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m)*mix(1.,.12+.88*na,m);
-    }`,
-   fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=(1.-d)*(1.-d);gl_FragColor=vec4(vC*a*vA,a*vA);}`});
-  const pts=new THREE.Points(g,mat);pts.frustumCulled=false;pts.renderOrder=4;scene.add(pts);
-  INTRO.U=U;INTRO.listo=true;INTRO.t0=performance.now();BASE0=START.length();INTRO.n=n;
-  $i('ih1').innerHTML='<b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O';
-  $i('ih2').innerHTML='Puntos  <b id="icnt">0</b>\nEdificios  <b>203.783</b>\nFuente  catastro · OSM';
-  $i('ih3').innerHTML='<i>●</i> Escaneando territorio\n<span id="ifase">Nube de puntos</span>';
-  $i('ih4').innerHTML='1.037.929 hab · 3.858 ha\nSimulador · Federación Policéntrica';
-  if(!INTRO.on)aura(); // se saltó la entrada antes de que cargara: las partículas van directo a las esferas
- }).catch(e=>{console.warn('entrada:',e);if(INTRO.on){cam.position.copy(START);fin()}});
- INTRO.update=(now)=>{
-  if(!INTRO.listo){cam.position.set(0,360,760);cam.lookAt(0,0,0);return}
-  const t=(now-INTRO.t0)/1000,U=INTRO.U;U.uT.value=t;
-  U.uRise.value=Math.min(1,t/2.4);U.uAlpha.value=Math.min(1,t/1.2);U.uScan.value=-700+((t*420)%1400);
-  const c=$i('icnt');if(c)c.textContent=fmt(Math.min(INTRO.n,INTRO.n*t/2.2));
-  ov.classList.toggle('t1',t>1.2&&INTRO.tMix===null);ov.classList.toggle('t2',INTRO.tMix!==null);
-  $i('ibar').style.width=Math.min(100,(INTRO.tMix===null?t/6.4*70:70+30*Math.min(1,(now-INTRO.tMix)/INTRO.dur)))+'%';
-  if(INTRO.tMix===null&&t>6.4)INTRO.tMix=now;
-  const ang=.55+t*.075,rad=760-Math.min(1,t/7)*230,hh=360-Math.min(1,t/7)*150; // sobrevuelo bajo, como un dron
-  const pc=new THREE.Vector3(Math.sin(ang)*rad,hh,Math.cos(ang)*rad);
-  if(INTRO.tMix===null){cam.position.copy(pc);cam.lookAt(0,0,0);return}
-  const q=Math.min(1,(now-INTRO.tMix)/INTRO.dur),e=q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2;
-  U.uMix.value=Math.min(1,q*1.15);U.uJit.value=1.2*(1-q);
-  const fp=$i('ifase');if(fp)fp.textContent=q<.5?'Desintegrando la ciudad':'Seis problemas que se alimentan entre sí';
-  cam.position.lerpVectors(pc,START.clone().multiplyScalar(1.85),e);cam.lookAt(0,0,0);
-  if(q>=1)fin();
- };
-})();
-{const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel;pinta()}}
+sPts.visible=false;
+/* ============ RECORRIDO CON SCROLL: el territorio -> cada problema donde ocurre -> todo se conecta -> la red ============
+   nube.bin (tools/nube_build.js): 142.762 puntos de los edificios reales de Kennedy (del simulador), calles, humedales, Corabastos.
+   lugares.json (tools/lugares_build.js): dónde ocurre cada problema (OpenStreetMap, UAESP, catastro del simulador).
+   El scroll mueve la cámara y enciende los lugares de cada problema; en «Todo está conectado» los puntos de la ciudad viajan a
+   las esferas de la red. Al final la red queda interactiva (la misma de antes: panel de datos y vista a fondo). */
+const MOV={on:!matchMedia('(prefers-reduced-motion: reduce)').matches}; // movimiento continuo; se puede pausar; con movimiento reducido empieza quieto
+let BASE0=null;const START=cam.position.clone();BASE0=START.length();
+const ESCALA=1150/7600,ESCY=ESCALA*3.2; // la ciudad mide ~1.150 unidades; alturas ×3,2 para que se lea
+const ORDEN=['F','B','C','D','A','E']; // el recorrido empieza por la causa raíz
+const H={modo:'historia',s:0,t:0,U:null,M:null,lug:null,vistas:null,hitos:[]};
+document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;
+const esc2=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ---------- secciones del recorrido ----------
+const ST=document.createElement('main');ST.id='story';
+{const hab=(D.B&&D.B.g[0].k[1]&&D.B.g[0].k[1][0])||'1.037.929',ha=(D.B&&D.B.g[0].k[2]&&D.B.g[0].k[2][0])||'3.858,97 ha';
+ let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p>'+esc2(hab)+' habitantes en '+esc2(ha)+'. Un territorio y seis problemas que se alimentan entre sí.</p><div class="down">Desliza para recorrerlo<i></i></div></div>'+
+  '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Puntos  <b>142.762</b>\nEdificios  <b>203.783</b>\nFuente  catastro · OSM</div></section>';
+ ORDEN.forEach((id,i)=>{const n=byId[id],d=D[id],k=(d.g&&d.g[0]?d.g[0].k:[]).slice(0,3);
+  h+='<section class="pb" data-k="'+id+'"><article class="card" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06 · Problema</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(d.lead?'<p>'+d.lead+'</p>':'')+
+   '<div class="donde"><h3>Dónde ocurre en Kennedy</h3><ul data-donde="'+id+'"></ul></div>'+
+   (k.length?'<div class="kps">'+k.map(x=>'<div><b>'+x[0]+'</b><span>'+x[1]+'</span>'+(x[2]?'<em>'+x[2]+'</em>':'')+'</div>').join('')+'</div>':'')+'</article></section>'});
+ h+='<section class="ex"><article class="card ancha"><div class="num">Todo está conectado</div><h2>Ningún problema ocurre solo</h2><p>Los seis aparecen juntos sobre el territorio. Sigue bajando: la ciudad se desarma y cada punto viaja a su problema hasta formar la red de causas.</p></article></section><section class="fin" aria-label="La red de problemas"></section>';
+ ST.innerHTML=h;document.body.appendChild(ST)}
+const volver=document.createElement('button');volver.id='volver';volver.type='button';volver.textContent='↑ Volver al recorrido';document.body.appendChild(volver);
+volver.onclick=()=>scrollTo({top:0,behavior:MOV.on?'smooth':'auto'});
+const SECS=[...ST.querySelectorAll('section')];
+const vis=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('vis',e.isIntersecting)),{threshold:.35});ST.querySelectorAll('.card,.hcard').forEach(c=>vis.observe(c));
+function etapa(){const vh=innerHeight,y=scrollY+vh*.5;let i=0;for(let k=0;k<SECS.length;k++)if(SECS[k].offsetTop<=y)i=k;const s=SECS[i];return i+Math.max(0,Math.min(1,(y-s.offsetTop)/s.offsetHeight))}
+// ---------- la ciudad (nube de puntos) ----------
+fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
+ const dv=new DataView(buf),n=dv.getUint32(4,true);
+ const pos=new Float32Array(n*3),cen=new Float32Array(n*3),off=new Float32Array(n*3),col=new Float32Array(n*3),tip=new Float32Array(n),rn=new Float32Array(n),nod=new Float32Array(n);
+ const W=N.map(m=>m.r*m.r*m.r),Wt=W.reduce((a,b)=>a+b,0);
+ for(let i=0;i<n;i++){const o=16+i*7;pos[i*3]=dv.getInt16(o,true)/2*ESCALA;pos[i*3+1]=dv.getInt16(o+2,true)/2*ESCY;pos[i*3+2]=dv.getInt16(o+4,true)/2*ESCALA;tip[i]=dv.getUint8(o+6);rn[i]=Math.random();
+  let u=Math.random()*Wt,k=0;while(u>W[k]&&k<N.length-1){u-=W[k];k++}const m=N[k];nod[i]=k;
+  const z=Math.random()*2-1,a=Math.random()*6.2832,q=Math.sqrt(1-z*z),rr=m.r*Math.pow(Math.random(),.35)*1.05;
+  cen.set([m.p.x,m.p.y,m.p.z],i*3);off.set([q*Math.cos(a)*rr,z*rr,q*Math.sin(a)*rr],i*3);
+  const c=new THREE.Color(PC[m.id]).lerp(new THREE.Color('#ffffff'),Math.random()*.35);col.set([c.r,c.g,c.b],i*3)}
+ const g=new THREE.BufferGeometry();
+ g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aCen',new THREE.BufferAttribute(cen,3));g.setAttribute('aOff',new THREE.BufferAttribute(off,3));
+ g.setAttribute('aCol',new THREE.BufferAttribute(col,3));g.setAttribute('aTipo',new THREE.BufferAttribute(tip,1));g.setAttribute('aRnd',new THREE.BufferAttribute(rn,1));g.setAttribute('aNode',new THREE.BufferAttribute(nod,1));
+ const U={uT:{value:0},uRise:{value:0},uMix:{value:0},uScan:{value:-900},uAlpha:{value:0},uFade:{value:0},uJit:{value:1.2},uDim:{value:1},uPix:{value:Math.min(devicePixelRatio,2)},uSize:{value:innerWidth<700?2.3:3},uNA:{value:[1,1,1,1,1,1]}};
+ const mat=new THREE.ShaderMaterial({uniforms:U,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec3 aCen;attribute vec3 aOff;attribute vec3 aCol;attribute float aTipo;attribute float aRnd;attribute float aNode;
+   uniform float uT,uRise,uMix,uScan,uAlpha,uFade,uJit,uDim,uPix,uSize;uniform float uNA[6];varying vec3 vC;varying float vA;
+   void main(){
+    float r=clamp(uRise*1.6-aRnd*.6,0.,1.);r=r*r*(3.-2.*r);
+    vec3 c=position;c.y*=r;
+    c+=vec3(sin(uT*1.3+aRnd*40.+c.z*.05),sin(uT*1.9+aRnd*23.)*.6,cos(uT*1.1+aRnd*31.+c.x*.05))*uJit;
+    float m=clamp(uMix*1.7-aRnd*.7,0.,1.);m=m*m*(3.-2.*m);
+    float ang=uT*(.1+aRnd*.22)*(aRnd>.5?1.:-1.),ca=cos(ang),sa=sin(ang);
+    vec3 o=vec3(ca*aOff.x-sa*aOff.z,aOff.y,sa*aOff.x+ca*aOff.z);o*=1.+.035*sin(uT*1.6+aRnd*12.);
+    vec3 net=aCen+o;float sw=sin(m*3.14159);
+    vec3 p=mix(c,net,m)+vec3(cos(aRnd*80.+uT*2.1),sin(aRnd*50.+uT*1.6)*1.3,sin(aRnd*80.+uT*2.1))*sw*(90.+aRnd*160.);
+    vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;
+    float big=aTipo>2.5&&aTipo<3.5?1.5:(aTipo>1.5&&aTipo<2.5?1.2:1.);
+    gl_PointSize=uSize*big*mix(1.,.72,m)*uPix*(420./-mv.z);
+    float h=clamp(position.y/34.,0.,1.);
+    vec3 b=aTipo<.5?vec3(mix(.32,1.,pow(h,.7))):aTipo<1.5?vec3(.26):aTipo<2.5?vec3(.62):aTipo<3.5?vec3(.85):vec3(.4);
+    float sc=exp(-pow((position.x-uScan)/26.,2.));b+=vec3(1.)*sc*1.1*(1.-m)*uDim;
+    float tw=.75+.25*sin(uT*3.+aRnd*90.);
+    vC=mix(b,aCol*1.15*tw,m);
+    float na=1.;for(int k=0;k<6;k++){if(abs(aNode-float(k))<.5)na=uNA[k];}
+    vA=uAlpha*(aTipo<.5?1.:1.1)*(1.-uFade*m)*mix(1.,.12+.88*na,m)*mix(uDim,1.,m);
+   }`,
+  fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=(1.-d)*(1.-d);gl_FragColor=vec4(vC*a*vA,a*vA);}`});
+ const pts=new THREE.Points(g,mat);pts.frustumCulled=false;pts.renderOrder=4;scene.add(pts);H.U=U;H.t0=performance.now();
+}).catch(e=>console.warn('nube:',e));
+// ---------- dónde ocurre cada problema: puntos y columnas de luz ----------
+fetch('lugares.json').then(r=>r.json()).then(L=>{
+ H.lug=L;const idx=Object.fromEntries(N.map((n,i)=>[n.id,i]));
+ const P=[],A=[],T=[],B=[],BA=[],BP=[];
+ for(const id of Object.keys(idx)){const l=L[id];if(!l)continue;const k=idx[id];
+  for(const [x,z,w,t] of l.pts){const X=x*ESCALA,Z=z*ESCALA,alto=id==='B'?w*15*ESCY:6+w*9;P.push(X,id==='B'?alto:2,Z);A.push(k,w);T.push(t);
+   if(id!=='B'||Math.random()<.5){B.push(X,0,Z,X,alto,Z);BA.push(k,0,k,1)}}
+  // cuántos lugares y de qué tipo
+  const ul=ST.querySelector('[data-donde="'+id+'"]');if(ul)ul.innerHTML=l.cuenta.map(c=>'<li><i></i><b>'+Number(c[1]).toLocaleString('es-CO')+'</b> '+esc2(c[0])+'</li>').join('');
+  for(const hi of l.hitos)H.hitos.push({id,k,n:hi.n,sub:hi.sub,p:new THREE.Vector3(hi.p[0]*ESCALA,30,hi.p[1]*ESCALA)});
+  // vista de la cámara para este problema: centro ponderado y extensión de sus lugares
+  let sx=0,sz=0,sw=0;for(const [x,z,w] of l.pts){sx+=x*w;sz+=z*w;sw+=w}const cx=sx/sw*ESCALA,cz=sz/sw*ESCALA;let r2=0;for(const [x,z,w] of l.pts)r2+=((x*ESCALA-cx)**2+(z*ESCALA-cz)**2)*w;
+  idx[id+'v']={c:new THREE.Vector3(cx,0,cz),d:Math.max(260,Math.min(900,Math.sqrt(r2/sw)*2.6))}}
+ H.vistaP=idx;
+ const cols=N.map(n=>new THREE.Color(PC[n.id]));
+ const MU={uT:{value:0},uPix:{value:Math.min(devicePixelRatio,2)},uShow:{value:[0,0,0,0,0,0]},uCol:{value:cols}};
+ const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(P,3));g.setAttribute('aDat',new THREE.Float32BufferAttribute(A,2));g.setAttribute('aTipo',new THREE.Float32BufferAttribute(T,1));
+ const sel6=`float sh=0.;vec3 col=vec3(1.);for(int k=0;k<6;k++){if(abs(PROB-float(k))<.5){sh=uShow[k];col=uCol[k];}}`;
+ const mk=new THREE.Points(g,new THREE.ShaderMaterial({uniforms:MU,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec2 aDat;attribute float aTipo;uniform float uT,uPix;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA;
+   void main(){${sel6.replace(/PROB/g,'aDat.x')}vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
+    float pulse=1.+.3*sin(uT*3.+position.x*.07+position.z*.05);gl_PointSize=(5.+aDat.y*5.)*pulse*uPix*(420./-mv.z)*sh;
+    vC=mix(col,vec3(1.),aTipo>.5?.45:.12);vA=sh;}`,
+  fragmentShader:`varying vec3 vC;varying float vA;void main(){vec2 q=gl_PointCoord*2.-1.;float d=dot(q,q);if(d>1.)discard;float a=exp(-d*3.5);gl_FragColor=vec4(vC*a*vA*1.4,a*vA);}`}));
+ mk.frustumCulled=false;mk.renderOrder=7;scene.add(mk);
+ const bg=new THREE.BufferGeometry();bg.setAttribute('position',new THREE.Float32BufferAttribute(B,3));bg.setAttribute('aDat',new THREE.Float32BufferAttribute(BA,2));
+ const bm=new THREE.LineSegments(bg,new THREE.ShaderMaterial({uniforms:MU,transparent:true,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,
+  vertexShader:`attribute vec2 aDat;uniform float uShow[6];uniform vec3 uCol[6];varying vec3 vC;varying float vA;void main(){${sel6.replace(/PROB/g,'aDat.x')}gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);vC=col;vA=sh*(1.-aDat.y)*.75;}`,
+  fragmentShader:`varying vec3 vC;varying float vA;void main(){gl_FragColor=vec4(vC*vA,vA);}`}));
+ bm.frustumCulled=false;bm.renderOrder=6;scene.add(bm);H.M=MU;
+ // letreros de los lugares clave (Corabastos, Bavaria)
+ H.hitos.forEach(h=>{const d=document.createElement('div');d.className='hito';d.style.setProperty('--c',PC[h.id]);d.innerHTML='<b>'+esc2(h.n)+'</b><small>'+esc2(h.sub)+'</small>';document.body.appendChild(d);h.el=d});
+}).catch(e=>console.warn('lugares:',e));
+// ---------- cámara del recorrido ----------
+const ss=(a,b,x)=>{const t=Math.max(0,Math.min(1,(x-a)/(b-a)));return t*t*(3-2*t)};
+const RED_POS=START.clone().multiplyScalar(1.85),O3=new THREE.Vector3();
+function vista(i,t){ // posición y objetivo de la cámara en la etapa i
+ if(i<=0){const a=.55+t*.04;return [new THREE.Vector3(Math.sin(a)*700,330,Math.cos(a)*700),O3.clone()]}
+ if(i<=6){const id=ORDEN[i-1],v=H.vistaP&&H.vistaP[id+'v'];if(!v)return vista(0,t);const a=.4+i*.9+t*.03;return [v.c.clone().add(new THREE.Vector3(Math.sin(a)*v.d*.7,v.d*.85,Math.cos(a)*v.d*.7)),v.c.clone()]}
+ if(i===7){const a=.55+t*.03;return [new THREE.Vector3(Math.sin(a)*820,560,Math.cos(a)*820),O3.clone()]} // todos los problemas juntos sobre la ciudad
+ return [RED_POS.clone(),O3.clone()];
+}
+const cT=new THREE.Vector3(),cP=new THREE.Vector3();let camIni=false;
+function recorrido(dt,now){
+ if(MOV.on)H.t+=dt;const st=etapa();H.s+=(st-H.s)*(1-Math.exp(-dt*5));const s=H.s,i=Math.floor(s),f=s-i;
+ // cámara: se queda en cada etapa y viaja a la siguiente al final de la sección
+ let [p0,t0]=vista(Math.min(i,8),H.t),w=0,p1=p0,t1=t0;
+ if(i<7){w=ss(.62,1,f);[p1,t1]=vista(i+1,H.t)}else if(i===7){w=ss(.45,.95,f);[p1,t1]=vista(8,H.t)}
+ const dp=p0.lerp(p1,w),dtg=t0.lerp(t1,w);
+ if(!camIni){cP.copy(dp);cT.copy(dtg);camIni=true}
+ const k=1-Math.exp(-dt*3.5);cP.lerp(dp,k);cT.lerp(dtg,k);cam.position.copy(cP);cam.lookAt(cT);
+ // ciudad
+ const U=H.U;if(U){const te=(now-H.t0)/1000;U.uT.value=H.t;U.uRise.value=Math.min(1,te/2.4);U.uAlpha.value=Math.min(1,te/1.2);U.uScan.value=-700+((H.t*420)%1400);U.uJit.value=MOV.on?1.2*(1-U.uMix.value):0;
+  const mix=i>=7?ss(.4,.95,i===7?f:1):0;U.uMix.value=mix;U.uFade.value=.08*mix;
+  const enProb=i>=1&&i<=6?1:0,dim=enProb?.55:(i===7?.55:1);U.uDim.value+=(dim-U.uDim.value)*(1-Math.exp(-dt*4));
+  N.forEach((n,j)=>U.uNA.value[j]=1)}
+ // lugares de cada problema
+ const M=H.M;if(M){M.uT.value=H.t;const want=[0,0,0,0,0,0];
+  if(i>=1&&i<=6){const id=ORDEN[i-1],j=N.findIndex(n=>n.id===id);want[j]=ss(0,.18,f)*(1-ss(.8,1,f))}
+  if(i===7){const a=ss(0,.15,f)*(1-ss(.35,.6,f));for(let j=0;j<6;j++)want[j]=a*.9}
+  for(let j=0;j<6;j++)M.uShow.value[j]+=(want[j]-M.uShow.value[j])*(1-Math.exp(-dt*6))}
+ // letreros de lugares clave
+ const r=renderer.domElement.getBoundingClientRect();
+ H.hitos.forEach(h=>{const o=M?M.uShow.value[h.k]:0;h.el.style.opacity=o;if(o<.02)return;const q=h.p.clone().project(cam);if(q.z>1){h.el.style.opacity=0;return}h.el.style.transform='translate('+((q.x+1)/2*r.width).toFixed(1)+'px,'+((1-q.y)/2*r.height).toFixed(1)+'px)'});
+ return s;
+}
+// ---------- pausa del movimiento ----------
+{const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel&&H.modo==='red';pinta()}}
+// ---------- bucle ----------
 let LT2=performance.now();
 (function loop(t){
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
- if(INTRO.on){INTRO.update(now);pintar();return}
- tick(t||0);ctl.update();constelacion(dt,now);
+ const s=etapa(),enRed=s>=8;
+ if(enRed&&H.modo!=='red'){H.modo='red';document.body.classList.remove('historia');ctl.enabled=true;ctl.target.set(0,0,0);cam.position.copy(RED_POS);T0=null;tRed=now;ctl.autoRotate=MOV.on;sPts.visible=true;if(H.U){H.U.uMix.value=1;H.U.uFade.value=.08;H.U.uDim.value=1}if(H.M)H.M.uShow.value.fill(0);H.hitos.forEach(h=>h.el.style.opacity=0)}
+ if(!enRed&&H.modo==='red'){H.modo='historia';document.body.classList.add('historia');ctl.enabled=false;ctl.autoRotate=false;if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;cam.clearViewOffset();vtx=vty=vox=voy=0;tRed=null;sPts.visible=false;ARC.forEach(a=>a.lm.opacity=0);cP.copy(cam.position);H.s=s}
+ if(H.modo==='red'){if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
+ else recorrido(dt,now);
  pintar();
 })();
 </script>
