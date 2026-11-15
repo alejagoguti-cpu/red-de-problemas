@@ -8,6 +8,7 @@
    E Residuos sólidos: contenedores de la UAESP (residuos.json)
    F Centralización de servicios: Corabastos, colegios y jardines (OSM), plazas de mercado y salud (OSM, Overpass) */
 const fs = require('fs'), path = require('path');
+const { servicios, CATS } = require('./servicios.js'), SV = servicios();
 const DATA = process.argv[2] || 'C:/Users/ACER/simulador/data3d', CACHE = process.argv[3] || 'C:/Users/ACER/simulador/tools/cache';
 const R = (f) => JSON.parse(fs.readFileSync(path.join(DATA, f), 'utf8'));
 const OX = 2095.67, OZ = -109.06, LC = { x: 5341.33, y: 3161.9 };
@@ -39,14 +40,7 @@ const altos = []; for (const b of R('buildings.json')) { if ((b.h || 0) < 15) co
 const muestraAltos = altos.filter(() => rnd() < Math.min(1, 1800 / altos.length));
 
 (async () => {
-  // salud (OpenStreetMap vía Overpass): hospitales, clínicas, centros de salud
-  let salud = [];
-  try {
-    const q = '[out:json][timeout:60];(nwr["amenity"~"hospital|clinic|doctors"](4.56,-74.21,4.68,-74.10);nwr["healthcare"~"hospital|clinic|centre|doctor"](4.56,-74.21,4.68,-74.10););out center tags;';
-    const r = await fetch('https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(q), { headers: { 'User-Agent': 'red-de-problemas-build' } });
-    const j = await r.json(); const vistos = new Set();
-    salud = j.elements.map(e => { const ll = e.center || e; const p = ll2l(ll.lat, ll.lon); return { p, n: (e.tags && e.tags.name) || '' }; }).filter(x => enK(x.p) && !vistos.has(Math.round(x.p[0] / 30) + ',' + Math.round(x.p[1] / 30)) && vistos.add(Math.round(x.p[0] / 30) + ',' + Math.round(x.p[1] / 30)));
-  } catch (e) { console.warn('Overpass no respondió:', e.message); }
+  // (salud y demás servicios: tools/servicios.js, desde tools/cache/servicios_osm.json)
   const pts = (L, peso = 1, tipo = 0) => L.map(x => { const p = x.p || x; const [a, b] = rel(p); return [a, b, peso, tipo]; });
   const hito = (n, p, sub) => ({ n, sub, p: rel(p) });
   const out = {
@@ -56,7 +50,10 @@ const muestraAltos = altos.filter(() => rnd() < Math.min(1, 1800 / altos.length)
     C: { pts: pts(obras, 2, 0), hitos: [], cuenta: [['obras en construcción', obras.length]] },
     D: { pts: pts(lotes, 2.4, 0).concat(pts([bav], 6, 1), pts(baldios, 2.4, 2)), hitos: [hito('Bavaria', bav, 'predio de 71 ha')], cuenta: [['lotes vacíos o abandonados', lotes.length + baldios.length]] },
     E: { pts: pts(residuos, 1, 0), hitos: [], cuenta: [['contenedores de basura', residuos.length]] },
-    F: { pts: pts([cora], 6, 1).concat(pts(colegios, 1.3, 0), pts(jardines, 1, 0), pts(plazas, 2.6, 2), pts(salud, 2, 3)), hitos: [hito('Corabastos', cora, 'abastos centralizados')].concat(plazas.map(q => hito(q.n, q.p, 'plaza distrital'))), cuenta: [['colegios', colegios.length], ['jardines', jardines.length], ['servicios de salud', salud.length], ['plazas de mercado distritales', plazas.length]] }
+    // F: equipamientos por categoría (tools/servicios.js); sus edificios se resaltan con destacados.json
+    F: { pts: pts([cora], 6, 1).concat(SV.map(s => { const [a, b] = rel(s.p); return [a, b, s.cat === 'plaza' ? 2.6 : 1.4, s.cat === 'plaza' ? 2 : s.cat === 'salud' ? 3 : 0]; })),
+      hitos: [hito('Corabastos', cora, 'abastos centralizados')].concat(plazas.map(q => hito(q.n, q.p, 'plaza distrital'))),
+      cuenta: CATS.map(c => [c.n, SV.filter(s => s.cat === c.id).length, c.col]) }
   };
   fs.writeFileSync(path.join(__dirname, '..', 'lugares.json'), JSON.stringify(out));
   for (const k of 'ABCDEF') console.log(k, out[k].pts.length, JSON.stringify(out[k].cuenta));
