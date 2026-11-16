@@ -298,7 +298,7 @@ body{font-size-adjust:from-font} /* el texto no salta cuando llega Inter */
 .legend .mov:focus-visible{outline:2px solid #cfff5e;outline-offset:2px}
 @media(max-width:600px){#panel{right:0;left:0;top:auto;bottom:0;width:100%;max-height:72%}}
 /* ============ RECORRIDO CON SCROLL ============ */
-html,body{height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}
+html,body{height:auto!important;overflow:visible!important}html{overflow-x:clip!important}body{overflow-x:clip!important} /* clip (no hidden): el mapa fijo usa position:sticky */
 #c{position:fixed!important}
 header,.legend,.goprop,#panel,#tip,#dv,#lbls{position:fixed!important}
 #intro{display:none!important}
@@ -594,6 +594,76 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
  .flujo{height:120px}.ton b{font-size:42px}.usos{margin-top:20px}
  .seis{gap:8px 6px}.seis span{width:72px}.seis .ico{width:24px;height:24px;padding:8px}
  .etq b{font-size:12px}.etq.grande b{font-size:16px}
+}
+/* ============ MAPA LIMPIO FIJO (los seis problemas) ============ */
+#mk{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);background:var(--campo-0);pointer-events:auto;border-top:1px solid var(--linea)}
+#mk .mk-mapa{grid-column:2;grid-row:1;position:sticky;top:0;height:100vh;align-self:start;display:flex;flex-direction:column;padding:24px 28px 20px 8px;box-sizing:border-box}
+#mk .mk-pasos{grid-column:1;grid-row:1}
+#story #mk section.paso{min-height:100vh;padding:0 3vw 0 5vw;display:flex;align-items:center}
+#story #mk .card.esc{max-width:470px;padding:0!important;background:none!important;border:0!important;box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+#story #mk .card.esc::before{display:none}
+#story #mk .card.esc h2{font-size:clamp(2.2rem,1.4rem + 2vw,3.4rem)!important}
+.mk-tit{display:flex;align-items:baseline;gap:14px;padding-bottom:10px;border-bottom:1px solid var(--linea)}
+.mk-tit b{font:300 26px/1 var(--letra-titulo);letter-spacing:.02em;text-transform:uppercase;color:var(--tinta-1)}
+.mk-tit span{font:500 10.5px var(--letra-dato);letter-spacing:.14em;text-transform:uppercase;color:var(--tinta-3);transition:color .4s}
+#mksvg{flex:1;min-height:0;width:100%;display:block;overflow:visible}
+.mk-ley{display:flex;flex-wrap:wrap;gap:8px 18px;padding-top:12px;border-top:1px solid var(--linea);min-height:34px}
+.mk-ley span{display:flex;align-items:center;gap:8px;font:500 10px var(--letra-dato);letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-2);animation:aparece .6s both}
+.mk-ley span:nth-child(2){animation-delay:.1s}.mk-ley span:nth-child(3){animation-delay:.2s}.mk-ley span:nth-child(4){animation-delay:.3s}
+@keyframes aparece{from{opacity:0;transform:translateY(6px)}}
+.sw{width:14px;height:14px;flex:none;display:inline-block;border-radius:50%;background:var(--pc)}
+.sw.cora{box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 35%,transparent)}.sw.plaza{width:10px;height:10px}
+.sw.anillo{background:none;border:1.5px dashed var(--pc)}.sw.raya{border-radius:0;background:repeating-linear-gradient(45deg,var(--pc) 0 2px,transparent 2px 5px)}
+.sw.grad{width:44px;height:10px;border-radius:0;background:linear-gradient(90deg,color-mix(in srgb,var(--pc) 12%,transparent),var(--pc))}.sw.txt{display:none}
+.sw.area{border-radius:0;background:color-mix(in srgb,var(--pc) 45%,transparent);border:1px solid var(--pc)}.sw.obra{width:9px;height:9px;border-radius:0}
+.sw.sube{border-radius:0;background:color-mix(in srgb,var(--pc) 50%,transparent);border:1px solid var(--pc)}.sw.igual{border-radius:0;background:rgba(169,179,175,.3);border:1px solid #a9b3af}
+.sw.flujo{width:30px;height:4px;border-radius:2px}.sw.tienda{width:5px;height:5px;opacity:.7}
+.sw.pin{background:#fff;box-shadow:0 0 0 3px var(--pc)}.sw.punto{width:5px;height:5px;opacity:.8}
+/* capas base */
+.mk-sil{fill:#0c0f10}
+.mk-upz path{fill:var(--pc,#fff);fill-opacity:0;stroke:rgba(214,228,222,.16);stroke-width:1;vector-effect:non-scaling-stroke;transition:fill-opacity .8s ease,fill .6s ease}
+.mk-via3{fill:none;stroke:rgba(214,228,222,.13);stroke-width:.8;vector-effect:non-scaling-stroke}
+.mk-via4{fill:none;stroke:rgba(214,228,222,.32);stroke-width:1.4;vector-effect:non-scaling-stroke}
+.mk-borde{fill:none;stroke:#d6e4de;stroke-width:1.6;vector-effect:non-scaling-stroke}
+.mk-t{font:400 calc(var(--u,10)*15px)/1 var(--letra-titulo);letter-spacing:.03em;text-transform:uppercase;fill:#eaefed;paint-order:stroke;stroke:#050607;stroke-width:calc(var(--u,10)*4px);stroke-linejoin:round}
+.mk-t .mk-st{font:500 calc(var(--u,10)*9px) var(--letra-dato);letter-spacing:.1em;fill:var(--pc)}
+.mk-t.cen{text-anchor:middle}.mk-t.der{text-anchor:end}.mk-t.g{font-size:calc(var(--u,10)*19px)}
+.mk-t.dens{font-size:calc(var(--u,10)*17px)}.mk-t.dens.g{font-size:calc(var(--u,10)*30px);fill:#fff}
+.mk-t.sube{fill:var(--pc)}.mk-t.igual{fill:#cfd6d3}.mk-t.reg{font-size:calc(var(--u,10)*17px)}
+.mk-ref .mk-t{font-size:calc(var(--u,10)*11px);fill:var(--tinta-3)}.mk-esc{stroke:var(--tinta-3);stroke-width:2;vector-effect:non-scaling-stroke}
+/* capas por paso */
+.capa{opacity:0;transition:opacity .7s ease;pointer-events:none}
+#mksvg[data-paso=F] .capa[data-capa=F],#mksvg[data-paso=B] .capa[data-capa=B],#mksvg[data-paso=C] .capa[data-capa=C],#mksvg[data-paso=D] .capa[data-capa=D],#mksvg[data-paso=A] .capa[data-capa=A],#mksvg[data-paso=E] .capa[data-capa=E]{opacity:1}
+#mksvg[data-paso=F] .u-tintal{fill:url(#mkraya);fill-opacity:1}
+.raya{stroke:var(--pc);stroke-width:14;opacity:.55}.raya-f{fill:var(--pc);opacity:.08}
+#mksvg[data-paso=B] .mk-upz path{fill-opacity:calc(.07 + .7*var(--q))}
+#mksvg[data-paso=C] .u-carvajal{fill-opacity:.4}
+#mksvg[data-paso=D] .u-americas,#mksvg[data-paso=D] .u-carvajal{fill-opacity:.45}
+#mksvg[data-paso=D] .u-patio,#mksvg[data-paso=D] .u-cora{fill:#a9b3af;fill-opacity:.22}
+/* elementos */
+.mk-anillo{fill:none;stroke:var(--pc);stroke-width:1.6;stroke-dasharray:0 100;vector-effect:non-scaling-stroke;transition:stroke-dasharray 1.6s cubic-bezier(.16,1,.3,1) var(--d,0s)}
+#mksvg[data-paso=F] .mk-anillo{stroke-dasharray:100 0}
+.mk-anillo-f{fill:var(--pc);fill-opacity:.07;stroke:none}
+.mk-plaza{fill:var(--pc);fill-opacity:.6;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke}
+.mk-plz{fill:#fff;stroke:var(--pc);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk-cora{fill:var(--pc);stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke}
+.mk-mp{fill:#fff;stroke:var(--pc);stroke-width:3;vector-effect:non-scaling-stroke}
+.mk-pulso{fill:none;stroke:var(--pc);stroke-width:1.5;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;animation:mkpulso 2.2s ease-out infinite}
+.mk-pulso.lento{animation-duration:3s}
+@keyframes mkpulso{from{transform:scale(1);opacity:.9}to{transform:scale(5);opacity:0}}
+.mk-obra{fill:var(--pc);opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:opacity .4s var(--d),transform .6s cubic-bezier(.16,1,.3,1) var(--d)}
+#mksvg[data-paso=C] .mk-obra{opacity:.9;transform:none}
+.mk-tienda{fill:var(--pc);opacity:.55}.mk-cont{fill:var(--pc);opacity:.7}
+.mk-fl-base{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-opacity:.18;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.mk-fl{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-linecap:round;stroke-dasharray:1.2 4;vector-effect:non-scaling-stroke;animation:mkflujo 1.2s linear infinite;animation-delay:var(--d)}
+@keyframes mkflujo{to{stroke-dashoffset:-5.2}}
+@media(prefers-reduced-motion:reduce){.mk-pulso,.mk-fl{animation:none}}
+@media(max-width:700px){
+ #mk{display:block}
+ #mk .mk-mapa{position:sticky;top:0;height:54vh;padding:12px 12px 8px;z-index:2;background:var(--campo-0);border-bottom:1px solid var(--linea)}
+ .mk-tit b{font-size:20px}.mk-ley{gap:5px 12px;padding-top:8px}.mk-ley span{font-size:8.5px}
+ #story #mk section.paso{min-height:75vh;padding:28px 16px 70px;align-items:flex-start}
+ #story #mk .card.esc{max-width:none}
 }
 /* barra de desplazamiento como en Salento */
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-track{background:var(--campo-0)}::-webkit-scrollbar-thumb{background:var(--tinta-4);border:3px solid var(--campo-0);border-radius:6px}
@@ -1174,8 +1244,11 @@ const ESC={
   '<div class="seis">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(.15+i*.12)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'<em>'+esc2(byId[id].t)+'</em></span>').join('')+'</div>'+
   '<div class="down">Empezamos por los mercados<i></i></div></div>'+
   '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>244.147</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · Google · Microsoft</div></section>';
+ // los seis problemas: mapa limpio fijo (SVG) + pasos de texto que suben
+ h+='<div id="mk"><div class="mk-mapa"><div class="mk-tit"><b>Kennedy</b><span id="mktag"></span></div><svg id="mksvg" role="img" aria-label="Mapa de Kennedy"></svg><div class="mk-ley" id="mkley"></div></div><div class="mk-pasos">';
  ORDEN.forEach((id,i)=>{const n=byId[id],e=ESC[id];
-  h+='<section class="pb" data-k="'+id+'"><article class="card esc" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06'+(e.hip?' <b class="hip">'+ic('lupa')+'Hipótesis</b>':'')+'</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(e.hip?'':'<p class="tag">'+e.tag+'</p>')+e.g()+'<div class="src">'+e.src+'</div></article></section>'});
+  h+='<section class="pb paso" data-k="'+id+'"><article class="card esc" style="--c:'+PC[id]+'" aria-labelledby="st-'+id+'"><div class="num"><span>'+String(i+1).padStart(2,'0')+'</span> / 06'+(e.hip?' <b class="hip">'+ic('lupa')+'Hipótesis</b>':'')+'</div><h2 id="st-'+id+'">'+esc2(n.t)+'</h2>'+(e.hip?'':'<p class="tag">'+e.tag+'</p>')+e.g()+'<div class="src">'+e.src+'</div></article></section>'});
+ h+='</div></div>';
  h+='<section class="ex"><article class="card ancha esc"><div class="num">Todo está conectado</div><h2>Ningún problema ocurre solo</h2><div class="seis mini">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(i*.1)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'</span>').join('')+'</div><p class="frase">'+ic('red')+'Sigue bajando: la ciudad se desarma y <em>cada punto viaja a su problema</em>.</p></article></section>'+
   '<section class="rd"><article class="card esc red1" style="--c:'+PC.F+'"><div class="num">La red · causas de fondo</div><h2>Centralización: el nodo con más conexiones</h2>'+
   '<div class="rel3"><div style="--d:0s"><b>'+ic('camion')+'Territorial</b><span>producción dispersa <i>→</i> recepción concentrada <i>→</i> acceso desigual</span></div>'+
@@ -1189,13 +1262,77 @@ const ESC={
 // gráficos que se arman al entrar en pantalla: personas, hectáreas y contadores
 ST.querySelectorAll('.pg').forEach(g=>{const n=+g.dataset.n,on=+g.dataset.on;let s='';for(let i=0;i<n;i++)s+='<i class="'+(i<on?'on':'')+'" style="--d:'+(i*.012).toFixed(3)+'s">'+ic('persona')+'</i>';g.innerHTML=s});
 ST.querySelectorAll('.hect').forEach(g=>{const n=+g.dataset.n;let s='';for(let i=0;i<n;i++){s+='<i style="left:'+(Math.random()*96+2).toFixed(1)+'%;top:'+(Math.random()*96+2).toFixed(1)+'%;--d:'+(Math.random()*1.4).toFixed(2)+'s"></i>'}g.innerHTML=s});
+/* ============ MAPA LIMPIO DE LOS SEIS PROBLEMAS (SVG) ============
+   Mismo marco que el 3D: metros desde el centro de nube.bin (x este, z sur = abajo). Capas: silueta (limite.json), UPZ (upz.json),
+   avenidas (vias.json), lugares de cada problema (lugares.json) y plazas distritales (plazas_distritales.json). */
+const LEY={
+ F:[['cora','Corabastos · central mayorista'],['plaza','plaza de mercado distrital'],['anillo','15 min a pie (≈1,1 km)'],['raya','Tintal: menor proximidad']],
+ B:[['grad','habitantes por hectárea (2024)'],['txt','434 Patio Bonito · 90 Tintal Norte']],
+ C:[['area','UPZ Carvajal · cultivo urbano en Carvajal Osorio'],['obra','obras en construcción']],
+ D:[['sube','valores en aumento (Américas, Carvajal)'],['igual','valores estables (Patio Bonito, Corabastos)']],
+ A:[['flujo','toneladas que llegan a Corabastos (2022)'],['tienda','tiendas de barrio']],
+ E:[['cora','Corabastos: residuos +48 h'],['pin','María Paz: 23 t retiradas (mar. 2026)'],['punto','contenedores de basura']]};
+const MKTAG={F:'dónde llegan los alimentos',B:'dónde vive la gente',C:'dónde compite el suelo',D:'dónde se espera que suba',A:'de dónde viene la comida',E:'dónde se acumulan los residuos'};
+Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distritales.json'].map(u=>fetch(u).then(r=>r.json()))).then(([LM,UZ,LG,VI,PZ])=>{
+ const svg=document.getElementById('mksvg');if(!svg)return;
+ let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;for(const [x,z] of LM.pts){x0=Math.min(x0,x);x1=Math.max(x1,x);z0=Math.min(z0,z);z1=Math.max(z1,z)}
+ const W=x1-x0,Hh=z1-z0,pad=Math.max(W,Hh)*.16,VB=[x0-pad*1.35,z0-pad,W+pad*2.7,Hh+pad*2];svg.setAttribute('viewBox',VB.join(' '));
+ const R=v=>Math.round(v),Pth=a=>a.map((p,i)=>(i?'L':'M')+R(p[0])+' '+R(p[1])).join('')+'Z';
+ const t=(x,z,txt,cl,sub)=>'<text class="mk-t '+(cl||'')+'" x="'+R(x)+'" y="'+R(z)+'">'+esc2(txt)+(sub?'<tspan class="mk-st" x="'+R(x)+'" dy="1.25em">'+esc2(sub)+'</tspan>':'')+'</text>';
+ const pt=(x,z,px,cl,extra)=>'<circle class="'+cl+'" cx="'+R(x)+'" cy="'+R(z)+'" data-px="'+px+'" r="1"'+(extra||'')+'/>';
+ const cora=LG.A.hitos.find(h=>h.n==='Corabastos').p,plz=PZ.plazas.filter(p=>p.loc===8),mp=(LG.E.hitos.find(h=>h.n==='María Paz')||{}).p;
+ const clsU={'Tintal Norte':'u-tintal','Carvajal':'u-carvajal','Américas':'u-americas','Patio Bonito':'u-patio','Corabastos':'u-cora'};
+ let s='<defs><pattern id="mkraya" patternUnits="userSpaceOnUse" width="70" height="70" patternTransform="rotate(45)"><rect width="70" height="70" class="raya-f"/><line x1="0" y1="0" x2="0" y2="70" class="raya"/></pattern>'+
+  '<clipPath id="mkclip"><path d="'+Pth(LM.pts)+'"/></clipPath><radialGradient id="mkgl"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>';
+ s+='<path class="mk-sil" d="'+Pth(LM.pts)+'"/>';
+ s+='<g class="mk-upz">'+UZ.upz.map(u=>'<path class="'+(clsU[u.n]||'')+'" style="--q:'+((u.dens-90)/(434-90)).toFixed(3)+'" d="'+Pth(u.poly)+'"/>').join('')+'</g>';
+ const vias=j=>VI.vias.filter(v=>v[0]===j||(j===4&&v[0]>=4)).map(v=>{let d='';for(let i=1;i+1<v.length;i+=2)d+=(i===1?'M':'L')+v[i]+' '+v[i+1];return d}).join('');
+ s+='<g clip-path="url(#mkclip)"><path class="mk-via3" d="'+vias(3)+'"/><path class="mk-via4" d="'+vias(4)+'"/></g><path class="mk-borde" d="'+Pth(LM.pts)+'"/>';
+ // F · centralización: plazas, 15 min a pie, Corabastos, Tintal
+ s+='<g class="capa" data-capa="F">'+plz.map((p,i)=>'<circle class="mk-anillo" cx="'+p.c[0]+'" cy="'+p.c[1]+'" r="1125" pathLength="100" style="--d:'+(i*.3)+'s"/><circle class="mk-anillo-f" cx="'+p.c[0]+'" cy="'+p.c[1]+'" r="1125"/>').join('')+
+  plz.map(p=>'<path class="mk-plaza" d="'+Pth(p.poly)+'"/>'+pt(p.c[0],p.c[1],5,'mk-plz')+pt(p.c[0],p.c[1],5,'mk-pulso',' style="--c:var(--pc)"')).join('')+
+  pt(cora[0],cora[1],9,'mk-cora')+pt(cora[0],cora[1],9,'mk-pulso lento')+
+  t(cora[0]-260,cora[1]-60,'Corabastos','der','central mayorista')+plz.map(p=>t(p.c[0]+230,p.c[1]+40,'Plaza '+p.n,'','plaza distrital')).join('')+
+  (()=>{const u=UZ.upz.find(u=>u.n==='Tintal Norte');return u?t(u.c[0],u.c[1],'Tintal','cen','menor proximidad'):''})()+
+  t(plz[0].c[0],plz[0].c[1]+1125+260,'15 min a pie','cen')+'</g>';
+ // B · densidad por UPZ
+ s+='<g class="capa" data-capa="B">'+UZ.upz.map(u=>{const g=u.n==='Patio Bonito'||u.n==='Tintal Norte';return t(u.c[0],u.c[1],String(u.dens),'cen dens'+(g?' g':''),u.n)}).join('')+'</g>';
+ // C · valorización: obras en construcción + Carvajal
+ s+='<g class="capa" data-capa="C">'+LG.C.pts.map((p,i)=>'<rect class="mk-obra" x="'+(p[0]-45)+'" y="'+(p[1]-45)+'" width="90" height="90" style="--d:'+(i*.015).toFixed(3)+'s"/>').join('')+
+  (()=>{const u=UZ.upz.find(u=>u.n==='Carvajal');return u?t(u.c[0],u.c[1],'Carvajal','cen g','Carvajal Osorio · cultivo urbano'):''})()+'</g>';
+ // D · especulación
+ s+='<g class="capa" data-capa="D">'+UZ.upz.filter(u=>clsU[u.n]&&u.n!=='Tintal Norte').map(u=>{const up=u.n==='Américas'||u.n==='Carvajal';return t(u.c[0],u.c[1],(up?'↑ ':'→ ')+u.n,'cen g '+(up?'sube':'igual'),up?'valores en aumento':'valores estables')}).join('')+'</g>';
+ // A · dependencia: flujos desde las regiones (dirección real, distancia esquemática)
+ const RG=[['Cundinamarca','+1 millón de t',1016649,300],['Boyacá','341 mil t',341000,40],['Meta','273 mil t',273000,128],['Otras regiones','≈567 mil t',567469,200]];
+ s+='<g class="capa" data-capa="A">'+LG.A.pts.filter(p=>p[3]===0).map(p=>pt(p[0],p[1],1.6,'mk-tienda')).join('')+
+  RG.map(([n,tx,ton,b],i)=>{const a=b*Math.PI/180,L=5600,ox=cora[0]+Math.sin(a)*L,oz=cora[1]-Math.cos(a)*L,mx=(ox+cora[0])/2+Math.cos(a)*900,mz=(oz+cora[1])/2+Math.sin(a)*900,w=(2+ton/1016649*12).toFixed(1);
+   const lx=cora[0]+Math.sin(a)*(L+250),lz=cora[1]-Math.cos(a)*(L+250);
+   return '<path class="mk-fl-base" style="--w:'+w+'" d="M'+R(ox)+' '+R(oz)+'Q'+R(mx)+' '+R(mz)+' '+cora[0]+' '+cora[1]+'"/><path class="mk-fl" pathLength="100" style="--w:'+w+';--d:'+(i*.25)+'s" d="M'+R(ox)+' '+R(oz)+'Q'+R(mx)+' '+R(mz)+' '+cora[0]+' '+cora[1]+'"/>'+t(lx,lz,n,'cen g reg',tx)}).join('')+
+  pt(cora[0],cora[1],11,'mk-cora')+pt(cora[0],cora[1],11,'mk-pulso lento')+t(cora[0]+300,cora[1]+80,'Corabastos','','2,2 millones de t')+'</g>';
+ // E · residuos
+ s+='<g class="capa" data-capa="E">'+LG.E.pts.filter(p=>p[3]===0).map(p=>pt(p[0],p[1],2,'mk-cont')).join('')+
+  pt(cora[0],cora[1],10,'mk-cora')+pt(cora[0],cora[1],10,'mk-pulso lento')+t(cora[0]-280,cora[1]+60,'Corabastos','der','residuos acumulados +48 h')+
+  (mp?pt(mp[0],mp[1],7,'mk-mp')+pt(mp[0],mp[1],7,'mk-pulso')+t(mp[0]+260,mp[1]-120,'María Paz','','5 t orgánicos · 18 t voluminosos'):'')+'</g>';
+ // norte y escala (1 km)
+ const sx=VB[0]+pad*.4,sz=VB[1]+VB[3]-pad*.35;
+ s+='<g class="mk-ref"><path class="mk-esc" d="M'+R(sx)+' '+R(sz)+'h1000"/>'+t(sx,sz-110,'1 km','')+t(VB[0]+VB[2]-pad*.5,VB[1]+pad*.6,'N ↑','cen')+'</g>';
+ svg.innerHTML=s;MK.svg=svg;MK.vb=VB;escalarMapa();pasoMapa(MK.paso||'F');
+}).catch(e=>console.warn('mapa:',e));
+const MK={};
+function escalarMapa(){const svg=MK.svg;if(!svg)return;const u=MK.vb[2]/Math.max(1,svg.getBoundingClientRect().width);svg.style.setProperty('--u',u.toFixed(3));svg.querySelectorAll('[data-px]').forEach(c=>c.setAttribute('r',(+c.dataset.px*u).toFixed(1)))}
+addEventListener('resize',escalarMapa);
+function pasoMapa(id){MK.paso=id;const svg=MK.svg;document.getElementById('mktag').textContent=MKTAG[id]||'';
+ const ley=document.getElementById('mkley');ley.style.setProperty('--pc',PC[id]);ley.innerHTML=(LEY[id]||[]).map(([k,txt])=>'<span><i class="sw '+k+'"></i>'+esc2(txt)+'</span>').join('');
+ if(!svg)return;svg.dataset.paso=id;svg.style.setProperty('--pc',PC[id]);escalarMapa()}
+const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
+ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
 function contar(card){card.querySelectorAll('.cnt').forEach(b=>{const v=+b.dataset.v,d=+b.dataset.d,t0=performance.now(),T=MOV.on?1600:1;
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);b.textContent=(v*e).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d});if(q<1)requestAnimationFrame(f)};requestAnimationFrame(f)})}
 const volver=document.createElement('button');volver.id='volver';volver.type='button';volver.textContent='↑ Volver al recorrido';document.body.appendChild(volver);
 volver.onclick=()=>scrollTo({top:0,behavior:MOV.on?'smooth':'auto'});
 const SECS=[...ST.querySelectorAll('section')];
 const vis=new IntersectionObserver(es=>es.forEach(e=>{const was=e.target.classList.contains('vis');e.target.classList.toggle('vis',e.isIntersecting);if(e.isIntersecting&&!was)contar(e.target)}),{threshold:.3});ST.querySelectorAll('.card,.hcard').forEach(c=>vis.observe(c));
-function etapa(){const vh=innerHeight,y=scrollY+vh*.5;let i=0;for(let k=0;k<SECS.length;k++)if(SECS[k].offsetTop<=y)i=k;const s=SECS[i];return i+Math.max(0,Math.min(1,(y-s.offsetTop)/s.offsetHeight))}
+function etapa(){const vh=innerHeight,y=vh*.5,T=SECS.map(s=>s.getBoundingClientRect());let i=0;for(let k=0;k<T.length;k++)if(T[k].top<=y)i=k;return i+Math.max(0,Math.min(1,(y-T[i].top)/T[i].height))}
 // ---------- la ciudad (nube de puntos) ----------
 fetch('nube.bin').then(r=>{if(!r.ok)throw new Error('nube');return r.arrayBuffer()}).then(buf=>{
  const dv=new DataView(buf),n=dv.getUint32(4,true);
@@ -1485,7 +1622,7 @@ function recorrido(dt,now){
 // ---------- pausa del movimiento ----------
 {const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel&&H.modo==='red';pinta()}}
 // ---------- bucle ----------
-let LT2=performance.now();
+let LT2=performance.now();const MKEL=document.getElementById('mk');
 (function loop(t){
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
@@ -1500,7 +1637,8 @@ let LT2=performance.now();
   H.guionF=(s>=8&&s<9&&!sel)?byId.F:null;
   if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);
- pintar();
+ // mientras el mapa limpio cubre la pantalla no hace falta dibujar el 3D
+ const mkr=MKEL&&MKEL.getBoundingClientRect();if(!(mkr&&mkr.top<=0&&mkr.bottom>=innerHeight))pintar();
 })();
 </script>
 </body>
