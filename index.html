@@ -595,6 +595,23 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
  .seis{gap:8px 6px}.seis span{width:72px}.seis .ico{width:24px;height:24px;padding:8px}
  .etq b{font-size:12px}.etq.grande b{font-size:16px}
 }
+/* ============ PORTADA: maqueta axonométrica ============ */
+#story section.hero{position:relative;background:radial-gradient(70% 60% at 68% 52%,#0d1314 0%,var(--campo-0) 70%);display:grid!important;grid-template-columns:minmax(0,40fr) minmax(0,60fr);align-items:center!important;justify-content:stretch!important;padding:0 3vw 0 5vw!important;min-height:100vh;pointer-events:auto;overflow:hidden}
+#story section.hero .hmaq{grid-column:2;grid-row:1;position:relative;height:min(86vh,820px);align-self:center}
+#hmaq{width:100%;height:100%;display:block}
+.hmaq-n{position:absolute;right:4%;bottom:2%;font:500 10px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3)}.hmaq-n b{color:var(--tinta-1);font-weight:500}
+#story section.hero .hcard{grid-column:1;grid-row:1;text-align:left!important;width:auto!important}
+#story section.hero .hcard h1{font-size:clamp(3.6rem,1.4rem + 7vw,8.4rem)!important;line-height:.88!important}
+#story section.hero .hcard p{margin:18px 0 0!important;text-shadow:none}
+#story section.hero .seis{justify-content:flex-start;margin:26px 0 0;max-width:440px}
+#story section.hero .down{align-items:flex-start}
+@media(max-width:700px){
+ #story section.hero{grid-template-columns:1fr;grid-template-rows:auto auto;padding:64px 16px 8vh!important;align-content:start}
+ #story section.hero .hmaq{grid-column:1;grid-row:1;height:44vh}
+ #story section.hero .hcard{grid-row:2;text-align:center!important}
+ #story section.hero .seis{justify-content:center;margin:20px auto 0}#story section.hero .down{align-items:center}
+ #story section.hero .hcard p{margin:12px auto 0!important}
+}
 /* ============ MAPA LIMPIO FIJO (los seis problemas) ============ */
 #mk{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);background:var(--campo-0);pointer-events:auto;border-top:1px solid var(--linea)}
 #mk .mk-mapa{grid-column:2;grid-row:1;position:sticky;top:0;height:100vh;align-self:start;display:flex;flex-direction:column;padding:24px 28px 20px 8px;box-sizing:border-box}
@@ -1294,7 +1311,7 @@ const ESC={
    '<p class="frase">'+ic('camion')+'Recoge <em>Ciudad Limpia</em>, 3 veces por semana según el sector; lo reciclable va con <em>recicladores de oficio</em>. Los focos de basura se concentran junto al río Bogotá: 51 t en un operativo en Patio Bonito.</p>'+
    '<p class="frase">'+ic('brote')+'Compostaje: solo iniciativas pequeñas, como la huerta de Carvajal Osorio (más de 6,5 t de residuos vegetales). No hay cifra pública de orgánicos aprovechados en Kennedy.</p>',
   src:'UAESP/IDECA contenerización · Corabastos 2025 · UAESP · Alcaldía 2026'}};
-{let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p class="q">¿Cómo llega la comida a <b>1.037.929</b> personas?</p>'+
+{let h='<section class="hero"><div class="hmaq" aria-hidden="true"><canvas id="hmaq"></canvas><div class="hmaq-n"><b>244.147</b> edificios · <b>12</b> UPZ · <b>38,6</b> km²</div></div><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p class="q">¿Cómo llega la comida a <b>1.037.929</b> personas?</p>'+
   '<div class="seis">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(.15+i*.12)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'<em>'+esc2(byId[id].t)+'</em></span>').join('')+'</div>'+
   '<div class="down">Empezamos por los mercados<i></i></div></div>'+
   '<div class="hud hl"><b>Kennedy · localidad 8</b>\nBogotá D.C.\n4°37′N  74°09′O</div><div class="hud hr">Edificios  <b>244.147</b>\nVías  <b>OpenStreetMap</b>\nFuente  catastro · Google · Microsoft</div></section>';
@@ -1474,6 +1491,47 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
 {const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0,md=CON3D[id]||'';MK.svg.classList.toggle('con3d',!!o);
  if(md!==M3.md){const ant=M3.md;M3.md=md;if(md==='upz')crecerUPZ();else if(ant==='upz')bajarUPZ();if(ant&&md&&ant!==md){M3.sube=0;modo3D();animar3D();return}}modo3D();if(o!==M3.obj||o){M3.obj=o;animar3D()}}}
 {const em=escalarMapa;escalarMapa=function(){em();if(M3.r&&M3.obj)dibujar3D()}}
+/* ---------- PORTADA: maqueta axonométrica de Kennedy ----------
+   La localidad como losa recortada por su límite; los edificios reales (edif.bin) brotan en ola desde Corabastos hacia los bordes.
+   Misma proyección que el mapa de los problemas (giro −30°, achatamiento 0,56). Alturas ×3 para que se lea el volumen. */
+(function maqueta(){
+ const cv=document.getElementById('hmaq');if(!cv)return;
+ const TH=-30*Math.PI/180,K=.56,A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K,EXH=3,LOSA=170;
+ const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
+ const sc=new THREE.Scene(),cam=new THREE.Camera();cam.matrixAutoUpdate=false;
+ sc.add(new THREE.AmbientLight(0xffffff,.34));const sol=new THREE.DirectionalLight(0xfff4e6,1.2);sol.position.set(-.7,1,-.2);sc.add(sol);const fr=new THREE.DirectionalLight(0x9fc4d6,.4);fr.position.set(.8,.5,.5);sc.add(fr);
+ const U={uT:{value:0}};let vb=null,listo=false,t0=0,vivo=true;
+ Promise.all([fetch('limite.json').then(x=>x.json()),fetch('edif.bin').then(x=>x.arrayBuffer()),fetch('vias.json').then(x=>x.json()),fetch('lugares.json').then(x=>x.json())]).then(([LM,buf,VI,LG])=>{
+  const L=LM.pts,cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;
+  const dentro=(x,y)=>{let c=false;for(let i=0,j=L.length-1;i<L.length;j=i++)if((L[i][1]>y)!==(L[j][1]>y)&&x<(L[j][0]-L[i][0])*(y-L[i][1])/(L[j][1]-L[i][1])+L[i][0])c=!c;return c};
+  // losa con espesor, recortada exacta por el límite
+  const sh=new THREE.Shape(L.map(([x,z])=>new THREE.Vector2(x,z)));const gs=new THREE.ExtrudeGeometry(sh,{depth:LOSA,bevelEnabled:false});gs.rotateX(Math.PI/2);
+  sc.add(new THREE.Mesh(gs,[new THREE.MeshLambertMaterial({color:0x111617}),new THREE.MeshLambertMaterial({color:0x222a2b})]));
+  const borde=L.map(([x,z])=>new THREE.Vector3(x,1,z));borde.push(borde[0].clone());
+  sc.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(borde),new THREE.LineBasicMaterial({color:0xd6e4de})));
+  // avenidas principales, solo dentro del límite
+  const P=[];for(const v of VI.vias){if(v[0]<4)continue;for(let i=1;i+3<v.length;i+=2){const a=[v[i],v[i+1]],b=[v[i+2],v[i+3]];if(dentro((a[0]+b[0])/2,(a[1]+b[1])/2))P.push(a[0],1.5,a[1],b[0],1.5,b[1])}}
+  const gv=new THREE.BufferGeometry();gv.setAttribute('position',new THREE.Float32BufferAttribute(P,3));sc.add(new THREE.LineSegments(gv,new THREE.LineBasicMaterial({color:0x56615f})));
+  // edificios: brotan en ola desde Corabastos (retardo según la distancia)
+  const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?80000:total);
+  const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);const del=new Float32Array(n);
+  let dmax=0;for(const [x,z] of L)dmax=Math.max(dmax,Math.hypot(x-cora[0],z-cora[1]));
+  const mat=new THREE.MeshLambertMaterial({color:0xffffff,emissive:0x0c1011});
+  mat.onBeforeCompile=s=>{s.uniforms.uT=U.uT;s.vertexShader='attribute float aDel;uniform float uT;\n'+s.vertexShader.replace('#include <begin_vertex>','float kk=clamp((uT-aDel)/0.9,0.,1.);kk=1.-pow(1.-kk,3.);vec3 transformed=vec3(position.x,position.y*max(kk,0.002),position.z);')};
+  const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D(),cB=new THREE.Color('#3c4544'),cA=new THREE.Color('#93a09c'),cc=new THREE.Color();
+  for(let i=0;i<n;i++){const b=8+i*12,x=dv.getInt16(b,true)/2,z=dv.getInt16(b+2,true)/2,h=dv.getInt16(b+10,true)/2;o.position.set(x,0,z);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,h*EXH,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix);
+   cc.copy(cB).lerp(cA,Math.min(1,Math.pow(h/40,.7)));m.setColorAt(i,cc);del[i]=Math.hypot(x-cora[0],z-cora[1])/dmax*2.6+Math.random()*.25}
+  g.setAttribute('aDel',new THREE.InstancedBufferAttribute(del,1));m.frustumCulled=false;sc.add(m);
+  // encuadre en coordenadas proyectadas (incluye el canto de la losa)
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const [x,z] of L){const px=A*x+C*z,py=B*x+D*z;x0=Math.min(x0,px);x1=Math.max(x1,px);y0=Math.min(y0,py-260);y1=Math.max(y1,py+LOSA*.9)}
+  const mx=(x1-x0)*.04,my=(y1-y0)*.05;vb=[x0-mx,y0-my,x1-x0+2*mx,y1-y0+2*my];listo=true;t0=performance.now();
+ }).catch(e=>console.warn('maqueta:',e));
+ const ajustar=()=>{const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h||!vb)return false;r.setSize(w,h,false);
+  let [x0,y0,vw,vh]=vb;if(w/h>vw/vh){const nn=vh*w/h;x0-=(nn-vw)/2;vw=nn}else{const nn=vw*h/w;y0-=(nn-vh)/2;vh=nn}
+  const sx=2/vw,sy=-2/vh,dz=1/9000;cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();return true};
+ new IntersectionObserver(es=>{vivo=es[0].isIntersecting},{threshold:0}).observe(cv);
+ (function cuadro(t){requestAnimationFrame(cuadro);if(!listo||!vivo)return;const s=(t-t0)/1000;U.uT.value=MOV.on?s:9;if(ajustar())r.render(sc,cam)})(0);
+})();
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
 function contar(card){card.querySelectorAll('.cnt').forEach(b=>{const v=+b.dataset.v,d=+b.dataset.d,t0=performance.now(),T=MOV.on?1600:1;
