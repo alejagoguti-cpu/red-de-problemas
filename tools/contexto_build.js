@@ -39,7 +39,10 @@ const estaciones = EST.map(([n, sub, pts]) => { const p = pts.length ? sobreLine
 const cen = (P) => [P.reduce((s, q) => s + q[0], 0) / P.length, P.reduce((s, q) => s + q[1], 0) / P.length];
 const area = (P) => { let a = 0; for (let i = 0, j = P.length - 1; i < P.length; j = i++) a += P[j][0] * P[i][1] - P[i][0] * P[j][1]; return Math.abs(a) / 2; };
 const obras = OSM.filter((e) => e.tags && (e.tags.landuse === 'construction' || (e.tags.building === 'construction')) && e.geometry).map((e) => ({ n: e.tags.name || '', t: e.tags.construction || '', poly: e.geometry.map((g) => ll2l(g.lat, g.lon)) }))
-  .filter((o) => { const c = cen(o.poly); return dentro(c[0], c[1], LIM); }).map((o) => ({ n: o.n, t: o.t, a: Math.round(area(o.poly)), poly: o.poly.map(rel) }));
+  .filter((o) => { const c = cen(o.poly); return dentro(c[0], c[1], LIM); })
+  // fuera las franjas largas sin nombre (obras viales y del canal en el borde, no edificaciones): compacidad 4πA/P² < 0,45
+  .filter((o) => { let p = 0; for (let i = 1; i < o.poly.length; i++) p += Math.hypot(o.poly[i][0] - o.poly[i - 1][0], o.poly[i][1] - o.poly[i - 1][1]); const k = area(o.poly) * 4 * Math.PI / (p * p); return o.n || k >= 0.45; })
+  .map((o) => ({ n: o.n, t: o.t, a: Math.round(area(o.poly)), poly: o.poly.map(rel) }));
 // --- huerta de Carvajal Osorio: cruce Kr 68L × Cl 37D Sur ---
 const kr = calle(/^Carrera 68 ?L$/), cl = calle(/^Calle 37 ?D Sur$/); let huerta = null, hd = 1e9;
 for (const a of kr) for (const b of cl) { const d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (d < hd) { hd = d; huerta = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; } }

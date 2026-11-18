@@ -659,7 +659,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 #mksvg[data-paso=C] .mk-obra{opacity:1}
 /* accesibilidad a pie por la red de calles: 5 · 10 · 15 min */
 .mk-iso{fill:none;stroke:var(--pc);stroke-linecap:round;vector-effect:non-scaling-stroke}
-.mk-iso.i1{stroke-width:3;stroke-opacity:1}.mk-iso.i2{stroke-width:2;stroke-opacity:.6}.mk-iso.i3{stroke-width:1.4;stroke-opacity:.32}
+.mk-iso.i1{stroke-width:1.3;stroke-opacity:.95}.mk-iso.i2{stroke-width:.9;stroke-opacity:.6}.mk-iso.i3{stroke-width:.6;stroke-opacity:.35}
 /* metro Línea 1 */
 .mk-metro-b{fill:none;stroke:#050607;stroke-width:7;vector-effect:non-scaling-stroke}
 .mk-metro{fill:none;stroke:#8fe7f2;stroke-width:3;stroke-dasharray:10 6;vector-effect:non-scaling-stroke;animation:mkmetro 1.6s linear infinite}
@@ -679,7 +679,8 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 /* densidad: los volúmenes se dibujan en 3D (WebGL); aquí quedan solo las cifras */
 .pr-lado,.pr-tapa{display:none}
 #mksvg[data-paso=B] .mk-via3,#mksvg[data-paso=B] .mk-via4,#mksvg[data-paso=B] .mk-borde{display:none}
-.mk-tienda{fill:var(--pc);opacity:.55}.mk-cont{fill:var(--pc);opacity:.7}
+.mk-tienda{fill:var(--pc);opacity:.55}.mk-cont{fill:var(--pc);opacity:.8}.mk-recic{fill:#8fe7f2;opacity:.7}
+.sw.recic{width:6px;height:6px;background:#8fe7f2}
 .mk-fl-base{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-opacity:.18;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .mk-fl{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-linecap:round;stroke-dasharray:1.2 4;vector-effect:non-scaling-stroke;animation:mkflujo 1.2s linear infinite;animation-delay:var(--d)}
 @keyframes mkflujo{to{stroke-dashoffset:-5.2}}
@@ -1274,9 +1275,10 @@ const ESC={
  D:{tag:'Hipótesis',hip:1,
   g:()=>'<div class="cadena"><span>'+ic('tren')+'nueva estación</span><i>'+ic('flecha')+'</i><span>'+ic('ojo')+'expectativa</span><i>'+ic('flecha')+'</i><span>'+ic('precio')+'precio esperado</span></div>'+
    '<div class="tend"><div class="t sube"><b>↑</b>Américas</div><div class="t sube"><b>↑</b>Carvajal</div><div class="t igual"><b>→</b>Patio Bonito</div><div class="t igual"><b>→</b>Corabastos</div></div>'+
-   '<p class="frase">'+ic('tren')+'Patio Bonito y Corabastos quedan cerca de <em>futuras estaciones de la Línea 1</em>, pero ahí los valores no subieron; sí subieron en <em>Américas y Carvajal</em>. La cercanía a una estación no basta para explicar el precio.</p>'+
-   '<p class="frase">'+ic('lupa')+'Por comprobar: ¿suben los arriendos y <em>salen los comerciantes</em>?</p>',
-  src:'Universidad Nacional · manzanas residenciales 2015–2023'},
+   '<p class="frase">'+ic('tren')+'Patio Bonito y Corabastos están <em>junto a las estaciones 1 a 3</em>, pero sus valores siguieron bajos; subieron en <em>Américas y Carvajal</em> (estratos 3 y 4), incluso a 400–600 m. Pesan más el estrato y la pobreza que la estación.</p>'+
+   '<p class="frase">'+ic('casa')+'Cerca de la línea, los <em>avisos de venta</em> suben ~12 % al año (5 % en el resto de Bogotá); a menos de 500 m del viaducto el m² es más barato por la obra y los lotes abandonados de la Primero de Mayo.</p>'+
+   '<p class="frase">'+ic('lupa')+'Nadie ha medido compra especulativa en Kennedy. Por comprobar: ¿suben los arriendos y <em>salen los comerciantes</em>?</p>',
+  src:'UNAL (M. Delgado) 2015–2023 · Fincaraíz 2026'},
  A:{tag:'Se cultiva lejos, llega a un solo punto',
   g:()=>'<div class="ton">'+num(2.2,1)+'<span>millones de toneladas<br>llegaron a Corabastos (2022)</span></div>'+
    '<div class="flujo"><svg viewBox="0 0 300 150" preserveAspectRatio="none">'+
@@ -1288,8 +1290,10 @@ const ESC={
  E:{tag:'Cuando se demora el retiro, se descompone',
   g:()=>'<div class="cadena"><span>'+ic('reloj')+'+48 h acumulados</span><i>'+ic('flecha')+'</i><span>'+ic('basura')+'materia orgánica</span><i>'+ic('flecha')+'</i><span class="goteo">'+ic('gota')+'lixiviados</span></div>'+
    '<div class="mp"><div class="mpt">'+ic('pin')+'María Paz · Dg 38 Sur × Tv 81 · marzo 2026</div><div class="pesos"><div class="ps" style="--h:28%"><i></i><b>'+num(5)+' t</b><span>orgánicos</span></div><div class="ps p2" style="--h:100%"><i></i><b>'+num(18)+' t</b><span>voluminosos</span></div></div></div>'+
-   '<p class="frase">Saber <em>qué</em> se recoge, <em>dónde</em> y <em>cuánto tiempo</em> queda ahí.</p>',
-  src:'Informe de gestión Corabastos 2025 · operativo marzo 2026'}};
+   '<div class="tend"><div class="t igual"><b>745</b>contenedores de basura</div><div class="t sube"><b>625</b>de reciclaje</div></div>'+
+   '<p class="frase">'+ic('camion')+'Recoge <em>Ciudad Limpia</em>, 3 veces por semana según el sector; lo reciclable va con <em>recicladores de oficio</em>. Los focos de basura se concentran junto al río Bogotá: 51 t en un operativo en Patio Bonito.</p>'+
+   '<p class="frase">'+ic('brote')+'Compostaje: solo iniciativas pequeñas, como la huerta de Carvajal Osorio (más de 6,5 t de residuos vegetales). No hay cifra pública de orgánicos aprovechados en Kennedy.</p>',
+  src:'UAESP/IDECA contenerización · Corabastos 2025 · UAESP · Alcaldía 2026'}};
 {let h='<section class="hero"><div class="hcard"><small>Kennedy · Bogotá · localidad 8</small><h1>Kennedy</h1><p class="q">¿Cómo llega la comida a <b>1.037.929</b> personas?</p>'+
   '<div class="seis">'+ORDEN.map((id,i)=>'<span style="--c:'+PC[id]+';--d:'+(.15+i*.12)+'s">'+ic({F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'}[id])+'<em>'+esc2(byId[id].t)+'</em></span>').join('')+'</div>'+
   '<div class="down">Empezamos por los mercados<i></i></div></div>'+
@@ -1321,7 +1325,7 @@ const LEY={
  C:[['metro','Metro Línea 1 · en obra (2028)'],['obra','obras en construcción (OSM)'],['huerta','huerta de la JAC de Carvajal Osorio']],
  D:[['metro','Metro Línea 1 y estaciones futuras'],['sube','valores en aumento (Américas, Carvajal)'],['igual','estables pese a la cercanía (Patio Bonito, Corabastos)']],
  A:[['flujo','toneladas que llegan a Corabastos (2022)'],['tienda','tiendas de barrio']],
- E:[['cora','Corabastos: residuos +48 h'],['pin','María Paz: 23 t retiradas (mar. 2026)'],['punto','contenedores de basura']]};
+ E:[['cora','Corabastos: residuos +48 h'],['pin','María Paz: 23 t retiradas (mar. 2026)'],['punto','745 contenedores de basura'],['recic','625 de reciclaje (UAESP)']]};
 const MKTAG={F:'dónde llegan los alimentos',B:'dónde vive la gente',C:'dónde compite el suelo',D:'dónde se espera que suba',A:'de dónde viene la comida',E:'dónde se acumulan los residuos'};
 Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distritales.json','contexto.json'].map(u=>fetch(u).then(r=>r.json()))).then(([LM,UZ,LG,VI,PZ,CX])=>{
  const svg=document.getElementById('mksvg');if(!svg)return;
@@ -1362,7 +1366,7 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
  s+='<g class="capa" data-capa="C">'+CX.obras.map((o,i)=>'<path class="mk-obra" style="--d:'+(i*.02).toFixed(2)+'s" d="'+Pth(o.poly)+'"/>').join('')+'</g>';
  s+='<g class="capa capa-metro" data-capa="C D"><path class="mk-metro-b" d="'+metroD+'"/><path class="mk-metro" d="'+metroD+'"/>'+CX.estaciones.map(e=>'<circle class="mk-est-halo" cx="'+e.p[0]+'" cy="'+e.p[1]+'" r="500"/>').join('')+'</g>';
  s+='<g class="capa" data-capa="A">'+LG.A.pts.filter(p=>p[3]===0).map(p=>'<circle class="mk-tienda" cx="'+p[0]+'" cy="'+p[1]+'" r="28"/>').join('')+'</g>';
- s+='<g class="capa" data-capa="E">'+LG.E.pts.filter(p=>p[3]===0).map(p=>'<circle class="mk-cont" cx="'+p[0]+'" cy="'+p[1]+'" r="34"/>').join('')+'</g>';
+ s+='<g class="capa" data-capa="E">'+LG.E.pts.filter(p=>p[3]===0).map(p=>'<circle class="mk-cont" cx="'+p[0]+'" cy="'+p[1]+'" r="24"/>').join('')+LG.E.pts.filter(p=>p[3]===3).map(p=>'<circle class="mk-recic" cx="'+p[0]+'" cy="'+p[1]+'" r="24"/>').join('')+'</g>';
  s+='</g>';
  // F · centralización (marcadores y textos, derechos)
  s+='<g class="capa" data-capa="F">'+pin(cora[0],cora[1],420,9,'mk-cora',2)+plz.map(p=>pin(p.c[0],p.c[1],300,6,'mk-plz',1)).join('')+
@@ -1386,13 +1390,9 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
  // A · dependencia: arcos por el aire desde las regiones hasta Corabastos
  s+='<g class="capa" data-capa="A">'+RG.map(([n,tx,ton],i)=>{const o=P(org[i][0],org[i][1]),c=P(cora[0],cora[1]),mx=(org[i][0]+cora[0])/2,mz=(org[i][1]+cora[1])/2,m=P(mx,mz,4200),w=(2+ton/1016649*12).toFixed(1);
    const d='M'+R(o[0])+' '+R(o[1])+'Q'+R(m[0])+' '+R(m[1])+' '+R(c[0])+' '+R(c[1]);
-   // carga que viaja: más partículas cuanto más toneladas (1 por cada ~70 mil t)
-   const np=Math.max(3,Math.round(ton/70000)),dur=(5.5+i*.6).toFixed(1);let pts='';
-   for(let k=0;k<np;k++)pts+='<circle class="mk-carga" data-px="'+(2.2+ton/1016649*2.4).toFixed(1)+'" r="1"><animateMotion dur="'+dur+'s" repeatCount="indefinite" begin="-'+(k*dur/np).toFixed(2)+'s" path="'+d+'" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".4 0 .6 1"/></circle>';
-   return '<path class="mk-fl-base" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl-luz" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl" pathLength="100" style="--w:'+w+';--d:'+(i*.25)+'s" d="'+d+'"/>'+pts+
+   return '<path class="mk-fl-base" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl" pathLength="100" style="--w:'+w+';--d:'+(i*.25)+'s" d="'+d+'"/>'+
     '<ellipse class="mk-origen" cx="'+R(o[0])+'" cy="'+R(o[1])+'" rx="'+(160+ton/1016649*260).toFixed(0)+'" ry="'+((160+ton/1016649*260)*K).toFixed(0)+'"/>'+t(org[i][0],org[i][1],0,n,'cen g reg',tx)}).join('')+
-  (()=>{const c=P(cora[0],cora[1]);return [0,1,2].map(k=>'<ellipse class="mk-llegada" cx="'+R(c[0])+'" cy="'+R(c[1])+'" rx="420" ry="'+R(420*K)+'" style="animation-delay:'+(k*.9)+'s"/>').join('')})()+
-  pin(cora[0],cora[1],260,11,'mk-cora',2)+t(cora[0],cora[1],260+190,'Corabastos','cen g','2,2 millones de t · 2022')+'</g>';
+  pin(cora[0],cora[1],260,11,'mk-cora',2)+t(cora[0],cora[1],260+190,'Corabastos','cen','2,2 millones de t')+'</g>';
  // E · residuos
  s+='<g class="capa" data-capa="E">'+pin(cora[0],cora[1],380,10,'mk-cora',2)+t(cora[0]-150,cora[1],380+170,'Corabastos','der','residuos acumulados +48 h')+
   (mp?pin(mp[0],mp[1],620,7,'mk-mp',1)+t(mp[0]+150,mp[1],620+140,'María Paz','','5 t orgánicos · 18 t voluminosos'):'')+'</g>';
@@ -1404,7 +1404,7 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
 const MK={};
 // volúmenes de densidad: suben al entrar al paso
 function prismas(f){const box=document.getElementById('mkprismas');if(!box||!MK.PR)return;const P=MK.P,R=Math.round;
- [...box.children].forEach((g,i)=>{const p=MK.PR[i],h=p.h*f,r=p.r,L=['','',''];
+ [...box.children].forEach((g,i)=>{const p=MK.PR[i],fi=typeof f==='function'?f(p.u.n):f,h=p.h*Math.max(0,fi),r=p.r,L=['','',''];g.style.opacity=fi>.05?1:0;g.style.transition='opacity .35s';
   for(let k=0;k<r.length;k++){const a=r[k],b=r[(k+1)%r.length],a0=P(a[0],a[1]),b0=P(b[0],b[1]),a1=P(a[0],a[1],h),b1=P(b[0],b[1],h);
    const dx=b[0]-a[0],dz=b[1]-a[1],n=Math.hypot(dx,dz)||1,luz=Math.abs((dz*.6+dx*.8)/n),cl=luz<.4?0:luz<.75?1:2; // sombreado según hacia dónde mira la cara
    L[cl]+='M'+R(a0[0])+' '+R(a0[1])+'L'+R(b0[0])+' '+R(b0[1])+'L'+R(b1[0])+' '+R(b1[1])+'L'+R(a1[0])+' '+R(a1[1])+'Z'}
@@ -1418,7 +1418,7 @@ addEventListener('resize',escalarMapa);
 function pasoMapa(id){const antes=MK.paso;MK.paso=id;const svg=MK.svg;document.getElementById('mktag').textContent=MKTAG[id]||'';
  const ley=document.getElementById('mkley');ley.style.setProperty('--pc',PC[id]);ley.innerHTML=(LEY[id]||[]).map(([k,txt])=>'<span><i class="sw '+k+'"></i>'+esc2(txt)+'</span>').join('');
  if(!svg)return;svg.dataset.paso=id;svg.style.setProperty('--pc',PC[id]);escalarMapa();
- if(id==='B'&&antes!=='B')subirPrismas();if(id!=='B'&&antes==='B'){cancelAnimationFrame(MK.raf);prismas(0)}
+ if(id!=='B'&&antes==='B'){cancelAnimationFrame(MK.raf);prismas(0)}
  // encuadre: en «dependencia» se aleja para ver llegar los alimentos desde las regiones
  const meta=id==='A'?MK.VBA:MK.VBK;if(!meta)return;const ini=MK.vbAct.slice(),t0=performance.now(),T=MOV.on?1100:1;cancelAnimationFrame(MK.rafv);
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2;MK.vbAct=ini.map((v,i)=>v+(meta[i]-v)*e);svg.setAttribute('viewBox',MK.vbAct.map(v=>v.toFixed(1)).join(' '));MK.vb=MK.vbAct;escalarMapa();if(q<1)MK.rafv=requestAnimationFrame(f)};MK.rafv=requestAnimationFrame(f)}
@@ -1430,7 +1430,7 @@ const M3={on:0,obj:0,sube:0,r:null,raf:0};
 function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
  const box=MK.svg.parentElement,cv=document.createElement('canvas');cv.className='mk-3d';box.insertBefore(cv,MK.svg);M3.cv=cv;
  const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));M3.r=r;
- const sc=new THREE.Scene();M3.sc=sc;sc.add(new THREE.AmbientLight(0xffffff,.55));const dl=new THREE.DirectionalLight(0xffffff,.75);dl.position.set(-.6,1,-.35);sc.add(dl);
+ const sc=new THREE.Scene();M3.sc=sc;sc.add(new THREE.AmbientLight(0xffffff,.32));const dl=new THREE.DirectionalLight(0xfff6ea,1.15);dl.position.set(-.7,1,-.25);sc.add(dl);const dl2=new THREE.DirectionalLight(0x9fc4d6,.35);dl2.position.set(.8,.6,.4);sc.add(dl2);
  M3.cam=new THREE.Camera();M3.cam.matrixAutoUpdate=false;
  // suelo de la localidad
  // losa con espesor (la del SVG se oculta en estos pasos)
@@ -1438,17 +1438,27 @@ function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
  sc.add(new THREE.Mesh(g0,[new THREE.MeshBasicMaterial({color:0x101415,side:THREE.DoubleSide}),new THREE.MeshLambertMaterial({color:0x1d2324,side:THREE.DoubleSide})]));
  fetch('edif.bin').then(x=>x.arrayBuffer()).then(buf=>{const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?90000:total);
   const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
-  const mat=new THREE.MeshLambertMaterial({color:0x2c3436,emissive:0x0b0e0f,side:THREE.DoubleSide});M3.mat=mat; // grafito oscuro: contexto que no compite con los datos
+  const mat=new THREE.MeshLambertMaterial({color:0x5c6664,emissive:0x0d1112,side:THREE.DoubleSide});M3.mat=mat; // grafito oscuro: contexto que no compite con los datos
   mat.onBeforeCompile=sh=>{sh.uniforms.uSube={value:0};M3.uSube=sh.uniforms.uSube;sh.vertexShader='uniform float uSube;\n'+sh.vertexShader.replace('#include <begin_vertex>','vec3 transformed=vec3(position.x,position.y*uSube,position.z);')};
   const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D();
   for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,dv.getInt16(b+10,true)/2,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
   m.frustumCulled=false;sc.add(m);M3.edif=m;modo3D();dibujar3D()});
  // volúmenes de densidad por UPZ: sólidos con aristas claras (altura = habitantes por hectárea)
  const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2b2416'),cTop=new THREE.Color('#e9b85a');
+ const orden=MK.UZ.slice().sort((a,b)=>a.dens-b.dens).map(u=>u.n); // suben de la menos densa a la más densa (Patio Bonito al final)
  MK.UZ.forEach(u=>{const h=u.dens/434*MK.HMAX,q=(u.dens-90)/(434-90),shp=new THREE.Shape(u.poly.map(([x,z])=>new THREE.Vector2(x,z)));
   const g=new THREE.ExtrudeGeometry(shp,{depth:h,bevelEnabled:false});g.rotateX(Math.PI/2);g.translate(0,h,0);
   const col=cBase.clone().lerp(cTop,.15+.85*Math.pow(q,.9)),mm=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:col,emissive:col.clone().multiplyScalar(.06),side:THREE.DoubleSide}));
-  const ed=new THREE.LineSegments(new THREE.EdgesGeometry(g,25),new THREE.LineBasicMaterial({color:0xfff3d6,transparent:true,opacity:.55}));gU.add(mm,ed)});}
+  const ed=new THREE.LineSegments(new THREE.EdgesGeometry(g,25),new THREE.LineBasicMaterial({color:0xfff3d6,transparent:true,opacity:.55}));
+  const sub=new THREE.Group();sub.add(mm,ed);sub.userData={n:u.n,ord:orden.indexOf(u.n)};sub.scale.y=.001;gU.add(sub)});}
+// densidad: cada UPZ sube por turno, «tum, tum, tum», con un pequeño rebote al llegar
+const UPZ_T={ini:.35,paso:.42,dur:.9};
+const fUPZ=(ord,s)=>{const t=Math.max(0,Math.min(1,(s-UPZ_T.ini-ord*UPZ_T.paso)/UPZ_T.dur));if(!t)return 0;const c1=1.4,c3=c1+1;return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2)};
+function crecerUPZ(){cancelAnimationFrame(M3.rafU);const t0=performance.now(),fin=UPZ_T.ini+(MK.UZ.length-1)*UPZ_T.paso+UPZ_T.dur;
+ const paso=t=>{const s=MOV.on?(t-t0)/1000:99,ordDe={};
+  if(M3.upz)M3.upz.children.forEach(g=>{const f=fUPZ(g.userData.ord,s);g.scale.y=Math.max(.001,f);ordDe[g.userData.n]=f});
+  prismas(n=>ordDe[n]||0);dibujar3D();if(s<fin)M3.rafU=requestAnimationFrame(paso)};M3.rafU=requestAnimationFrame(paso)}
+function bajarUPZ(){cancelAnimationFrame(M3.rafU);if(M3.upz)M3.upz.children.forEach(g=>g.scale.y=.001);prismas(0)}
 // qué se ve en el lienzo según el paso
 function modo3D(){if(!M3.r)return;const md=CON3D[MK.paso];if(M3.edif)M3.edif.visible=md==='ed';if(M3.upz)M3.upz.visible=md==='upz'}
 // proyección: la del SVG (x=A·x+C·z, y=B·x+D·z−0,9·h), ajustada al tamaño real del elemento (preserveAspectRatio: meet)
@@ -1458,11 +1468,11 @@ function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=r
  const {A,B,C,D}=MK.proj,sx=2/vw,sy=-2/vh,dz=1/9000; // profundidad: lo más lejano (arriba en pantalla) y lo más bajo quedan detrás
  M3.cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);
  M3.cam.projectionMatrixInverse.copy(M3.cam.projectionMatrix).invert();return true}
-function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;if(M3.upz)M3.upz.scale.y=Math.max(.001,M3.sube);M3.r.render(M3.sc,M3.cam)}
+function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;M3.r.render(M3.sc,M3.cam)}
 function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M3.sube,a=M3.obj,T=MOV.on?1100:1;
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);M3.sube=de+(a-de)*e;M3.cv.style.opacity=Math.min(1,M3.sube*1.4);dibujar3D();if(q<1)M3.raf=requestAnimationFrame(f)};M3.raf=requestAnimationFrame(f)}
 {const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0,md=CON3D[id]||'';MK.svg.classList.toggle('con3d',!!o);
- if(md!==M3.md){const ant=M3.md;M3.md=md;if(ant&&md&&ant!==md){M3.sube=0;modo3D();animar3D();return}}modo3D();if(o!==M3.obj||o){M3.obj=o;animar3D()}}}
+ if(md!==M3.md){const ant=M3.md;M3.md=md;if(md==='upz')crecerUPZ();else if(ant==='upz')bajarUPZ();if(ant&&md&&ant!==md){M3.sube=0;modo3D();animar3D();return}}modo3D();if(o!==M3.obj||o){M3.obj=o;animar3D()}}}
 {const em=escalarMapa;escalarMapa=function(){em();if(M3.r&&M3.obj)dibujar3D()}}
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));

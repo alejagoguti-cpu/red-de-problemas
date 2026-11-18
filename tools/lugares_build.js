@@ -32,7 +32,10 @@ const colegios = osm('amenity', 'school'), jardines = osm('amenity', 'kindergart
 const plazas = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'plazas_distritales.json'), 'utf8')).plazas.filter(p => p.loc === 8).map(p => ({ p: [p.c[0] + cx, cy - p.c[1]], n: 'Plaza ' + p.n }));
 const CO = R('corabastos.json'), cora = centro(CO.poly), BV = R('bavaria.json'), bav = centro(BV.sitio);
 const tiendas = R('propuesta.json').nodos.filter(n => n.t === 'tienda').map(n => [n.x + LC.x, LC.y - n.z]).filter(enK);
-const residuos = R('residuos.json').p.map(q => [q[0], q[1]]).filter(enK);
+// residuos.json (UAESP/IDECA, capa Contenerización) viene en el marco del «giro» con OX ya sumado: al modelo se pasa con LC.
+// Antes se leía como si ya fuera marco modelo y los puntos quedaban corridos (~5 km): solo 160 de 1.380 caían en Kennedy.
+const RES = R('residuos.json').p.map(q => ({ p: [q[0] + LC.x, LC.y - q[1]], ap: q[2] === 1, cap: q[3] })).filter(r => enK(r.p));
+const residuos = RES.filter(r => !r.ap).map(r => r.p), reciclables = RES.filter(r => r.ap).map(r => r.p);
 const E8 = R('estrategias.json').estrategias.find(e => e.id === 'E8'), baldios = [];
 for (const c of E8.capas) if (/bald/i.test(c.n)) for (const l of c.lotes) { const P = []; for (let i = 0; i + 1 < l.length; i += 2) P.push([l[i] / 2, l[i + 1] / 2]); if (P.length > 2) baldios.push(centro(P)); }
 // María Paz: cruce de la Diagonal 38 Sur con la Transversal 81 (calles de OSM; operativo de residuos de marzo de 2026)
@@ -55,7 +58,7 @@ const muestraAltos = altos.filter(() => rnd() < Math.min(1, 1800 / altos.length)
     B: { pts: muestraAltos.map(([x, y, h]) => { const [a, b] = rel([x, y]); return [a, b, Math.min(4, h / 15), 0]; }), hitos: [], cuenta: [['edificios de 5 pisos o más', altos.length]] },
     C: { pts: pts(obras, 2, 0), hitos: [], cuenta: [['obras en construcción', obras.length]] },
     D: { pts: pts(lotes, 2.4, 0).concat(pts([bav], 6, 1), pts(baldios, 2.4, 2)), hitos: [hito('Bavaria', bav, 'predio de 71 ha')], cuenta: [['lotes vacíos o abandonados', lotes.length + baldios.length]] },
-    E: { pts: pts(residuos, 1, 0).concat(pts([cora], 5, 1), mariaPaz ? pts([mariaPaz], 5, 1) : []), hitos: [hito('Corabastos', cora, 'residuos acumulados +48 h')].concat(mariaPaz ? [hito('María Paz', mariaPaz, 'Dg 38 Sur × Tv 81 · 23 t retiradas')] : []), vista: 'hitos', cuenta: [['contenedores de basura', residuos.length]] },
+    E: { pts: pts(residuos, 1, 0).concat(pts(reciclables, 1, 3),pts([cora], 5, 1), mariaPaz ? pts([mariaPaz], 5, 1) : []), hitos: [hito('Corabastos', cora, 'residuos acumulados +48 h')].concat(mariaPaz ? [hito('María Paz', mariaPaz, 'Dg 38 Sur × Tv 81 · 23 t retiradas')] : []), vista: 'hitos', cuenta: [['contenedores de basura (no aprovechables)', residuos.length], ['contenedores de reciclaje (aprovechables)', reciclables.length]] },
     // F: según el guion, «servicios» = abastecimiento de alimentos: Corabastos y las plazas distritales
     F: { pts: pts([cora], 7, 1).concat(pts(plazas, 4, 2)), hitos: [hito('Corabastos', cora, 'central mayorista')].concat(plazas.map(q => hito(q.n, q.p, 'plaza distrital'))), vista: 'hitos', cuenta: [] }
   };
