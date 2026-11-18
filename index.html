@@ -6,7 +6,7 @@
 <title>Red de problemas · Kennedy</title>
 <meta name="description" content="Mapa interactivo de seis problemas interrelacionados en la localidad de Kennedy, Bogotá.">
 <link rel="icon" type="image/png" sizes="32x32" href="icono-32.png"><link rel="icon" type="image/png" sizes="64x64" href="icono-64.png"><link rel="apple-touch-icon" href="icono-180.png">
-<link rel="preload" href="nube.bin" as="fetch" crossorigin><link rel="preload" href="edif.bin" as="fetch" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="edif.bin" as="fetch" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500&family=Geist:wght@300..600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark;--bg:#09090b;--fg:#ececee;--mut:#8a8a93;--line:#232328;--card:#0e0e11;--cy:#8a8a93;box-sizing:border-box}
@@ -1526,10 +1526,11 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
   const L=LM.pts;cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;U.uC.value.set(cora[0],cora[1]);
   // agua: río Bogotá, humedales y lagos (agua.json), con su nombre
   // todo en el color de los humedales y recortado exacto por el límite (prueba punto-en-polígono en el sombreador)
-  const NL=Math.min(L.length,128),lim=[];for(let i=0;i<NL;i++)lim.push(new THREE.Vector2(L[Math.floor(i*L.length/NL)][0],L[Math.floor(i*L.length/NL)][1]));while(lim.length<128)lim.push(lim[0].clone()); // el arreglo del sombreador tiene 128 casillas fijas
-  const matAg=new THREE.ShaderMaterial({uniforms:{uL:{value:lim},uN:{value:NL},uC:{value:new THREE.Color(0x3f8c8a)}},transparent:true,depthWrite:false,side:THREE.DoubleSide,
-   vertexShader:'varying vec2 vP;void main(){vP=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
-   fragmentShader:'uniform vec2 uL[128];uniform int uN;uniform vec3 uC;varying vec2 vP;void main(){bool d=false;for(int i=0;i<128;i++){if(i>=uN)break;int j=i==0?uN-1:i-1;vec2 a=uL[i],b=uL[0];for(int k=0;k<128;k++){if(k==j){b=uL[k];break;}}if((a.y>vP.y)!=(b.y>vP.y)&&vP.x<(b.x-a.x)*(vP.y-a.y)/(b.y-a.y)+a.x)d=!d;}if(!d)discard;gl_FragColor=vec4(uC,.88);}'});
+  // máscara (stencil) con la forma de Kennedy: el agua solo se pinta donde está la máscara. Liviano y exacto.
+  const gm=new THREE.ShapeGeometry(new THREE.Shape(L.map(([x,z])=>new THREE.Vector2(x,z))));gm.rotateX(Math.PI/2);
+  const masc=new THREE.Mesh(gm,new THREE.MeshBasicMaterial({colorWrite:false,depthWrite:false,stencilWrite:true,stencilRef:1,stencilFunc:THREE.AlwaysStencilFunc,stencilZPass:THREE.ReplaceStencilOp,side:THREE.DoubleSide}));
+  masc.position.y=2.4;masc.renderOrder=1;sc.add(masc);
+  const matAg=new THREE.MeshBasicMaterial({color:0x3f8c8a,transparent:true,opacity:.88,depthWrite:false,side:THREE.DoubleSide,stencilWrite:true,stencilRef:1,stencilFunc:THREE.EqualStencilFunc,stencilFail:THREE.KeepStencilOp,stencilZFail:THREE.KeepStencilOp,stencilZPass:THREE.KeepStencilOp});
   AG.agua.forEach(a=>{const s=new THREE.Shape(a.poly.map(([x,z])=>new THREE.Vector2(x,z)));const ga=new THREE.ShapeGeometry(s);ga.rotateX(Math.PI/2);
    const ma=new THREE.Mesh(ga,matAg);ma.position.y=2.5;ma.renderOrder=2;sc.add(ma)});
   const nomb={},cen=p=>[p.reduce((s,q)=>s+q[0],0)/p.length,p.reduce((s,q)=>s+q[1],0)/p.length],ar=p=>{let a=0;for(let i=0,j=p.length-1;i<p.length;j=i++)a+=p[j][0]*p[i][1]-p[i][0]*p[j][1];return Math.abs(a)/2};
@@ -1907,7 +1908,7 @@ function recorrido(dt,now){
 // ---------- pausa del movimiento ----------
 {const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel&&H.modo==='red';pinta()}}
 // ---------- bucle ----------
-let LT2=performance.now();const MKEL=document.getElementById('mk');
+let LT2=performance.now();const MKEL=document.getElementById('mk'),HERO0=document.querySelector('#story section.hero');
 (function loop(t){
  requestAnimationFrame(loop);
  const now=performance.now(),dt=Math.min(.05,(now-LT2)/1000);LT2=now;
@@ -1923,7 +1924,7 @@ let LT2=performance.now();const MKEL=document.getElementById('mk');
   if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
  else recorrido(dt,now);
  // mientras el mapa limpio cubre la pantalla no hace falta dibujar el 3D
- const mkr=MKEL&&MKEL.getBoundingClientRect();if(!(mkr&&mkr.top<=0&&mkr.bottom>=innerHeight))pintar();
+ const mkr=MKEL&&MKEL.getBoundingClientRect(),hr0=HERO0&&HERO0.getBoundingClientRect();if(!(mkr&&mkr.top<=0&&mkr.bottom>=innerHeight)&&!(hr0&&hr0.bottom>=innerHeight*.98))pintar(); // la portada y el mapa tapan el 3D viejo: no se dibuja
 })();
 </script>
 </body>
