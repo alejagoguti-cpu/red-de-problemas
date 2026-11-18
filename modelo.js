@@ -10,6 +10,47 @@ const LIM='#cfff5e',ESC_C={A:'#7a8480',B:'#dba73a',C:'#cfff5e'};
 const fmt=(v,d=0)=>(+v).toLocaleString('es-CO',{maximumFractionDigits:d,minimumFractionDigits:d});
 const el=(t,a={},h='')=>{const e=document.createElement(t);for(const k in a)e.setAttribute(k,a[k]);e.innerHTML=h;return e};
 const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* íconos de línea (24 × 24), mismo trazo que el resto de la página */
+const I={
+ casa:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-5h4v5"/>',
+ persona:'<circle cx="12" cy="7" r="3.2"/><path d="M5 21v-1a7 7 0 0 1 14 0v1"/>',
+ promotor:'<circle cx="9" cy="7" r="3"/><path d="M3 20v-1a6 6 0 0 1 10-4.5"/><path d="M17 12.5l1.4 2.8 3.1.4-2.3 2.1.6 3-2.8-1.5-2.8 1.5.6-3-2.3-2.1 3.1-.4z"/>',
+ tienda:'<path d="M3 9l1.5-5h15L21 9"/><path d="M4 9v11h16V9"/><path d="M3 9h18"/><path d="M9 20v-6h6v6"/>',
+ acopio:'<path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-8h10v8"/><path d="M7 17h10"/>',
+ hongo:'<path d="M4 12a8 8 0 0 1 16 0z"/><path d="M10 12v6a2 2 0 0 0 4 0v-6"/>',
+ asamblea:'<circle cx="12" cy="6" r="2.4"/><circle cx="5" cy="10" r="2"/><circle cx="19" cy="10" r="2"/><path d="M8 20a4 4 0 0 1 8 0"/><path d="M1.5 19a3.5 3.5 0 0 1 6-2.4"/><path d="M22.5 19a3.5 3.5 0 0 0-6-2.4"/>',
+ inst:'<path d="M3 10l9-6 9 6"/><path d="M5 10v9M9 10v9M15 10v9M19 10v9"/><path d="M3 21h18"/>',
+ basura:'<path d="M4 7h16"/><path d="M9 7V4h6v3"/><path d="M6 7l1 14h10l1-14"/><path d="M10 11v6M14 11v6"/>',
+ camion:'<path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.6"/><circle cx="17" cy="17.5" r="1.6"/>',
+ ave:'<path d="M16 7h.01"/><path d="M3.4 18H12a8 8 0 0 0 8-8V7a4 4 0 0 0-7.28-2.3L2 20"/><path d="m20 7 2 .5-2 .5"/><path d="M10 18v3"/><path d="M14 17.75V21"/><path d="M7 18a6 6 0 0 0 3.84-10.61"/>',
+ carro:'<path d="M5 17h14v-5l-2-5H7l-2 5z"/><path d="M5 12h14"/><circle cx="8" cy="17" r="1.6"/><circle cx="16" cy="17" r="1.6"/>',
+ mercado:'<path d="M3 21V10l4-3 4 3 4-3 4 3 2 1v10"/><path d="M2 21h20"/><path d="M8 21v-5h8v5"/>',
+ brote:'<path d="M12 21v-9"/><path d="M12 12c0-4-3-7-8-7 0 4 3 7 8 7z"/><path d="M12 14c0-3 2.5-6 7-6 0 3.5-2.5 6-7 6z"/>',
+ hoja:'<path d="M5 19c0-9 6-14 15-14 0 9-5 15-14 15"/><path d="M5 19l8-8"/>',
+ agua:'<path d="M2 8c2.5-2 4.5-2 7 0s4.5 2 7 0 4.5-2 6 0"/><path d="M2 13c2.5-2 4.5-2 7 0s4.5 2 7 0 4.5-2 6 0"/><path d="M2 18c2.5-2 4.5-2 7 0s4.5 2 7 0 4.5-2 6 0"/>',
+ luz:'<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.5 1 2.5h6c0-1 .2-1.7 1-2.5A6 6 0 0 0 12 3z"/>',
+ edificio:'<path d="M4 21V4h10v17"/><path d="M14 9h6v12"/><path d="M8 8h2M8 12h2M8 16h2M17 13h.01M17 17h.01"/><path d="M2 21h20"/>',
+ via:'<path d="M5 21 9 3M19 21 15 3"/><path d="M12 6v2M12 11v2M12 16v2"/>',
+ compost:'<path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/><path d="M12 8c-2 2-2 5 0 8 2-3 2-6 0-8z"/>',
+ reloj:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ peso:'<path d="M6 8h12l2 13H4z"/><circle cx="12" cy="5" r="2"/>',
+ red:'<circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="12" cy="18" r="2"/><path d="M7 6h10M6 8l5 8M18 8l-5 8"/>',
+ diana:'<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/>',
+ capas:'<path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/>',
+ regla:'<path d="M4 6h16M4 12h10M4 18h6"/><path d="M15 16l2 2 4-5"/>',
+ flechas:'<path d="M4 8h13l-3-3"/><path d="M20 16H7l3 3"/>',
+ play:'<path d="M7 4v16l13-8z"/>',
+ pregunta:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7"/><path d="M12 17h.01"/>',
+ politica:'<path d="M12 3v18"/><path d="M8 21h8"/><path d="M5 7h14"/><path d="M5 7l-3 7a3 3 0 0 0 6 0z"/><path d="M19 7l-3 7a3 3 0 0 0 6 0z"/>',
+ sol:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ candado:'<rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ crece:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+ precio:'<path d="M12 2v20"/><path d="M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+ cubo:'<path d="M12 2 3 7v10l9 5 9-5V7z"/><path d="M3 7l9 5 9-5"/><path d="M12 12v10"/>',
+ lupa:'<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/>',
+ vidrio:'<rect x="4" y="3" width="16" height="18"/><path d="M8 13l4-4M10 17l6-6"/>'};
+const ic=(k,s=18,c='')=>'<svg class="mi '+c+'" width="'+s+'" height="'+s+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+(I[k]||'')+'</svg>';
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /* ---------- estilos ---------- */
 const css=`
@@ -67,8 +108,8 @@ const css=`
 #modelo .lazos button[aria-pressed=true]{color:#050607;background:var(--c);border-color:var(--c)}
 #modelo .lazo-txt{margin-top:14px;min-height:3.2em;font-size:14.5px;color:#cfd6d3;max-width:80ch}
 #modelo .lazo-txt b{color:var(--c,${LIM});font-weight:500}
-#modelo #cld .ar{transition:opacity .3s,stroke .3s}
-#modelo #cld.foco .ar{opacity:.12}#modelo #cld.foco .ar.on{opacity:1}
+#modelo #cld .car{transition:opacity .3s,stroke .3s}
+#modelo #cld.foco .car{opacity:.12}#modelo #cld.foco .car.on{opacity:1}
 #modelo #cld.foco .nd{opacity:.3}#modelo #cld.foco .nd.on{opacity:1}
 #modelo #cld .nd{transition:opacity .3s}
 #modelo .flujo{stroke-dasharray:4 6;animation:fluye 1.4s linear infinite}
@@ -130,6 +171,65 @@ const css=`
 .al-modelo{position:absolute;left:50%;bottom:86px;transform:translateX(-50%);pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:10px;font:500 10.5px 'Geist Mono',ui-monospace,monospace;letter-spacing:.22em;text-transform:uppercase;color:#a9b3af;text-decoration:none;padding:10px 14px;background:rgba(5,6,7,.7);border:1px solid rgba(214,228,222,.18)}
 .al-modelo:hover{color:${LIM};border-color:rgba(207,255,94,.45)}
 body.enmodelo header,body.enmodelo .legend,body.enmodelo .goprop,body.enmodelo #volver,body.enmodelo #panel,body.enmodelo #tip,body.enmodelo #lbls,body.enmodelo .hito{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+/* íconos y movimiento */
+#modelo .mi{flex:none;vertical-align:middle}
+#modelo .gf h6 svg.mi,#modelo .kpis svg.mi{display:inline-block;width:16px;height:16px}#modelo .kpis svg.mi{width:18px;height:18px}
+#modelo .ey .mi{color:${LIM}}
+#modelo .hico{display:inline-grid;place-items:center;width:52px;height:52px;border:1px solid rgba(207,255,94,.35);color:${LIM};margin-bottom:6px;position:relative}
+#modelo .hico::after{content:'';position:absolute;inset:-6px;border:1px solid rgba(207,255,94,.12)}
+@media(prefers-reduced-motion:no-preference){#modelo .hico::after{animation:late 2.6s ease-out infinite}}
+@keyframes late{0%{transform:scale(.85);opacity:1}100%{transform:scale(1.35);opacity:0}}
+#modelo .caja .ci{display:grid;place-items:center;width:34px;height:34px;color:var(--c,${LIM});border:1px solid color-mix(in srgb,var(--c,${LIM}) 40%,transparent);margin-bottom:12px}
+#modelo .caja li.i{padding-left:28px}#modelo .caja li.i::before{display:none}#modelo .caja li.i .mi{position:absolute;left:0;top:1px;color:var(--c,${LIM})}
+#modelo .tabla td .ag{display:flex;align-items:center;gap:10px}#modelo .tabla td .ag .mi{color:#cfd6d3}
+#modelo .tabla tr:has(.tp.act) td .ag .mi{color:${LIM}}
+#modelo .regla .mi{color:${LIM};float:right;margin-top:-2px}
+#modelo .tabs button .mi{margin-right:8px;color:#7a8480}#modelo .tabs button[aria-selected=true] .mi{color:${LIM}}
+#modelo .sl label{display:flex;align-items:center;gap:7px}#modelo .sl label .mi{color:#7a8480}
+#modelo .chk .mi{color:#ff8a75}
+#modelo .gf h6{display:flex;align-items:center;gap:7px}#modelo .gf h6 .mi{color:${LIM};opacity:.85}
+#modelo .kpis div{position:relative}#modelo .kpis .mi{position:absolute;right:12px;top:12px;color:${LIM};opacity:.7}
+#modelo .rel h6{display:flex;align-items:center;gap:7px}
+#modelo .ref b{display:flex;align-items:center;gap:8px}#modelo .ref b .mi{color:${LIM}}
+#modelo .lectura .dato{display:flex;align-items:center;gap:7px}
+#modelo .rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.8,.2,1) var(--d,0s),transform .9s cubic-bezier(.2,.8,.2,1) var(--d,0s)}
+#modelo .rv.vis{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){#modelo .rv{opacity:1;transform:none;transition:none}}
+#modelo .gf svg.dib path.mln{stroke-dasharray:3000;stroke-dashoffset:3000;animation:dib 1.5s cubic-bezier(.3,.7,.2,1) forwards}
+#modelo .gf svg.dib path.mar2{animation:aparece .9s ease both}
+#modelo .gf svg.dib rect.mbr{transform-box:fill-box;transform-origin:bottom;animation:crece .9s cubic-bezier(.2,.8,.2,1) both}
+#modelo .gf svg.dib circle{animation:aparece .4s 1.3s both}
+@keyframes dib{to{stroke-dashoffset:0}}@keyframes aparece{from{opacity:0}}@keyframes crece{from{transform:scaleY(0)}}
+@media(prefers-reduced-motion:reduce){#modelo .gf svg.dib *{animation:none!important;stroke-dashoffset:0!important}}
+#modelo #cld .car.on path{stroke-width:2.2;stroke-dasharray:6 5;animation:fluye .9s linear infinite}
+/* mini simulación animada (laboratorio) */
+#modelo .lab{margin-top:34px;border:1px solid rgba(214,228,222,.12);position:relative;background:#07090a}
+#modelo .lab canvas{display:block;width:100%;height:340px}
+#modelo .lab .lbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid rgba(214,228,222,.1)}
+#modelo .lab .lley{display:flex;flex-wrap:wrap;gap:12px}
+#modelo .lab .lley span{display:flex;align-items:center;gap:6px;font:500 9.5px 'Geist Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#a9b3af}
+#modelo .lab .lley i{width:8px;height:8px;border-radius:50%;background:var(--c)}
+#modelo .lab .lseg{display:flex}
+#modelo .lab .lseg button{all:unset;cursor:pointer;padding:8px 12px;border:1px solid rgba(214,228,222,.22);font:500 10px 'Geist Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:#a9b3af}
+#modelo .lab .lseg button+button{border-left:0}
+#modelo .lab .lseg button[aria-pressed=true]{background:${LIM};color:#050607;border-color:${LIM}}
+#modelo .lab .lcnt{position:absolute;left:14px;top:12px;display:grid;gap:4px;font:500 10px 'Geist Mono',monospace;letter-spacing:.08em;text-transform:uppercase;color:#7a8480;pointer-events:none}
+#modelo .lab .lcnt b{color:#eaefed;font-weight:500}
+/* videos del simulador */
+#modelo .vids{display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:auto auto;gap:18px;margin-top:30px}
+#modelo .vids figure{margin:0;border:1px solid rgba(214,228,222,.12);background:#07090a;position:relative}
+#modelo .vids figure:first-child{grid-row:span 2}
+#modelo .vids video{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;background:#0b0d0e}
+#modelo .vids figcaption{padding:12px 14px 14px;font-size:13px;line-height:1.5;color:#a9b3af}
+#modelo .vids figcaption b{display:flex;align-items:center;gap:7px;font:500 10px 'Geist Mono',monospace;letter-spacing:.14em;text-transform:uppercase;color:${LIM};margin-bottom:6px}
+#modelo .vids .rec{position:absolute;left:12px;top:12px;display:flex;align-items:center;gap:6px;padding:4px 8px;background:rgba(5,6,7,.75);font:500 9px 'Geist Mono',monospace;letter-spacing:.14em;color:#eaefed}
+#modelo .vids .rec i{width:7px;height:7px;border-radius:50%;background:#d4553f}
+@media(prefers-reduced-motion:no-preference){#modelo .vids .rec i{animation:parp 1.2s steps(2) infinite}}
+@keyframes parp{50%{opacity:.2}}
+#modelo .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#modelo .chips span{display:inline-flex;align-items:center;gap:5px;padding:3px 7px;border:1px solid rgba(214,228,222,.18);font:500 9.5px 'Geist Mono',monospace;color:#cfd6d3}
+#modelo .chips span em{color:${LIM}}
+@media(max-width:900px){#modelo .vids{grid-template-columns:1fr}#modelo .vids figure:first-child{grid-row:auto}#modelo .lab canvas{height:300px}}
 @media(max-width:900px){#modelo .tablero{grid-template-columns:1fr}#modelo .ctrl{position:static}#modelo .rel,#modelo .ref{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){#modelo .mw{padding:0 16px}#modelo .blq{padding:64px 0 30px}#modelo .g2,#modelo .g3,#modelo .graf{grid-template-columns:1fr}
  #modelo .kpis{grid-template-columns:1fr 1fr}#modelo .rel,#modelo .ref{grid-template-columns:1fr}#modelo .lead{font-size:16px}#modelo .pregunta{padding:18px}#modelo .pregunta p,#modelo .simq{font-size:16.5px}
@@ -139,34 +239,34 @@ document.head.appendChild(el('style',{},css));
 
 /* ---------- contenido ---------- */
 const AG=[
- ['act','Hogar cultivador','Producir, autoconsumir y vender el excedente','tipología de huerta, m², conocimiento, horas de trabajo'],
- ['act','Promotor (formado en Bavaria)','Abrir y acompañar huertas','huertas acompañadas, carga'],
- ['act','Tienda o comedor','Abastecerse con regularidad y buen precio','surtido necesario, proveedor actual'],
- ['act','Bavaria Común · acopio rotativo','Acopiar y repartir','capacidad, inventario'],
- ['act','Bavaria Común · distrito de hongos','Convertir sustrato en proteína de hongos','sustrato recibido, inventario de proteína'],
- ['act','Asamblea de Bavaria y Mesa (gobierno rotativo)','Asignar espacios y normas','vocería actual, carga, conocimiento'],
- ['act','Institución central (escenario B)','Decidir solicitudes','cola de solicitudes, capacidad de decisión'],
- ['act','Generador de orgánicos (hogar o comercio)','Botar o separar sus residuos','kg por semana, ruta que usa'],
- ['act','Operador de aseo','Recoger y llevar a disposición','ruta de recolección, destino final'],
- ['act','Aves (garza, copetón, tingua)','Buscar hábitat, alimentarse, anidar','posición, parche ocupado, supervivencia'],
- ['act','Vehículos y repartidores','Circular por la red vial','posición, ruta, carga'],
- ['pas','Corabastos','Ninguno propio: fija oferta y precio exógenos (se reduce la dependencia, no se elimina)','precio, oferta'],
- ['pas','Parcela de huerta','Ninguno: soporte que produce','m², rendimiento'],
- ['pas','Residuos orgánicos y producto en acopio','Ninguno: se mueven por reglas de otros','kg, días en acopio'],
- ['pas','Humedal y parches de hábitat','Ninguno: cambia su estado por la presión que recibe','calidad, tamaño, presión'],
- ['pas','Amenazas: vidrios y luz nocturna','Ninguno: obstáculo','intensidad por edificio'],
- ['pas','Edificios, vías, parques, agua','Soporte y obstáculo','geometría fija']];
+ ['act','Hogar cultivador','Producir, autoconsumir y vender el excedente','tipología de huerta, m², conocimiento, horas de trabajo','casa'],
+ ['act','Promotor (formado en Bavaria)','Abrir y acompañar huertas','huertas acompañadas, carga','promotor'],
+ ['act','Tienda o comedor','Abastecerse con regularidad y buen precio','surtido necesario, proveedor actual','tienda'],
+ ['act','Bavaria Común · acopio rotativo','Acopiar y repartir','capacidad, inventario','acopio'],
+ ['act','Bavaria Común · distrito de hongos','Convertir sustrato en proteína de hongos','sustrato recibido, inventario de proteína','hongo'],
+ ['act','Asamblea de Bavaria y Mesa (gobierno rotativo)','Asignar espacios y normas','vocería actual, carga, conocimiento','asamblea'],
+ ['act','Institución central (escenario B)','Decidir solicitudes','cola de solicitudes, capacidad de decisión','inst'],
+ ['act','Generador de orgánicos (hogar o comercio)','Botar o separar sus residuos','kg por semana, ruta que usa','basura'],
+ ['act','Operador de aseo','Recoger y llevar a disposición','ruta de recolección, destino final','camion'],
+ ['act','Aves (garza, copetón, tingua)','Buscar hábitat, alimentarse, anidar','posición, parche ocupado, supervivencia','ave'],
+ ['act','Vehículos y repartidores','Circular por la red vial','posición, ruta, carga','carro'],
+ ['pas','Corabastos','Ninguno propio: fija oferta y precio exógenos (se reduce la dependencia, no se elimina)','precio, oferta','mercado'],
+ ['pas','Parcela de huerta','Ninguno: soporte que produce','m², rendimiento','brote'],
+ ['pas','Residuos orgánicos y producto en acopio','Ninguno: se mueven por reglas de otros','kg, días en acopio','hoja'],
+ ['pas','Humedal y parches de hábitat','Ninguno: cambia su estado por la presión que recibe','calidad, tamaño, presión','agua'],
+ ['pas','Amenazas: vidrios y luz nocturna','Ninguno: obstáculo','intensidad por edificio','vidrio'],
+ ['pas','Edificios, vías, parques, agua','Soporte y obstáculo','geometría fija','edificio']];
 
 const REG=[
- ['Hogar · PAR01 PAR02','Huerta','producción = m² × rendimiento × clima × calidad\nautoconsumo = producción × <i>PAR02</i>\nresto → acopio <i>hasta</i> su capacidad'],
- ['R1 R2 R3','Apertura de huertas','<i>si</i> hay participantes, conocimiento (STK07),\nsuelo disponible (AUX01) y promotores (STK11)\n<i>entonces</i> abre: (p + q·activos/N)·(N − activos)'],
- ['AUX04 AUX05','Cierre de huertas','<i>si</i> carga por persona > 1\n<i>entonces</i> sube la prob. de retiro\nh = h0·(1 + β·(carga − 1))\nla rotación de vocerías <i>baja</i> la carga'],
- ['B2 · AUX02','Tienda o comedor','<i>compra local si</i> hay disponibilidad\ny el precio relativo frente a Corabastos conviene\nelige por precio, crédito, volumen, horario, confianza'],
- ['B5 · AUX07 AUX08','Promotor','acompaña hasta c = 1.000 m² (20 huertas)\n<i>si</i> se pasa → cae la calidad de manejo\ny suben los cierres'],
- ['B3 · FLO16','Humedal','<i>si</i> hay actividad en el borde → sube la presión\n<i>si</i> cesa → se recupera a la tasa kr'],
- ['B4','Acopio','<i>si</i> se llena → sube la merma\ny cae el precio del excedente'],
- ['SIM-02','Estación de compostaje','recibe mín(fracción × generación; capacidad)\nmadura τ semanas → compost a huertas\nsustrato → distrito de hongos'],
- ['SIM-03','Ave','se mueve al parche más cercano dentro de α\n<i>si</i> el parche tiene vidrio o luz → muere con prob. m\n(trampa ecológica: atractivo pero letal)']];
+ ['Hogar · PAR01 PAR02','Huerta','producción = m² × rendimiento × clima × calidad\nautoconsumo = producción × <i>PAR02</i>\nresto → acopio <i>hasta</i> su capacidad','brote'],
+ ['R1 R2 R3','Apertura de huertas','<i>si</i> hay participantes, conocimiento (STK07),\nsuelo disponible (AUX01) y promotores (STK11)\n<i>entonces</i> abre: (p + q·activos/N)·(N − activos)','crece'],
+ ['AUX04 AUX05','Cierre de huertas','<i>si</i> carga por persona > 1\n<i>entonces</i> sube la prob. de retiro\nh = h0·(1 + β·(carga − 1))\nla rotación de vocerías <i>baja</i> la carga','peso'],
+ ['B2 · AUX02','Tienda o comedor','<i>compra local si</i> hay disponibilidad\ny el precio relativo frente a Corabastos conviene\nelige por precio, crédito, volumen, horario, confianza','tienda'],
+ ['B5 · AUX07 AUX08','Promotor','acompaña hasta c = 1.000 m² (20 huertas)\n<i>si</i> se pasa → cae la calidad de manejo\ny suben los cierres','promotor'],
+ ['B3 · FLO16','Humedal','<i>si</i> hay actividad en el borde → sube la presión\n<i>si</i> cesa → se recupera a la tasa kr','agua'],
+ ['B4','Acopio','<i>si</i> se llena → sube la merma\ny cae el precio del excedente','acopio'],
+ ['SIM-02','Estación de compostaje','recibe mín(fracción × generación; capacidad)\nmadura τ semanas → compost a huertas\nsustrato → distrito de hongos','compost'],
+ ['SIM-03','Ave','se mueve al parche más cercano dentro de α\n<i>si</i> el parche tiene vidrio o luz → muere con prob. m\n(trampa ecológica: atractivo pero letal)','ave']];
 
 /* nodos y flechas del modelo causal (x, y en un lienzo de 1200 × 730). Tipo: 0 acumulación (stock), 1 variable, 2 palanca de política */
 const ND={
@@ -209,7 +309,7 @@ function cld(){
  s+='<marker id="fl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="context-stroke"/></marker></defs>';
  AR.forEach(([a,b,sg,k,lz],i)=>{const A=caja(a),B=caja(b),[cx,cy]=curva([A.x,A.y],[B.x,B.y],k),p1=borde(A,cx,cy),p2=borde(B,cx,cy);
   const tx=.25*p1[0]+.5*cx+.25*p2[0],ty=.25*p1[1]+.5*cy+.25*p2[1],ex=p2[0]+(cx-p2[0])*.18,ey=p2[1]+(cy-p2[1])*.18,neg=sg!=='+';
-  s+='<g class="ar" data-l="'+lz+'"><path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+'Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+'" fill="none" stroke="'+(neg?'#d4553f':'#7a8480')+'" stroke-width="1.3" marker-end="url(#fl)"/>'+
+  s+='<g class="car" data-l="'+lz+'"><path d="M'+p1[0].toFixed(1)+' '+p1[1].toFixed(1)+'Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+p2[0].toFixed(1)+' '+p2[1].toFixed(1)+'" fill="none" stroke="'+(neg?'#d4553f':'#7a8480')+'" stroke-width="1.3" marker-end="url(#fl)"/>'+
    '<circle cx="'+ex.toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="7.5" fill="#050607" stroke="'+(neg?'#d4553f':'#4a524f')+'"/><text x="'+ex.toFixed(1)+'" y="'+(ey+3.8).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="600" fill="'+(neg?'#ff8a75':'#cfd6d3')+'">'+sg+'</text></g>'});
  Object.keys(ND).forEach(n=>{const c=caja(n),st=c.tipo===0,ex=c.tipo===2;const lz=Object.keys(LAZ).filter(L=>AR.some(a=>(a[0]===n||a[1]===n)&&a[4].split(' ').includes(L))).join(' ');
   s+='<g class="nd" data-n="'+n+'" data-l="'+lz+'"><rect x="'+(c.x-c.w/2)+'" y="'+(c.y-c.h/2)+'" width="'+c.w+'" height="'+c.h+'" fill="'+(st?'rgba(207,255,94,.08)':'#050607')+'" stroke="'+(st?LIM:ex?'#7a8480':'rgba(214,228,222,.3)')+'" '+(ex?'stroke-dasharray="3 3"':'')+' stroke-width="'+(st?1.4:1)+'"/>'+
@@ -221,20 +321,21 @@ function cld(){
  return s+'</svg>'}
 
 /* ---------- motor de gráficos (SVG livianos) ---------- */
+let ANIM=false;
 function linea(box,{series,T,ymax,ymin=0,yf=v=>fmt(v),xf=t=>t,xt,area}){
  const W=360,H=180,L=44,R=12,Tp=12,B=24,iw=W-L-R,ih=H-Tp-B;let mx=ymax;if(mx==null){mx=0;series.forEach(s=>s.y.forEach(v=>{if(v>mx)mx=v}));if(area)for(let i=0;i<T;i++){let a=0;area.forEach(x=>a+=x.y[i]);if(a>mx)mx=a}mx=mx*1.1||1}
- const X=t=>L+t/(T-1)*iw,Y=v=>Tp+ih-(v-ymin)/(mx-ymin)*ih;let s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+ const X=t=>L+t/(T-1)*iw,Y=v=>Tp+ih-(v-ymin)/(mx-ymin)*ih;let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" class="'+(ANIM?'dib':'')+'">';
  for(let k=0;k<=3;k++){const v=ymin+(mx-ymin)*k/3,y=Y(v);s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="rgba(214,228,222,'+(k?'.07':'.22')+')"/><text x="'+(L-6)+'" y="'+(y+3.5)+'" text-anchor="end" font-size="9.5" fill="#5d6663" font-family="Geist Mono,monospace">'+yf(v)+'</text>'}
  (xt||[]).forEach(t=>{s+='<text x="'+X(t)+'" y="'+(H-6)+'" text-anchor="middle" font-size="9.5" fill="#5d6663" font-family="Geist Mono,monospace">'+xf(t)+'</text>'});
- if(area){let base=new Array(T).fill(0);area.forEach(a=>{let d='M'+X(0)+' '+Y(base[0]);const top=a.y.map((v,i)=>base[i]+v);for(let i=0;i<T;i+=2)d+='L'+X(i).toFixed(1)+' '+Y(top[i]).toFixed(1);d+='L'+X(T-1)+' '+Y(top[T-1]);for(let i=T-1;i>=0;i-=2)d+='L'+X(i).toFixed(1)+' '+Y(base[i]).toFixed(1);d+='L'+X(0)+' '+Y(base[0])+'Z';s+='<path d="'+d+'" fill="'+a.c+'" opacity="'+(a.o||.75)+'"/>';base=top})}
+ if(area){let base=new Array(T).fill(0);area.forEach(a=>{let d='M'+X(0)+' '+Y(base[0]);const top=a.y.map((v,i)=>base[i]+v);for(let i=0;i<T;i+=2)d+='L'+X(i).toFixed(1)+' '+Y(top[i]).toFixed(1);d+='L'+X(T-1)+' '+Y(top[T-1]);for(let i=T-1;i>=0;i-=2)d+='L'+X(i).toFixed(1)+' '+Y(base[i]).toFixed(1);d+='L'+X(0)+' '+Y(base[0])+'Z';s+='<path class="mar2" d="'+d+'" fill="'+a.c+'" opacity="'+(a.o||.75)+'"/>';base=top})}
  series.forEach(sr=>{let d='';for(let i=0;i<T;i+=(T>300?2:1))d+=(d?'L':'M')+X(i).toFixed(1)+' '+Y(Math.max(ymin,Math.min(mx,sr.y[i]))).toFixed(1);d+='L'+X(T-1).toFixed(1)+' '+Y(Math.max(ymin,Math.min(mx,sr.y[T-1]))).toFixed(1);
-  s+='<path d="'+d+'" fill="none" stroke="'+sr.c+'" stroke-width="'+(sr.w||1.4)+'" '+(sr.dash?'stroke-dasharray="'+sr.dash+'"':'')+' opacity="'+(sr.o||1)+'" stroke-linejoin="round"/>';
+  s+='<path '+(sr.dash?'':'class="mln" ')+'d="'+d+'" fill="none" stroke="'+sr.c+'" stroke-width="'+(sr.w||1.4)+'" '+(sr.dash?'stroke-dasharray="'+sr.dash+'"':'')+' opacity="'+(sr.o||1)+'" stroke-linejoin="round"/>';
   if(sr.fin)s+='<circle cx="'+X(T-1)+'" cy="'+Y(Math.min(mx,sr.y[T-1]))+'" r="3" fill="'+sr.c+'"/>'});
  box.innerHTML=s+'</svg>'}
 function barras(box,{grupos,ymax=1,yf=v=>fmt(v*100)+'%'}){
- const W=360,H=180,L=44,R=12,Tp=12,B=26,iw=W-L-R,ih=H-Tp-B,gw=iw/grupos.length;let s='<svg viewBox="0 0 '+W+' '+H+'" role="img">';
+ const W=360,H=180,L=44,R=12,Tp=12,B=26,iw=W-L-R,ih=H-Tp-B,gw=iw/grupos.length;let s='<svg viewBox="0 0 '+W+' '+H+'" role="img" class="'+(ANIM?'dib':'')+'">';
  for(let k=0;k<=3;k++){const v=ymax*k/3,y=Tp+ih-v/ymax*ih;s+='<line x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'" stroke="rgba(214,228,222,'+(k?'.07':'.22')+')"/><text x="'+(L-6)+'" y="'+(y+3.5)+'" text-anchor="end" font-size="9.5" fill="#5d6663" font-family="Geist Mono,monospace">'+yf(v)+'</text>'}
- grupos.forEach((g,i)=>{const n=g.v.length,bw=Math.min(22,(gw-14)/n);g.v.forEach((b,j)=>{const x=L+i*gw+(gw-n*bw)/2+j*bw,h=Math.max(0,Math.min(1,b.y/ymax))*ih;s+='<rect x="'+(x+1).toFixed(1)+'" y="'+(Tp+ih-h).toFixed(1)+'" width="'+(bw-2).toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+b.c+'" opacity="'+(b.o||1)+'"/>'});
+ grupos.forEach((g,i)=>{const n=g.v.length,bw=Math.min(22,(gw-14)/n);g.v.forEach((b,j)=>{const x=L+i*gw+(gw-n*bw)/2+j*bw,h=Math.max(0,Math.min(1,b.y/ymax))*ih;s+='<rect class="mbr" style="animation-delay:'+(i*.12+j*.05).toFixed(2)+'s" x="'+(x+1).toFixed(1)+'" y="'+(Tp+ih-h).toFixed(1)+'" width="'+(bw-2).toFixed(1)+'" height="'+h.toFixed(1)+'" fill="'+b.c+'" opacity="'+(b.o||1)+'"/>'});
   s+='<text x="'+(L+i*gw+gw/2)+'" y="'+(H-8)+'" text-anchor="middle" font-size="9.5" fill="#7a8480" font-family="Geist Mono,monospace">'+esc(g.n)+'</text>'});
  box.innerHTML=s+'</svg>'}
 
@@ -327,25 +428,31 @@ const SIMS=[
    pol:'¿Quién decide dónde va una huerta? Sin criterio (B) decide cada lote; con corredores (C) decide la asamblea con un mapa común.',cau:'B3 (humedal): actividad en el borde → presión → menos suelo disponible para huertas.'},
   estado:[['Aves','posición, parche ocupado, supervivencia'],['Parche de hábitat (huerta, borde, núcleo, árboles)','calidad, tamaño, presión'],['Planta','presencia por parche'],['Amenaza (vidrios, luz nocturna)','intensidad por edificio'],['Fauna sinantrópica','abundancia, atraída por desperdicios']]}];
 
+const SLI={rend:'brote',alcance:'edificio',auto:'casa',acopio:'acopio',cupos:'promotor',retardo:'reloj',mpp:'persona',rot:'asamblea',muc:'inst',zona:'persona',frac:'basura',cap:'compost',tau:'reloj',sust:'hongo',dist:'via',alc:'ave',n:'brote',arb:'hoja',luz:'luz',rec:'agua',anti:'vidrio',sequia:'sol',bloqueo:'candado',crec:'crece',revoca:'precio'};
+const GI={G1:'brote',G3:'mercado',G4:'persona',G5:'promotor',G6:'reloj',G7:'peso',G8:'basura',G9:'compost',G10:'persona',G11:'hongo',G12:'acopio',G13:'ave',G14:'agua',G15:'red',G16:'luz'};
+const TABI={s1:'brote',s2:'compost',s3:'ave'};
+/* indicadores: [ícono, valor, decimales, sufijo, texto]; cuentan hacia arriba cuando la gráfica se dibuja */
+function kpis(K,arr){K.innerHTML=arr.map(([i,v,d,s,t])=>'<div>'+ic(i,18)+'<b data-v="'+v+'" data-d="'+d+'" data-s="'+esc(s)+'">'+fmt(v,d)+s+'</b><span>'+t+'</span></div>').join('');
+ if(!ANIM||RM)return;const bs=[...K.querySelectorAll('b')],t0=performance.now();const paso=now=>{const k=Math.min(1,(now-t0)/1100),e=1-Math.pow(1-k,3);bs.forEach(b=>{b.textContent=fmt(+b.dataset.v*e,+b.dataset.d)+b.dataset.s});if(k<1)requestAnimationFrame(paso)};requestAnimationFrame(paso)}
 function htmlSim(S,i){
- let h='<div class="sim'+(i?'':' on')+'" id="'+S.id+'" role="tabpanel"><p class="simq"><span class="dato">Why model? · '+S.cod+'</span>'+esc(S.q)+'</p><div class="tablero"><div class="ctrl"><h5>Escenarios</h5><div class="seg">';
+ let h='<div class="sim'+(i?'':' on')+'" id="'+S.id+'" role="tabpanel"><p class="simq"><span class="dato">'+ic('pregunta',14)+' Why model? · '+S.cod+'</span>'+esc(S.q)+'</p><div class="tablero"><div class="ctrl"><h5>Escenarios</h5><div class="seg">';
  ['A','B','C'].forEach(k=>{h+='<button type="button" data-e="'+k+'" style="--c:'+ESC_C[k]+'" aria-pressed="'+(k==='C')+'"><i>'+k+'</i><span>'+esc(S.esc[k])+'</span></button>'});
  h+='</div>';
- if(S.estres){h+='<h5>Estreses sobre B y C</h5>';S.estres.forEach(([k,t])=>{h+='<label class="chk"><input type="checkbox" data-k="'+k+'">'+esc(t)+'</label>'});h+='<div style="height:12px"></div>'}
+ if(S.estres){h+='<h5>Estreses sobre B y C</h5>';S.estres.forEach(([k,t])=>{h+='<label class="chk"><input type="checkbox" data-k="'+k+'">'+ic(SLI[k],15)+esc(t)+'</label>'});h+='<div style="height:12px"></div>'}
  h+='<h5>Sliders</h5>';
- S.sl.forEach(([k,t,u,a,b,st,f])=>{if(Array.isArray(a)){h+='<div class="sl"><label for="'+S.id+k+'">'+esc(t)+'</label><output data-o="'+k+'"></output><input id="'+S.id+k+'" type="range" data-k="'+k+'" data-v="'+a.join(',')+'" min="0" max="'+(a.length-1)+'" step="1"></div>';return}
-  h+='<div class="sl"><label for="'+S.id+k+'">'+esc(t)+'</label><output data-o="'+k+'"></output><input id="'+S.id+k+'" type="range" data-k="'+k+'" min="'+a+'" max="'+b+'" step="'+st+'"></div>'});
- (S.chk||[]).forEach(([k,t])=>{h+='<label class="chk"><input type="checkbox" data-k="'+k+'">'+esc(t)+'</label>'});
+ S.sl.forEach(([k,t,u,a,b,st,f])=>{if(Array.isArray(a)){h+='<div class="sl"><label for="'+S.id+k+'">'+ic(SLI[k],15)+esc(t)+'</label><output data-o="'+k+'"></output><input id="'+S.id+k+'" type="range" data-k="'+k+'" data-v="'+a.join(',')+'" min="0" max="'+(a.length-1)+'" step="1"></div>';return}
+  h+='<div class="sl"><label for="'+S.id+k+'">'+ic(SLI[k],15)+esc(t)+'</label><output data-o="'+k+'"></output><input id="'+S.id+k+'" type="range" data-k="'+k+'" min="'+a+'" max="'+b+'" step="'+st+'"></div>'});
+ (S.chk||[]).forEach(([k,t])=>{h+='<label class="chk"><input type="checkbox" data-k="'+k+'">'+ic(SLI[k],15)+esc(t)+'</label>'});
  h+='<button type="button" class="reset">Valores iniciales</button></div><div><div class="kpis"></div><div class="graf">';
- S.graf.forEach(([g,t,s],j)=>{h+='<div class="gf"><h6><b>'+g+'</b>'+esc(t)+'</h6><small>'+esc(s)+'</small><div data-g="'+j+'"></div><div class="ley" data-l="'+j+'"></div></div>'});
- h+='</div><div class="lectura" aria-live="polite"><span class="dato">Lectura de la corrida</span><div></div></div></div></div>';
- h+='<div class="rel"><div><h6>Por qué la elegimos</h6><p>'+S.por+'</p></div><div><h6>Qué entra a la propuesta final</h6><p>'+S.inc+'</p></div><div><h6>Red de actores</h6><p>'+S.rel.act+'</p></div><div><h6>Red de problemas</h6><p>'+S.rel.prob+'</p></div></div>';
- h+='<div class="rel" style="grid-template-columns:1fr 1fr;margin-top:-1px"><div><h6>Modelo político</h6><p>'+S.rel.pol+'</p></div><div><h6>Modelo dinámico causal</h6><p>'+S.rel.cau+'</p></div></div>';
+ S.graf.forEach(([g,t,s],j)=>{h+='<div class="gf"><h6>'+ic(GI[g],16)+'<b>'+g+'</b>'+esc(t)+'</h6><small>'+esc(s)+'</small><div data-g="'+j+'"></div><div class="ley" data-l="'+j+'"></div></div>'});
+ h+='</div><div class="lectura" aria-live="polite"><span class="dato">'+ic('lupa',14)+'Lectura de la corrida</span><div></div></div></div></div>';
+ h+='<div class="rel"><div><h6>'+ic('diana',15)+'Por qué la elegimos</h6><p>'+S.por+'</p></div><div><h6>'+ic('capas',15)+'Qué entra a la propuesta final</h6><p>'+S.inc+'</p></div><div><h6>'+ic('asamblea',15)+'Red de actores</h6><p>'+S.rel.act+'</p></div><div><h6>'+ic('red',15)+'Red de problemas</h6><p>'+S.rel.prob+'</p></div></div>';
+ h+='<div class="rel" style="grid-template-columns:1fr 1fr;margin-top:-1px"><div><h6>'+ic('politica',15)+'Modelo político</h6><p>'+S.rel.pol+'</p></div><div><h6>'+ic('flechas',15)+'Modelo dinámico causal</h6><p>'+S.rel.cau+'</p></div></div>';
  h+='<details><summary>Agentes y estado de '+S.cod+'</summary><div class="scrollx"><table class="tabla"><thead><tr><th>Agente</th><th>Estado</th></tr></thead><tbody>'+S.estado.map(([a,e])=>'<tr><td><b>'+esc(a)+'</b></td><td>'+esc(e)+'</td></tr>').join('')+'</tbody></table></div></details></div>';
  return h}
 
 const ley=arr=>arr.map(([t,c,d])=>'<span><i style="--c:'+c+(d?';background:repeating-linear-gradient(90deg,'+c+' 0 3px,transparent 3px 5px)':'')+'"></i>'+esc(t)+'</span>').join('');
-function pintar(S,box,P,e){
+function pintar(S,box,P,e,anim){ANIM=!!anim&&!RM;
  const ESCL=['A','B','C'].map(x=>[x+' '+S.nom[x],ESC_C[x]]);
  const R={A:S.corre(P,'A'),B:S.corre(P,'B'),C:S.corre(P,'C')},r=R[e],G=j=>box.querySelector('[data-g="'+j+'"]'),Lg=(j,a)=>{box.querySelector('[data-l="'+j+'"]').innerHTML=ley(a)};
  const tres=(k,extra={})=>['A','B','C'].map(x=>Object.assign({y:R[x][k],c:ESC_C[x],w:x===e?2.4:1.1,o:x===e?1:.55,fin:x===e},extra));
@@ -358,7 +465,7 @@ function pintar(S,box,P,e){
   linea(G(4),{series:tres('esp').slice(1),T,xt,xf,yf:v=>fmt(v,1)});Lg(4,ESCL.slice(1));
   linea(G(5),{series:tres('carga').concat([{y:new Array(T).fill(1),c:'#d4553f',dash:'3 4',w:1}]),T,xt,xf,ymin:.6,ymax:1.5,yf:v=>fmt(v,2)});Lg(5,ESCL.concat([['umbral 1',''+'#d4553f',1]]));
   const f=x=>x[x.length-1],pers=f(r.pers);
-  K.innerHTML='<div><b>'+fmt(f(r.part))+'</b><span>huerteros activos al año 10 ('+e+')</span></div><div><b>'+fmt(pers)+'</b><span>personas alimentadas en frutas y verduras (G2)</span></div><div><b>'+fmt(pers/POP_K*100,2)+' %</b><span>de la población de Kennedy</span></div><div><b>'+fmt(f(r.dep))+' %</b><span>dependencia de Corabastos en la zona · cae al 50 % en '+fmt(2*pers)+' hab.</span></div>';
+  kpis(K,[['persona',f(r.part),0,'','huerteros activos al año 10 ('+e+')'],['brote',pers,0,'','personas alimentadas en frutas y verduras (G2)'],['casa',pers/POP_K*100,2,' %','de la población de Kennedy'],['mercado',f(r.dep),0,' %','dependencia de Corabastos en la zona · cae al 50 % en '+fmt(2*pers)+' hab.']]);
   const minCal=Math.min(...r.cal),maxEsp=Math.max(...R.B.esp),t50=R.C.part.findIndex(v=>v>=.5*Math.max(...R.C.part));
   let L='<p>A 10 años, el escenario <em>C</em> llega a <em>'+fmt(f(R.C.part))+'</em> huerteros, el <em>B</em> a <em>'+fmt(f(R.B.part))+'</em> y sin intervención quedan <em>'+fmt(f(R.A.part))+'</em>. La dependencia de la zona baja a <em>'+fmt(f(R.C.dep))+' %</em> en C frente a <em>'+fmt(f(R.B.dep))+' %</em> en B.</p>';
   L+='<p>'+(maxEsp>4?'En B la institución central se satura: la espera por una decisión llega a <em>'+fmt(maxEsp,1)+' semanas</em> y frena la curva (lazo B6). ':'La capacidad de decisión central alcanza para esta demanda. ')+(minCal<90?'El acompañamiento se satura en '+e+': la calidad de manejo cae a <em>'+fmt(minCal)+' %</em> porque faltan promotores (B5). ':'')+(P.revoca?'La revocación de baldíos del año 5 corta el techo de huertas un 30 %. ':'')+(P.sequia?'La sequía se ve como un hueco en la producción del año 3. ':'')+'</p>';
@@ -371,7 +478,7 @@ function pintar(S,box,P,e){
   linea(G(3),{series:tres('hong'),T,xt,xf,yf:v=>fmt(v)});Lg(3,ESCL);
   linea(G(4),{series:tres('ocu').slice(1).concat([{y:new Array(T).fill(100),c:'#d4553f',dash:'3 4',w:1}]),T,xt,xf,yf:v=>fmt(v)+'%'});Lg(4,ESCL.slice(1).concat([['llena','#d4553f',1]]));
   const f=x=>x[x.length-1];
-  K.innerHTML='<div><b>'+fmt(f(r.desv)/r.gen*100,1)+' %</b><span>de los orgánicos de Kennedy se desvía ('+e+')</span></div><div><b>'+fmt(f(r.ent),1)+' t</b><span>compost por semana que llega a huertas</span></div><div><b>'+fmt(f(r.pers))+'</b><span>personas cuyo residuo se aprovecha</span></div><div><b>'+fmt(f(r.hong))+' kg</b><span>hongos frescos por semana</span></div>';
+  kpis(K,[['basura',f(r.desv)/r.gen*100,1,' %','de los orgánicos de Kennedy se desvía ('+e+')'],['compost',f(r.ent),1,' t','compost por semana que llega a huertas'],['persona',f(r.pers),0,'','personas cuyo residuo se aprovecha'],['hongo',f(r.hong),0,' kg','hongos frescos por semana']]);
   const sob=f(r.mad)/Math.max(.01,r.demanda);
   let L='<p>Kennedy genera unas <em>'+fmt(r.gen)+' t</em> de orgánicos por semana. Con estas capacidades, B desvía <em>'+fmt(f(R.B.desv)/r.gen*100,1)+' %</em> y C <em>'+fmt(f(R.C.desv)/r.gen*100,1)+' %</em>: '+(f(R.B.ocu)>100||f(R.C.ocu)>100?'las estaciones se llenan (G12 pasa el 100 %) y el resto sigue saliendo del barrio.':'las estaciones no se llenan.')+'</p>';
   if(e!=='A')L+='<p>'+(sob>1.2?'El compost madurado es <em>'+fmt(sob,1)+' veces</em> lo que piden las huertas de SIM-01: <em>sobra compost</em>, y hace falta otro destino (parques, viveros, venta) o más huertas.':'Casi todo el compost cabe en las huertas cercanas.')+' '+(e==='C'?'Desde Bavaria la distancia media sube y se pierde parte en el transporte; a cambio aparecen los hongos.':'Las estaciones barriales quedan cerca de las huertas: se pierde poco en el camino, pero no hay distrito de hongos.')+'</p>';
@@ -383,86 +490,110 @@ function pintar(S,box,P,e){
   barras(G(2),{grupos:SP.map((s,i)=>({n:s.k,v:['A','B','C'].map(x=>({y:R[x].con[i],c:ESC_C[x],o:x===e?1:.45}))}))});Lg(2,ESCL);
   barras(G(3),{grupos:['A','B','C'].map(x=>({n:x,v:[{y:R[x].ries,c:ESC_C[x],o:x===e?1:.45}]}))});Lg(3,ESCL);
   const f=x=>x[x.length-1],vivas=SP.filter((s,i)=>f(r.p[i])>5);
-  K.innerHTML='<div><b>'+vivas.length+' / 3</b><span>especies que persisten a 10 años ('+e+')</span></div><div><b>'+fmt(f(r.pres))+'</b><span>presión sobre el humedal (0–100)</span></div><div><b>'+fmt(r.d)+' m</b><span>distancia media entre parches</span></div><div><b>'+fmt(r.ries*100)+' %</b><span>riesgo de trampa ecológica</span></div>';
+  kpis(K,[['ave',vivas.length,0,' / 3','especies que persisten a 10 años ('+e+')'],['agua',f(r.pres),0,'','presión sobre el humedal (0–100)'],['via',r.d,0,' m','distancia media entre parches'],['luz',r.ries*100,0,' %','riesgo de trampa ecológica']]);
   const ti=2,tC=f(R.C.p[ti]),tB=f(R.B.p[ti]),tA=f(R.A.p[ti]);
   let L='<p>La <em>tingua de pico rojo</em> casi no vuela entre parches (α ≈ 350 m): sin huertas queda en <em>'+fmt(tA)+' %</em>, con huertas al azar en <em>'+fmt(tB)+' %</em> y con corredores en <em>'+fmt(tC)+' %</em>. La <em>garza</em> cruza la ciudad y casi no depende de la ubicación.</p>';
   L+='<p>'+(R.B.ries>R.A.ries?'Las huertas al azar <em>suben el riesgo de trampa</em> ('+fmt(R.B.ries*100)+' % frente a '+fmt(R.A.ries*100)+' % hoy): atraen aves a vidrios y luz. ':'')+(P.anti?'La medida antitrampa lo reduce a la tercera parte.':'Sin medida antitrampa el riesgo se mantiene alto: actívala para ver la diferencia.')+' La presión sobre el humedal en C termina en <em>'+fmt(f(R.C.pres))+'</em> frente a <em>'+fmt(f(R.B.pres))+'</em> en B.</p>';
-  Lc.innerHTML=L}}
+  Lc.innerHTML=L}ANIM=false}
 
 function montarSim(S,box){
  const P=Object.assign({},S.def);let e='C';
  const sync=()=>{box.querySelectorAll('input[type=range]').forEach(inp=>{const k=inp.dataset.k,o=box.querySelector('[data-o="'+k+'"]'),def=S.sl.find(x=>x[0]===k);
    if(inp.dataset.v){const V=inp.dataset.v.split(',').map(Number);inp.value=Math.max(0,V.indexOf(P[k]));o.textContent=fmt(P[k])+' '+def[2]}else{inp.value=P[k];o.textContent=def[6](P[k])}});
   box.querySelectorAll('input[type=checkbox]').forEach(c=>{c.checked=!!P[c.dataset.k]})};
- let raf=0;const run=()=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>pintar(S,box,P,e))};
+ let raf=0;const run=a=>{cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>pintar(S,box,P,e,a))};box._run=run;
  box.addEventListener('input',ev=>{const inp=ev.target,k=inp.dataset.k;if(!k)return;
   if(inp.type==='checkbox')P[k]=inp.checked;else if(inp.dataset.v)P[k]=inp.dataset.v.split(',').map(Number)[+inp.value];else P[k]=+inp.value;
   if(inp.type==='range'){const o=box.querySelector('[data-o="'+k+'"]'),def=S.sl.find(x=>x[0]===k);o.textContent=inp.dataset.v?fmt(P[k])+' '+def[2]:def[6](P[k])}run()});
- box.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{e=b.dataset.e;box.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));run()}));
- box.querySelector('.reset').addEventListener('click',()=>{Object.assign(P,S.def);sync();run()});
+ box.querySelectorAll('.seg button').forEach(b=>b.addEventListener('click',()=>{e=b.dataset.e;box.querySelectorAll('.seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));run(true)}));
+ box.querySelector('.reset').addEventListener('click',()=>{Object.assign(P,S.def);sync();run(true)});
  sync();pintar(S,box,P,e)}
 
 /* ---------- página ---------- */
 function montar(){
  const st=document.getElementById('story');if(!st||document.getElementById('modelo'))return!!st;
  const M=el('div',{id:'modelo','aria-label':'El modelo y las simulaciones'});
+ const li=(i,t)=>'<li class="i">'+ic(i,16)+t+'</li>',cab=(i,n,t)=>'<span class="hico">'+ic(i,26)+'</span><div class="ey"><b>'+n+'</b> · '+t+'</div>';
  let h='';
- // 0 · por qué modelar
- h+='<section class="blq"><div class="mw"><div class="ey"><b>04</b> · Del problema al modelo</div><h2>Por qué<br>simular Kennedy</h2>'+
+ // 0 · por qué modelar + laboratorio animado
+ h+='<section class="blq"><div class="mw">'+cab('cubo','04','Del problema al modelo')+'<h2>Por qué<br>simular Kennedy</h2>'+
   '<p class="lead">Los seis problemas no ocurren solos: se alimentan entre sí. Ese tipo de problema no se resuelve con un diagnóstico; hay que <em>construir un modelo, correrlo, equivocarse y corregirlo</em>. El diagnóstico fue la primera parte; aquí empieza la otra.</p>'+
-  '<div class="pregunta"><span class="dato">Why model? · Epstein</span><p>No modelamos para predecir el futuro de Kennedy. Modelamos para <em>explicar</em> por qué la dependencia de Corabastos se sostiene, <em>explorar escenarios</em> que no se pueden ensayar en la calle, <em>encontrar las palancas</em> que más mueven el sistema y <em>descubrir preguntas nuevas</em>. Cada modelo es una abstracción incompleta: lo vamos ampliando con cada error.</p></div>'+
-  '<div class="links"><a class="btn pri" href="https://anasoficasca-code.github.io/simulador/" target="_blank" rel="noopener">Abrir el simulador 3D ↗</a><a class="btn" href="https://o62juantr-bit.github.io/sim-kennedy/visor_modelos_vensim.html" target="_blank" rel="noopener">Modelos en Vensim ↗</a><a class="btn" href="#sims">Ir a las simulaciones ↓</a></div></div></section>';
+  '<div class="pregunta"><span class="dato">'+ic('pregunta',14)+' Why model? · Epstein</span><p>No modelamos para predecir el futuro de Kennedy. Modelamos para <em>explicar</em> por qué la dependencia de Corabastos se sostiene, <em>explorar escenarios</em> que no se pueden ensayar en la calle, <em>encontrar las palancas</em> que más mueven el sistema y <em>descubrir preguntas nuevas</em>. Cada modelo es una abstracción incompleta: lo vamos ampliando con cada error.</p></div>'+
+  '<div class="lab"><canvas aria-label="Animación de agentes: hogares, acopio de Bavaria, tiendas, camiones de Corabastos y aves"></canvas><div class="lcnt"></div><div class="lbar"><div class="lley">'+
+  [['#7a8480','hogar'],[LIM,'hogar que cultiva'],['#8fe7f2','promotor'],['#eaefed','tienda'],['#ee8a45','camión de Corabastos'],['#a3b845','cosecha al acopio'],['#5fb8a8','ave']].map(([c,t])=>'<span><i style="--c:'+c+'"></i>'+t+'</span>').join('')+
+  '</div><div class="lseg" role="group" aria-label="Escenario de la animación"><button type="button" data-m="hoy" aria-pressed="true">Kennedy hoy</button><button type="button" data-m="prop" aria-pressed="false">Con la propuesta</button></div></div></div>'+
+  '<div class="links"><a class="btn pri" href="https://anasoficasca-code.github.io/simulador/" target="_blank" rel="noopener">'+ic('play',14)+' Abrir el simulador 3D ↗</a><a class="btn" href="https://o62juantr-bit.github.io/sim-kennedy/visor_modelos_vensim.html" target="_blank" rel="noopener">'+ic('flechas',14)+' Modelos en Vensim ↗</a><a class="btn" href="#sims">'+ic('crece',14)+' Ir a las simulaciones ↓</a></div></div></section>';
  // I · II entorno y agentes
- h+='<section class="blq"><div class="mw"><div class="ey"><b>I · II</b> · Entorno y agentes</div><h2>Qué es entorno<br>y qué es agente</h2>'+
+ h+='<section class="blq"><div class="mw">'+cab('capas','I · II','Entorno y agentes')+'<h2>Qué es entorno<br>y qué es agente</h2>'+
   '<p class="lead">El criterio que usamos: <em>es agente lo que tiene estado propio, regla propia y afecta a otros</em>. Es entorno lo que solo sirve de soporte o de restricción.</p>'+
-  '<div class="g2"><div class="caja" style="--c:#7a8480"><span class="dato">Entorno · contexto fijo</span><h3 style="margin-top:10px">El territorio</h3><ul><li>El territorio de Kennedy: relieve, vías, agua, parques y 244.147 edificios (el modelo 3D del simulador).</li><li>Las calles y corredores de reparto por donde se mueven vehículos y repartidores.</li><li>Corabastos como nodo del que se depende: su precio y su oferta entran desde afuera.</li><li>Los humedales La Vaca, El Burro y Techo, y los parches de vegetación.</li></ul></div>'+
-  '<div class="caja"><span class="dato">Agentes · unidad mínima</span><h3 style="margin-top:10px">Quien decide</h3><ul><li><em>El hogar</em> es la unidad mínima: decide si cultiva, cuánto consume y qué vende.</li><li>Tiendas y comedores eligen proveedor; los promotores abren y acompañan huertas.</li><li>Bavaria Común acopia y forma; la asamblea asigna espacios y normas.</li><li>Las aves eligen parche; los vehículos eligen ruta.</li></ul></div></div>'+
-  '<div class="g2" style="margin-top:20px"><div class="caja" style="--c:#dba73a"><span class="dato">La frontera</span><p style="margin-top:10px">El entorno también puede ser agente. <em>El humedal</em> no tiene objetivo, pero su estado (presión) cambia con lo que hacen los demás y restringe dónde se abren huertas: lo modelamos como <em>agente pasivo</em>. <em>Corabastos</em> también: tiene precio y oferta, pero no lo hacemos decidir, porque la propuesta busca reducir la dependencia sin eliminarla.</p></div>'+
-  '<div class="caja" style="--c:#dba73a"><span class="dato">Por qué no al revés</span><p style="margin-top:10px">Un edificio no cambia su conducta según lo que pasa: es soporte y obstáculo (para las aves, un vidrio). Un hogar sí: si la carga de trabajo sube, abandona la huerta. Esa diferencia, <em>reaccionar con una regla propia</em>, es la que separa agente de entorno.</p></div></div></div></section>';
+  '<div class="g2"><div class="caja" style="--c:#7a8480"><span class="ci">'+ic('edificio',20)+'</span><span class="dato">Entorno · contexto fijo</span><h3 style="margin-top:10px">El territorio</h3><ul>'+
+   li('edificio','El territorio de Kennedy: relieve, vías, agua, parques y 244.147 edificios (el modelo 3D del simulador).')+li('via','Las calles y corredores de reparto por donde se mueven vehículos y repartidores.')+li('mercado','Corabastos como nodo del que se depende: su precio y su oferta entran desde afuera.')+li('agua','Los humedales La Vaca, El Burro y Techo, y los parches de vegetación.')+'</ul></div>'+
+  '<div class="caja"><span class="ci">'+ic('persona',20)+'</span><span class="dato">Agentes · unidad mínima</span><h3 style="margin-top:10px">Quien decide</h3><ul>'+
+   li('casa','<em>El hogar</em> es la unidad mínima: decide si cultiva, cuánto consume y qué vende.')+li('tienda','Tiendas y comedores eligen proveedor; los promotores abren y acompañan huertas.')+li('asamblea','Bavaria Común acopia y forma; la asamblea asigna espacios y normas.')+li('ave','Las aves eligen parche; los vehículos eligen ruta.')+'</ul></div></div>'+
+  '<div class="g2" style="margin-top:20px"><div class="caja" style="--c:#dba73a"><span class="ci">'+ic('agua',20)+'</span><span class="dato">La frontera</span><p style="margin-top:10px">El entorno también puede ser agente. <em>El humedal</em> no tiene objetivo, pero su estado (presión) cambia con lo que hacen los demás y restringe dónde se abren huertas: lo modelamos como <em>agente pasivo</em>. <em>Corabastos</em> también: tiene precio y oferta, pero no lo hacemos decidir, porque la propuesta busca reducir la dependencia sin eliminarla.</p></div>'+
+  '<div class="caja" style="--c:#dba73a"><span class="ci">'+ic('regla',20)+'</span><span class="dato">Por qué no al revés</span><p style="margin-top:10px">Un edificio no cambia su conducta según lo que pasa: es soporte y obstáculo (para las aves, un vidrio). Un hogar sí: si la carga de trabajo sube, abandona la huerta. Esa diferencia, <em>reaccionar con una regla propia</em>, es la que separa agente de entorno.</p></div></div></div></section>';
  // III · IV · V sistema multiagente
- h+='<section class="blq"><div class="mw"><div class="ey"><b>III · IV · V</b> · Sistema multiagente</div><h2>Muchos agentes,<br>reglas distintas</h2>'+
+ h+='<section class="blq"><div class="mw">'+cab('asamblea','III · IV · V','Sistema multiagente')+'<h2>Muchos agentes,<br>reglas distintas</h2>'+
   '<p class="lead">El modelo es <em>multiagente</em> porque conviven agentes con objetivos y reglas diferentes: un hogar busca producir, una tienda busca precio, una asamblea reparte, un ave busca hábitat. Lo interesante sale de sus interacciones, no de ninguno por separado.</p>'+
   '<div class="scrollx"><table class="tabla"><thead><tr><th>Tipo</th><th>Agente</th><th>Objetivo</th><th>Estado</th></tr></thead><tbody>'+
-  AG.map(([t,a,o,s])=>'<tr><td><span class="tp '+t+'">'+(t==='act'?'Activo':'Pasivo')+'</span></td><td><b>'+esc(a)+'</b></td><td>'+esc(o)+'</td><td>'+esc(s)+'</td></tr>').join('')+'</tbody></table></div>'+
-  '<div class="g3"><div class="caja"><span class="dato">Activos · objetivos simples</span><p style="margin-top:10px">Como los lobos y las ovejas de NetLogo: cada uno persigue algo sencillo (producir, abastecerse, decidir, sobrevivir) y lo complejo aparece al juntarse.</p></div>'+
-  '<div class="caja" style="--c:#7a8480"><span class="dato">Pasivos · sin objetivo</span><p style="margin-top:10px">Como la comida o el obstáculo: parcelas, residuos, producto en acopio, humedal, vidrios. Cambian de estado, pero no deciden.</p></div>'+
-  '<div class="caja" style="--c:#8fe7f2"><span class="dato">En el simulador 3D</span><p style="margin-top:10px">Ya corren como agentes los vehículos (tráfico por la red vial de OSM) y las aves (garza, tingua, copetón). Edificios, vías, parques y agua son el entorno.</p></div></div></div></section>';
+  AG.map(([t,a,o,s,i])=>'<tr><td><span class="tp '+t+'">'+(t==='act'?'Activo':'Pasivo')+'</span></td><td><span class="ag">'+ic(i,20)+'<b>'+esc(a)+'</b></span></td><td>'+esc(o)+'</td><td>'+esc(s)+'</td></tr>').join('')+'</tbody></table></div>'+
+  '<div class="g3"><div class="caja"><span class="ci">'+ic('ave',20)+'</span><span class="dato">Activos · objetivos simples</span><p style="margin-top:10px">Como los lobos y las ovejas de NetLogo: cada uno persigue algo sencillo (producir, abastecerse, decidir, sobrevivir) y lo complejo aparece al juntarse.</p></div>'+
+  '<div class="caja" style="--c:#7a8480"><span class="ci">'+ic('brote',20)+'</span><span class="dato">Pasivos · sin objetivo</span><p style="margin-top:10px">Como la comida o el obstáculo: parcelas, residuos, producto en acopio, humedal, vidrios. Cambian de estado, pero no deciden.</p></div>'+
+  '<div class="caja" style="--c:#8fe7f2"><span class="ci">'+ic('cubo',20)+'</span><span class="dato">En el simulador 3D</span><p style="margin-top:10px">Ya corren como agentes los vehículos (tráfico por la red vial de OSM) y las aves (garza, tingua, copetón). Edificios, vías, parques y agua son el entorno.</p></div></div></div></section>';
+ // en vivo: videos grabados del simulador 3D
+ const vid=(f,tit,txt,chips,i)=>'<figure><span class="rec"><i></i>SIMULADOR 3D · EN VIVO</span><video muted loop playsinline preload="none" poster="media/'+f+'.jpg" aria-label="'+esc(tit)+'"><source src="media/'+f+'.mp4" type="video/mp4"></video><figcaption><b>'+ic(i,14)+esc(tit)+'</b>'+txt+(chips?'<div class="chips">'+chips.map(c=>'<span>'+c+'</span>').join('')+'</div>':'')+'</figcaption></figure>';
+ h+='<section class="blq"><div class="mw">'+cab('play','En vivo','Los agentes en el simulador')+'<h2>Así corren<br>los agentes</h2>'+
+  '<p class="lead">Tomas grabadas del <em>simulador 3D</em> (malla fotorrealista de Google sobre Kennedy). Los vehículos circulan por la red vial, las aves vuelan entre los parches del humedal y el panel de agentes cuenta lo que pasa en la calle.</p>'+
+  '<div class="vids">'+
+  vid('sim_agentes','Kennedy hoy · capa de agentes','Sobre el humedal El Burro: cada arco es un ave moviéndose entre parches de vegetación. A la derecha, el panel de agentes cuenta vehículos y fauna en tiempo real.',[ic('carro',12)+'carros <em>≈ 1.790</em>',ic('camion',12)+'camiones <em>≈ 210</em>',ic('ave',12)+'1.006 aves en El Burro'],'ave')+
+  vid('sim_humedal','Vista baja del humedal','Las aves (agentes activos) buscan hábitat; el agua, los árboles y los edificios son el entorno que las sostiene o las frena.',null,'agua')+
+  vid('sim_propuesta','Con la propuesta','Al cambiar de escenario el panel recalcula: menos camiones hacia Corabastos y aparecen las furgonetas de reparto de la red de mercados.',[ic('carro',12)+'carros <em>≈ 1.250–1.300</em>',ic('camion',12)+'camiones <em>≈ 125–135</em>',ic('tienda',12)+'furgonetas <em>≈ 26–34</em>','−37 % cerca de Corabastos'],'tienda')+
+  '</div></div></section>';
  // VI reglas
- h+='<section class="blq"><div class="mw"><div class="ey"><b>VI</b> · Comportamientos</div><h2>Reglas<br>de agente</h2><p class="lead">Como en el juego de la vida: cada agente mira su estado y el de sus vecinos y aplica una regla <em>si … entonces</em>. Los códigos (PAR, AUX, STK, FLO) son las variables del modelo en Vensim.</p><div class="reglas">'+
-  REG.map(([c,t,r])=>'<div class="regla"><span class="dato">'+c+'</span><h4>'+t+'</h4><code>'+r+'</code></div>').join('')+'</div></div></section>';
+ h+='<section class="blq"><div class="mw">'+cab('regla','VI','Comportamientos')+'<h2>Reglas<br>de agente</h2><p class="lead">Como en el juego de la vida: cada agente mira su estado y el de sus vecinos y aplica una regla <em>si … entonces</em>. Los códigos (PAR, AUX, STK, FLO) son las variables del modelo en Vensim.</p><div class="reglas">'+
+  REG.map(([c,t,r,i])=>'<div class="regla">'+ic(i,22)+'<span class="dato">'+c+'</span><h4>'+t+'</h4><code>'+r+'</code></div>').join('')+'</div></div></section>';
  // VII interacciones
- h+='<section class="blq"><div class="mw"><div class="ey"><b>VII</b> · Interacciones</div><h2>Agente con agente,<br>agente con entorno</h2>'+
+ h+='<section class="blq"><div class="mw">'+cab('flechas','VII','Interacciones')+'<h2>Agente con agente,<br>agente con entorno</h2>'+
   '<div class="lienzo scrollx">'+interacciones()+'</div>'+
-  '<div class="g2"><div class="caja"><span class="dato">Agente – agente</span><ul><li>hogar → acopio → tienda</li><li>Bavaria → promotor → hogar</li><li>tienda ↔ Corabastos (elige proveedor)</li><li>hogar ↔ hogar (contagio y saber)</li><li>asamblea → hogar (asigna espacio)</li></ul></div>'+
-  '<div class="caja" style="--c:#8fe7f2"><span class="dato">Agente – entorno</span><ul><li>una huerta ocupa una parcela</li><li>la actividad del borde presiona el humedal</li><li>el compost vuelve al suelo</li><li>vehículos y repartidores se mueven por las calles</li><li>las aves ocupan parches de vegetación</li></ul></div></div></div></section>';
+  '<div class="g2"><div class="caja"><span class="ci">'+ic('red',20)+'</span><span class="dato">Agente – agente</span><ul>'+li('acopio','hogar → acopio → tienda')+li('promotor','Bavaria → promotor → hogar')+li('mercado','tienda ↔ Corabastos (elige proveedor)')+li('casa','hogar ↔ hogar (contagio y saber)')+li('asamblea','asamblea → hogar (asigna espacio)')+'</ul></div>'+
+  '<div class="caja" style="--c:#8fe7f2"><span class="ci">'+ic('agua',20)+'</span><span class="dato">Agente – entorno</span><ul>'+li('brote','una huerta ocupa una parcela')+li('agua','la actividad del borde presiona el humedal')+li('compost','el compost vuelve al suelo')+li('carro','vehículos y repartidores se mueven por las calles')+li('ave','las aves ocupan parches de vegetación')+'</ul></div></div></div></section>';
  // VIII + 3 diagrama causal
- h+='<section class="blq"><div class="mw"><div class="ey"><b>VIII · 3</b> · Modelo dinámico causal</div><h2>Los lazos<br>que mueven el sistema</h2>'+
-  '<p class="lead">Las cajas verdes son acumulaciones (stocks); las flechas dicen si una variable sube <em>(+)</em> o baja <em>(−)</em> a la otra. En rojo punteado, los estreses que llegan desde afuera. Elige un lazo para verlo.</p>'+
-  '<div class="lazos">'+Object.keys(LAZ).map(k=>'<button type="button" data-l="'+k+'" style="--c:'+LAZ[k][0]+'" aria-pressed="false">'+k+'</button>').join('')+'</div><p class="lazo-txt">Los lazos <em>R</em> refuerzan (el sistema crece); los <em>B</em> equilibran (el sistema se frena).</p>'+
+ h+='<section class="blq"><div class="mw">'+cab('red','VIII · 3','Modelo dinámico causal')+'<h2>Los lazos<br>que mueven el sistema</h2>'+
+  '<p class="lead">Las cajas verdes son acumulaciones (stocks); las flechas dicen si una variable sube <em>(+)</em> o baja <em>(−)</em> a la otra. En rojo punteado, los estreses que llegan desde afuera. Elige un lazo para verlo correr.</p>'+
+  '<div class="lazos">'+Object.keys(LAZ).map(k=>'<button type="button" data-l="'+k+'" style="--c:'+LAZ[k][0]+'" aria-pressed="false">'+ic(k[0]==='R'?'crece':'peso',13)+' '+k+'</button>').join('')+'</div><p class="lazo-txt">Los lazos <em>R</em> refuerzan (el sistema crece); los <em>B</em> equilibran (el sistema se frena).</p>'+
   '<div class="lienzo scrollx">'+cld()+'</div></div></section>';
  // 4 simulaciones
- h+='<section class="blq" id="sims"><div class="mw"><div class="ey"><b>4</b> · Simulaciones</div><h2>Tres simulaciones,<br>corriendo aquí</h2>'+
+ h+='<section class="blq" id="sims"><div class="mw">'+cab('crece','4','Simulaciones')+'<h2>Tres simulaciones,<br>corriendo aquí</h2>'+
   '<p class="lead">Cada simulación compara los escenarios A, B y C con las ecuaciones de los gráficos G1–G16. Mueve los sliders: las líneas gruesas son el escenario elegido, las delgadas los otros dos. Los valores iniciales marcados (S) son supuestos para calibrar con la Mesa.</p>'+
-  '<div class="tabs" role="tablist">'+SIMS.map((S,i)=>'<button type="button" role="tab" aria-selected="'+(!i)+'" aria-controls="'+S.id+'" data-t="'+S.id+'"><b>'+S.cod+'</b>'+esc(S.t)+'</button>').join('')+'</div>'+
+  '<div class="tabs" role="tablist">'+SIMS.map((S,i)=>'<button type="button" role="tab" aria-selected="'+(!i)+'" aria-controls="'+S.id+'" data-t="'+S.id+'">'+ic(TABI[S.id],16)+'<b>'+S.cod+'</b>'+esc(S.t)+'</button>').join('')+'</div>'+
   SIMS.map(htmlSim).join('')+'</div></section>';
  // referentes y cierre
- h+='<section class="blq"><div class="mw"><div class="ey"><b>Referentes</b> · Qué tomamos</div><h2>De dónde<br>viene el modelo</h2><div class="ref">'+
-  '<div><b>NetLogo</b><p>Agentes con reglas simples sobre celdas (lobos y ovejas, bandadas): la base de los agentes activos y pasivos.</p></div>'+
-  '<div><b>SLEUTH</b><p>Crecimiento urbano por celdas calibrado con la historia: la idea de la presión urbana sobre el borde del humedal.</p></div>'+
-  '<div><b>Mundos plausibles</b><p>Escenarios antes y después de la intervención, comparados con las mismas variables.</p></div>'+
-  '<div><b>Eco-arquitectura</b><p>ABM sobre ráster con sliders, los vertimientos de Corabastos y un escenario base que colapsa para comparar.</p></div></div></div></section>';
- h+='<section class="pie"><div class="mw"><p class="lead">Este modelo va a estar equivocado en algo. Lo útil es saber <em>en qué</em>: cada corrida deja una pregunta para la siguiente versión.</p><div class="links"><a class="btn pri" href="https://anasoficasca-code.github.io/simulador/" target="_blank" rel="noopener">Correrlo en el simulador 3D ↗</a><a class="btn" href="propuesta.html">Ver la propuesta</a><a class="btn" href="#top" data-arriba>Volver arriba ↑</a></div></div></section>';
+ h+='<section class="blq"><div class="mw">'+cab('lupa','Referentes','Qué tomamos')+'<h2>De dónde<br>viene el modelo</h2><div class="ref">'+
+  '<div><b>'+ic('ave',18)+'NetLogo</b><p>Agentes con reglas simples sobre celdas (lobos y ovejas, bandadas): la base de los agentes activos y pasivos.</p></div>'+
+  '<div><b>'+ic('edificio',18)+'SLEUTH</b><p>Crecimiento urbano por celdas calibrado con la historia: la idea de la presión urbana sobre el borde del humedal.</p></div>'+
+  '<div><b>'+ic('capas',18)+'Mundos plausibles</b><p>Escenarios antes y después de la intervención, comparados con las mismas variables.</p></div>'+
+  '<div><b>'+ic('agua',18)+'Eco-arquitectura</b><p>ABM sobre ráster con sliders, los vertimientos de Corabastos y un escenario base que colapsa para comparar.</p></div></div></div></section>';
+ h+='<section class="pie"><div class="mw"><p class="lead">Este modelo va a estar equivocado en algo. Lo útil es saber <em>en qué</em>: cada corrida deja una pregunta para la siguiente versión.</p><div class="links"><a class="btn pri" href="https://anasoficasca-code.github.io/simulador/" target="_blank" rel="noopener">'+ic('play',14)+' Correrlo en el simulador 3D ↗</a><a class="btn" href="propuesta.html">'+ic('capas',14)+' Ver la propuesta</a><a class="btn" href="#top" data-arriba>Volver arriba ↑</a></div></div></section>';
  M.innerHTML=h;st.insertAdjacentElement('afterend',M);
- // pestañas
- M.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{M.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));M.querySelectorAll('.sim').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t))}));
+ // pestañas: al cambiar, la simulación se vuelve a dibujar con animación
+ M.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{M.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));M.querySelectorAll('.sim').forEach(s=>s.classList.toggle('on',s.id===b.dataset.t));const s=M.querySelector('#'+b.dataset.t);if(s._run)s._run(true)}));
  SIMS.forEach(S=>montarSim(S,M.querySelector('#'+S.id)));
  // lazos del diagrama causal
  const C=M.querySelector('#cld'),tx=M.querySelector('.lazo-txt');
  M.querySelectorAll('.lazos button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.l,on=b.getAttribute('aria-pressed')!=='true';
   M.querySelectorAll('.lazos button').forEach(x=>x.setAttribute('aria-pressed',on&&x===b));C.classList.toggle('foco',on);
-  C.querySelectorAll('.ar,.nd').forEach(g=>{const hit=on&&g.dataset.l.split(' ').includes(k);g.classList.toggle('on',hit);if(g.classList.contains('ar'))g.querySelector('path').style.stroke=hit?LAZ[k][0]:''});
+  C.querySelectorAll('.car,.nd').forEach(g=>{const hit=on&&g.dataset.l.split(' ').includes(k);g.classList.toggle('on',hit);if(g.classList.contains('car'))g.querySelector('path').style.stroke=hit?LAZ[k][0]:''});
   tx.style.setProperty('--c',on?LAZ[k][0]:LIM);tx.innerHTML=on?'<b>'+LAZ[k][1]+'.</b> '+LAZ[k][2]:'Los lazos <em>R</em> refuerzan (el sistema crece); los <em>B</em> equilibran (el sistema se frena).'}));
  M.querySelector('[data-arriba]').addEventListener('click',ev=>{ev.preventDefault();scrollTo({top:0,behavior:'smooth'})});
+ // aparición al bajar: cada bloque entra escalonado
+ const SEL='.hico,.ey,h2,.lead,.pregunta,.lab,.links,.caja,.tabla tbody tr,.vids figure,.regla,.lienzo,.lazos,.tabs,.ref>div';
+ M.querySelectorAll('.blq,.pie').forEach(b=>{let n=0;b.querySelectorAll(SEL).forEach(x=>{if(x.closest('.sim'))return;x.classList.add('rv');x.style.setProperty('--d',Math.min(.9,(n++)*.06)+'s')})});
+ const rio=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){en.target.classList.add('vis');rio.unobserve(en.target)}}),{rootMargin:'0px 0px -8% 0px'});M.querySelectorAll('.rv').forEach(x=>rio.observe(x));
+ // las gráficas se dibujan la primera vez que se ven
+ const gio=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const s=M.querySelector('.sim.on');if(s&&s._run)s._run(true);gio.disconnect()}}),{threshold:.15});gio.observe(M.querySelector('#sims .tablero')||M.querySelector('#sims'));
+ // videos: solo corren cuando están en pantalla
+ const vio=new IntersectionObserver(es=>es.forEach(en=>{const v=en.target;if(en.isIntersecting&&!RM){v.play().catch(()=>{})}else v.pause()}),{threshold:.25});M.querySelectorAll('video').forEach(v=>vio.observe(v));
+ laboratorio(M.querySelector('.lab'));
  // aviso al final de la red para bajar al modelo
  const fin=st.querySelector('.fin');if(fin){const a=el('a',{class:'al-modelo',href:'#modelo'},'El modelo y las simulaciones<span aria-hidden="true">↓</span>');fin.appendChild(a);
   a.addEventListener('click',ev=>{ev.preventDefault();M.scrollIntoView({behavior:'smooth'})})}
@@ -472,17 +603,73 @@ function montar(){
  const cv=document.querySelector('#c');if(cv){window.addEventListener('wheel',ev=>{if(ev.target===cv&&!ev.ctrlKey)ev.stopPropagation()},{capture:true,passive:true});cv.style.touchAction='pan-y'}
  return true}
 
+/* ---------- laboratorio: agentes animados (esquema, no datos) ----------
+   Hoy: los camiones salen de Corabastos a cada tienda y las aves se quedan en el humedal.
+   Con la propuesta: los hogares que cultivan llevan cosecha al acopio de Bavaria, el acopio surte a las tiendas, los promotores
+   salen a acompañar huertas, llegan menos camiones (−37 %) y las aves usan las huertas como pasaderas. */
+function laboratorio(box){
+ if(!box)return;const cv=box.querySelector('canvas'),cx=cv.getContext('2d'),cnt=box.querySelector('.lcnt');let W=0,H=0,dpr=1,modo='hoy',vis=false,raf=0,t0=performance.now(),last=t0;
+ let rs=11;const rnd=()=>{rs=(rs*1664525+1013904223)>>>0;return rs/4294967296};
+ const casas=[],tiendas=[],viaj=[],aves=[];let cora,acop,hum;
+ const armar=()=>{const r=cv.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;cx.setTransform(dpr,0,0,dpr,0,0);
+  rs=11;casas.length=0;tiendas.length=0;cora={x:W*.92,y:H*.52};acop={x:W*.5,y:H*.55};hum={x:W*.2,y:H*.3,rx:W*.11,ry:H*.15};
+  const libre=(x,y)=>Math.hypot(x-acop.x,y-acop.y)>50&&Math.hypot((x-hum.x)/hum.rx,(y-hum.y)/hum.ry)>1.25&&x<W*.82;
+  let n=0;while(casas.length<(W<600?34:58)&&n++<2000){const x=W*(.05+rnd()*.78),y=H*(.1+rnd()*.82);if(libre(x,y))casas.push({x,y,cul:rnd()<.55})}
+  n=0;while(tiendas.length<(W<600?7:11)&&n++<2000){const x=W*(.12+rnd()*.66),y=H*(.12+rnd()*.78);if(libre(x,y)&&casas.every(c=>Math.hypot(c.x-x,c.y-y)>14))tiendas.push({x,y})}
+  aves.length=0;for(let i=0;i<(W<600?14:22);i++)aves.push({x:hum.x+(rnd()-.5)*hum.rx,y:hum.y+(rnd()-.5)*hum.ry,a:rnd()*6.28,o:hum,v:20+rnd()*20,tt:rnd()*6})};
+ const sale=(a,b,c,r,dur)=>viaj.push({x0:a.x,y0:a.y,x1:b.x,y1:b.y,t:0,dur,c,r,cv:(rnd()-.5)*.35});
+ const cuenta={cam:0,cos:0,pro:0};let acc={cam:0,cos:0,pro:0,tie:0};
+ const paso=(dt)=>{const P=modo==='prop';
+  acc.cam+=dt*(P?3.2*.63:3.2);while(acc.cam>1){acc.cam--;sale(cora,tiendas[(rnd()*tiendas.length)|0],'#ee8a45',2.6,2.6+rnd());cuenta.cam++}
+  if(P){acc.cos+=dt*4;while(acc.cos>1){acc.cos--;const cs=casas.filter(c=>c.cul);sale(cs[(rnd()*cs.length)|0],acop,'#a3b845',1.8,1.8+rnd()*.8);cuenta.cos++}
+   acc.tie+=dt*2.4;while(acc.tie>1){acc.tie--;sale(acop,tiendas[(rnd()*tiendas.length)|0],LIM,2.2,1.6+rnd()*.6)}
+   acc.pro+=dt*.9;while(acc.pro>1){acc.pro--;const cs=casas.filter(c=>c.cul),d=cs[(rnd()*cs.length)|0];sale(acop,d,'#8fe7f2',2.2,2.4);cuenta.pro++}}
+  for(let i=viaj.length-1;i>=0;i--){const v=viaj[i];v.t+=dt/v.dur;if(v.t>=1)viaj.splice(i,1)}
+  aves.forEach(a=>{a.tt-=dt;if(a.tt<0){a.tt=3+rnd()*5;const cs=casas.filter(c=>c.cul);a.o=P&&rnd()<.55?cs[(rnd()*cs.length)|0]:hum}
+   const ox=a.o.x,oy=a.o.y,dx=ox-a.x,dy=oy-a.y,d=Math.hypot(dx,dy);a.a+=(rnd()-.5)*2.4*dt;const ga=Math.atan2(dy,dx);if(d>18)a.a+=Math.sin(ga-a.a)*dt*2.2;
+   a.x+=Math.cos(a.a)*a.v*dt;a.y+=Math.sin(a.a)*a.v*dt})};
+ const dib=(now)=>{const P=modo==='prop';cx.fillStyle='rgba(7,9,10,.34)';cx.fillRect(0,0,W,H);
+  // humedal
+  cx.save();cx.beginPath();cx.ellipse(hum.x,hum.y,hum.rx,hum.ry,-.3,0,6.283);cx.fillStyle='rgba(63,140,138,.16)';cx.fill();cx.strokeStyle='rgba(95,184,168,.35)';cx.stroke();cx.restore();
+  cx.font='500 9px Geist Mono, monospace';cx.fillStyle='#5fb8a8';cx.fillText('HUMEDAL',hum.x-22,hum.y+hum.ry+14);
+  // hogares y tiendas
+  casas.forEach(c=>{const on=P&&c.cul;cx.fillStyle=on?LIM:'#4a524f';cx.fillRect(c.x-2.5,c.y-2.5,5,5);if(on){cx.strokeStyle='rgba(207,255,94,.25)';cx.strokeRect(c.x-5,c.y-5,10,10)}});
+  tiendas.forEach(s=>{cx.strokeStyle='#eaefed';cx.lineWidth=1.2;cx.beginPath();cx.moveTo(s.x-5,s.y+4);cx.lineTo(s.x-5,s.y-2);cx.lineTo(s.x,s.y-6);cx.lineTo(s.x+5,s.y-2);cx.lineTo(s.x+5,s.y+4);cx.closePath();cx.stroke()});
+  // Corabastos y acopio
+  const pul=.5+.5*Math.sin(now/400);
+  cx.fillStyle='#ee8a45';cx.fillRect(cora.x-13,cora.y-13,26,26);cx.strokeStyle='rgba(238,138,69,'+(.25+.25*pul)+')';cx.strokeRect(cora.x-19-pul*4,cora.y-19-pul*4,38+pul*8,38+pul*8);
+  cx.fillStyle='#ee8a45';cx.fillText('CORABASTOS',Math.min(cora.x-30,W-78),cora.y+32);
+  cx.globalAlpha=P?1:.35;cx.beginPath();for(let k=0;k<6;k++){const an=k/6*6.283+.52;cx.lineTo(acop.x+14*Math.cos(an),acop.y+14*Math.sin(an))}cx.closePath();cx.fillStyle=P?LIM:'#2b302e';cx.fill();
+  if(P){cx.strokeStyle='rgba(207,255,94,'+(.2+.3*pul)+')';cx.beginPath();cx.arc(acop.x,acop.y,22+pul*6,0,6.283);cx.stroke()}
+  cx.fillStyle=P?LIM:'#4a524f';cx.fillText('BAVARIA · ACOPIO',acop.x-42,acop.y+30);cx.globalAlpha=1;
+  // viajeros
+  viaj.forEach(v=>{const e=v.t<.5?2*v.t*v.t:1-Math.pow(-2*v.t+2,2)/2,mx=(v.x0+v.x1)/2-(v.y1-v.y0)*v.cv,my=(v.y0+v.y1)/2+(v.x1-v.x0)*v.cv,q=1-e,x=q*q*v.x0+2*q*e*mx+e*e*v.x1,y=q*q*v.y0+2*q*e*my+e*e*v.y1;
+   cx.fillStyle=v.c;cx.beginPath();cx.arc(x,y,v.r,0,6.283);cx.fill()});
+  // aves (pequeñas uves que aletean)
+  cx.strokeStyle='#5fb8a8';cx.lineWidth=1.2;aves.forEach(a=>{const f=Math.sin(now/90+a.v)*2.2;cx.beginPath();cx.moveTo(a.x-4,a.y-f);cx.lineTo(a.x,a.y);cx.lineTo(a.x+4,a.y-f);cx.stroke()})};
+ const loop=now=>{raf=0;if(!vis)return;const dt=Math.min(.05,(now-last)/1000);last=now;paso(dt);dib(now);
+  if(((now/500)|0)!==((now-dt*1000)/500|0))cnt.innerHTML=(modo==='prop'?'<span>Con la propuesta</span>':'<span>Kennedy hoy</span>')+'<span>camiones de Corabastos <b>'+(modo==='prop'?'−37 %':'100 %')+'</b></span>'+(modo==='prop'?'<span>cosechas al acopio <b>'+cuenta.cos+'</b></span><span>visitas de promotores <b>'+cuenta.pro+'</b></span>':'<span>huertas en red <b>0</b></span>');
+  raf=requestAnimationFrame(loop)};
+ const arranca=()=>{if(!raf&&vis){last=performance.now();raf=requestAnimationFrame(loop)}};
+ box.querySelectorAll('.lseg button').forEach(b=>b.addEventListener('click',()=>{modo=b.dataset.m;cuenta.cos=cuenta.pro=0;box.querySelectorAll('.lseg button').forEach(x=>x.setAttribute('aria-pressed',x===b));if(RM){paso(.016);dib(performance.now())}}));
+ new IntersectionObserver(es=>es.forEach(en=>{vis=en.isIntersecting;if(vis){if(!W)armar();if(RM){for(let i=0;i<120;i++)paso(.05);dib(performance.now())}else arranca()}}),{threshold:.05}).observe(cv);
+ let rz=0;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(vis)armar()},200)})}
+
 function interacciones(){
- const N=[['hog',190,150,'Hogar cultivador','act'],['aco',470,150,'Acopio (Bavaria)','act'],['tie',750,150,'Tienda o comedor','act'],['cora',990,150,'Corabastos','pas'],
-  ['bav',190,40,'Bavaria Común','act'],['pro',470,40,'Promotor','act'],['asa',750,40,'Asamblea rotativa','act'],
-  ['par',190,280,'Parcela','pas'],['hum',470,280,'Humedal','pas'],['com',750,280,'Compost / suelo','pas'],['ave',990,280,'Aves','act'],['calle',990,40,'Calles · vehículos','pas']];
+ const N=[['hog',190,150,'Hogar cultivador','act','casa'],['aco',470,150,'Acopio (Bavaria)','act','acopio'],['tie',750,150,'Tienda o comedor','act','tienda'],['cora',990,150,'Corabastos','pas','mercado'],
+  ['bav',190,40,'Bavaria Común','act','inst'],['pro',470,40,'Promotor','act','promotor'],['asa',750,40,'Asamblea rotativa','act','asamblea'],
+  ['par',190,280,'Parcela','pas','brote'],['hum',470,280,'Humedal','pas','agua'],['com',750,280,'Compost / suelo','pas','compost'],['ave',990,280,'Aves','act','ave'],['calle',990,40,'Calles · vehículos','pas','carro']];
  const P={};N.forEach(n=>P[n[0]]=n);
  const E=[['hog','aco',1],['aco','tie',1],['tie','cora',2],['bav','pro',1],['pro','hog',1],['asa','hog',1],['hog','par',3],['par','hum',3],['com','par',3],['ave','hum',3],['tie','calle',3],['hog','com',3]];
  let s='<svg viewBox="0 0 1100 330" style="min-width:760px" role="img" aria-label="Interacciones entre agentes y con el entorno"><defs><marker id="fi" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 1L10 5L0 9z" fill="context-stroke"/></marker></defs>';
- E.forEach(([a,b,k])=>{const A=P[a],B=P[b];let x1=A[1],y1=A[2],x2=B[1],y2=B[2];const dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy),ox=dx/l,oy=dy/l,ra=Math.abs(ox)>.5?92:20;x1+=ox*ra;y1+=oy*ra;x2-=ox*ra;y2-=oy*ra;
-  const col=k===3?'#8fe7f2':LIM;s+='<line x1="'+x1+'" y1="'+y1+'" x2="'+x2+'" y2="'+y2+'" stroke="'+col+'" stroke-width="1.3" class="flujo" marker-end="url(#fi)" '+(k===2?'marker-start="url(#fi)"':'')+' opacity=".85"/>'});
- N.forEach(([k,x,y,t,tp])=>{const w=168;s+='<rect x="'+(x-w/2)+'" y="'+(y-17)+'" width="'+w+'" height="34" fill="'+(tp==='act'?'rgba(207,255,94,.07)':'#050607')+'" stroke="'+(tp==='act'?'rgba(207,255,94,.6)':'rgba(214,228,222,.3)')+'"/><text x="'+x+'" y="'+(y+4.5)+'" text-anchor="middle" font-size="13" fill="#eaefed">'+esc(t)+'</text>'});
- s+='<text x="20" y="322" font-size="10" fill="#7a8480" font-family="Geist Mono,monospace" letter-spacing="1">VERDE: AGENTE–AGENTE · CIAN: AGENTE–ENTORNO · RELLENO: ACTIVO · SIN RELLENO: PASIVO</text>';
+ E.forEach(([a,b,k],j)=>{const A=P[a],B=P[b];let x1=A[1],y1=A[2],x2=B[1],y2=B[2];const dx=x2-x1,dy=y2-y1,l=Math.hypot(dx,dy),ox=dx/l,oy=dy/l,ra=Math.abs(ox)>.5?92:20;x1+=ox*ra;y1+=oy*ra;x2-=ox*ra;y2-=oy*ra;
+  const col=k===3?'#8fe7f2':LIM,id='ie'+j;s+='<path id="'+id+'" d="M'+x1+' '+y1+'L'+x2+' '+y2+'" stroke="'+col+'" stroke-width="1.2" fill="none" marker-end="url(#fi)" '+(k===2?'marker-start="url(#fi)"':'')+' opacity=".55"/>';
+  // un agente (punto) que recorre la relación
+  if(!RM)for(let q=0;q<2;q++)s+='<circle r="3.2" fill="'+col+'"><animateMotion dur="'+(2.4+j%3*.5)+'s" begin="'+(q*1.3+j*.17).toFixed(2)+'s" repeatCount="indefinite" '+(k===2&&q?'keyPoints="1;0" keyTimes="0;1" calcMode="linear"':'')+'><mpath href="#'+id+'"/></animateMotion></circle>'});
+ N.forEach(([k,x,y,t,tp,i])=>{const w=176;s+='<rect x="'+(x-w/2)+'" y="'+(y-18)+'" width="'+w+'" height="36" fill="'+(tp==='act'?'rgba(207,255,94,.07)':'#050607')+'" stroke="'+(tp==='act'?'rgba(207,255,94,.6)':'rgba(214,228,222,.3)')+'"/>'+
+  '<g transform="translate('+(x-w/2+10)+' '+(y-9)+') scale(.75)" fill="none" stroke="'+(tp==='act'?LIM:'#a9b3af')+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+I[i]+'</g>'+
+  '<text x="'+(x+12)+'" y="'+(y+4.5)+'" text-anchor="middle" font-size="13" fill="#eaefed">'+esc(t)+'</text>'});
+ s+='<text x="20" y="322" font-size="10" fill="#7a8480" font-family="Geist Mono,monospace" letter-spacing="1">VERDE: AGENTE–AGENTE · CIAN: AGENTE–ENTORNO · RELLENO: ACTIVO · SIN RELLENO: PASIVO · LOS PUNTOS SON AGENTES EN MOVIMIENTO</text>';
  return s+'</svg>'}
 
 if(!montar()){const t=setInterval(()=>{if(montar())clearInterval(t)},150)}
