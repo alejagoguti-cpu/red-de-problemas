@@ -1496,41 +1496,72 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
    Misma proyección que el mapa de los problemas (giro −30°, achatamiento 0,56). Alturas ×3 para que se lea el volumen. */
 (function maqueta(){
  const cv=document.getElementById('hmaq');if(!cv)return;
- const TH=-30*Math.PI/180,K=.56,A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K,EXH=3,LOSA=170;
+ const K=.56,EXH=3,LOSA=170;let TH=-30*Math.PI/180;
  const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));
  const sc=new THREE.Scene(),cam=new THREE.Camera();cam.matrixAutoUpdate=false;
- sc.add(new THREE.AmbientLight(0xffffff,.34));const sol=new THREE.DirectionalLight(0xfff4e6,1.2);sol.position.set(-.7,1,-.2);sc.add(sol);const fr=new THREE.DirectionalLight(0x9fc4d6,.4);fr.position.set(.8,.5,.5);sc.add(fr);
- const U={uT:{value:0}};let vb=null,listo=false,t0=0,vivo=true;
+ // luz neutra y cálida (sin tinte verde ni azul)
+ sc.add(new THREE.AmbientLight(0xffffff,.36));const sol=new THREE.DirectionalLight(0xfff1e2,1.15);sol.position.set(-.7,1,-.2);sc.add(sol);const fr=new THREE.DirectionalLight(0xffffff,.28);fr.position.set(.8,.5,.5);sc.add(fr);
+ const U={uT:{value:0},uC:{value:new THREE.Vector2()}};let vb=null,listo=false,t0=0,vivo=true,traf=null,cora=null,faro=null,aros=[];
  Promise.all([fetch('limite.json').then(x=>x.json()),fetch('edif.bin').then(x=>x.arrayBuffer()),fetch('vias.json').then(x=>x.json()),fetch('lugares.json').then(x=>x.json())]).then(([LM,buf,VI,LG])=>{
-  const L=LM.pts,cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;
+  const L=LM.pts;cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;U.uC.value.set(cora[0],cora[1]);
   const dentro=(x,y)=>{let c=false;for(let i=0,j=L.length-1;i<L.length;j=i++)if((L[i][1]>y)!==(L[j][1]>y)&&x<(L[j][0]-L[i][0])*(y-L[i][1])/(L[j][1]-L[i][1])+L[i][0])c=!c;return c};
   // losa con espesor, recortada exacta por el límite
   const sh=new THREE.Shape(L.map(([x,z])=>new THREE.Vector2(x,z)));const gs=new THREE.ExtrudeGeometry(sh,{depth:LOSA,bevelEnabled:false});gs.rotateX(Math.PI/2);
-  sc.add(new THREE.Mesh(gs,[new THREE.MeshLambertMaterial({color:0x111617}),new THREE.MeshLambertMaterial({color:0x222a2b})]));
+  sc.add(new THREE.Mesh(gs,[new THREE.MeshLambertMaterial({color:0x141416}),new THREE.MeshLambertMaterial({color:0x2a2a2e})]));
   const borde=L.map(([x,z])=>new THREE.Vector3(x,1,z));borde.push(borde[0].clone());
-  sc.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(borde),new THREE.LineBasicMaterial({color:0xd6e4de})));
-  // avenidas principales, solo dentro del límite
-  const P=[];for(const v of VI.vias){if(v[0]<4)continue;for(let i=1;i+3<v.length;i+=2){const a=[v[i],v[i+1]],b=[v[i+2],v[i+3]];if(dentro((a[0]+b[0])/2,(a[1]+b[1])/2))P.push(a[0],1.5,a[1],b[0],1.5,b[1])}}
-  const gv=new THREE.BufferGeometry();gv.setAttribute('position',new THREE.Float32BufferAttribute(P,3));sc.add(new THREE.LineSegments(gv,new THREE.LineBasicMaterial({color:0x56615f})));
-  // edificios: brotan en ola desde Corabastos (retardo según la distancia)
+  sc.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(borde),new THREE.LineBasicMaterial({color:0xe6e6e2})));
+  // avenidas (solo dentro del límite) y el tráfico que corre por ellas
+  const S=[];for(const v of VI.vias){if(v[0]<4)continue;for(let i=1;i+3<v.length;i+=2){const a=[v[i],v[i+1]],b=[v[i+2],v[i+3]];if(dentro((a[0]+b[0])/2,(a[1]+b[1])/2))S.push([a,b,Math.hypot(b[0]-a[0],b[1]-a[1])])}}
+  const P=[];S.forEach(([a,b])=>P.push(a[0],1.5,a[1],b[0],1.5,b[1]));const gv=new THREE.BufferGeometry();gv.setAttribute('position',new THREE.Float32BufferAttribute(P,3));
+  sc.add(new THREE.LineSegments(gv,new THREE.LineBasicMaterial({color:0x4a4a4e})));
+  // cadenas de tramos contiguos para que cada luz recorra una avenida larga
+  const NT=innerWidth<700?500:1100,tp=new Float32Array(NT*3),tc=new Float32Array(NT*3),cw=new THREE.Color('#fff2d8'),cr=new THREE.Color('#ff8a5c');
+  const SL=S.reduce((s,x)=>s+x[2],0),acc=[];let ac=0;S.forEach(x=>{ac+=x[2];acc.push(ac)});
+  const pick=()=>{const u=Math.random()*SL;let lo=0,hi=acc.length-1;while(lo<hi){const m=(lo+hi)>>1;if(acc[m]<u)lo=m+1;else hi=m}return lo};
+  traf=Array.from({length:NT},(_,i)=>{const c=Math.random()<.5?cw:cr;tc.set([c.r,c.g,c.b],i*3);return {s:pick(),t:Math.random(),v:(40+Math.random()*90)*(Math.random()<.5?1:-1)}});
+  const gt=new THREE.BufferGeometry();gt.setAttribute('position',new THREE.BufferAttribute(tp,3));gt.setAttribute('color',new THREE.BufferAttribute(tc,3));
+  const dot=(()=>{const c=document.createElement('canvas');c.width=c.height=32;const x=c.getContext('2d'),g=x.createRadialGradient(16,16,0,16,16,16);g.addColorStop(0,'#fff');g.addColorStop(.4,'#fffa');g.addColorStop(1,'#fff0');x.fillStyle=g;x.fillRect(0,0,32,32);return new THREE.CanvasTexture(c)})();
+  const pts=new THREE.Points(gt,new THREE.PointsMaterial({size:innerWidth<700?4:5,sizeAttenuation:false,map:dot,vertexColors:true,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));pts.frustumCulled=false;sc.add(pts);
+  traf.S=S;traf.p=tp;traf.g=gt;
+  // edificios: brotan en ola desde Corabastos; luego una onda de luz sale de ahí cada pocos segundos
   const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?80000:total);
   const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);const del=new Float32Array(n);
   let dmax=0;for(const [x,z] of L)dmax=Math.max(dmax,Math.hypot(x-cora[0],z-cora[1]));
-  const mat=new THREE.MeshLambertMaterial({color:0xffffff,emissive:0x0c1011});
-  mat.onBeforeCompile=s=>{s.uniforms.uT=U.uT;s.vertexShader='attribute float aDel;uniform float uT;\n'+s.vertexShader.replace('#include <begin_vertex>','float kk=clamp((uT-aDel)/0.9,0.,1.);kk=1.-pow(1.-kk,3.);vec3 transformed=vec3(position.x,position.y*max(kk,0.002),position.z);')};
-  const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D(),cB=new THREE.Color('#3c4544'),cA=new THREE.Color('#93a09c'),cc=new THREE.Color();
+  const mat=new THREE.MeshLambertMaterial({color:0xffffff,emissive:0x0e0e0f});
+  mat.onBeforeCompile=s=>{s.uniforms.uT=U.uT;s.uniforms.uC=U.uC;
+   s.vertexShader='attribute float aDel;uniform float uT;uniform vec2 uC;varying float vD;varying float vY;\n'+s.vertexShader.replace('#include <begin_vertex>','float kk=clamp((uT-aDel)/0.9,0.,1.);kk=1.-pow(1.-kk,3.);vec3 transformed=vec3(position.x,position.y*max(kk,0.002),position.z);vec4 wq=instanceMatrix*vec4(position,1.);vD=length(wq.xz-uC);vY=position.y;');
+   s.fragmentShader='uniform float uT;varying float vD;varying float vY;\n'+s.fragmentShader.replace('#include <emissivemap_fragment>','#include <emissivemap_fragment>\nfloat fase=max(uT-3.2,0.);float onda=mod(fase*1100.,7200.);float anillo=exp(-pow((vD-onda)/170.,2.))*(1.-onda/7200.)*step(0.001,fase);totalEmissiveRadiance+=vec3(1.,.78,.42)*anillo*(.35+.65*vY);');};
+  const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D(),cB=new THREE.Color('#38373a'),cA=new THREE.Color('#d9d4ca'),cc=new THREE.Color();
   for(let i=0;i<n;i++){const b=8+i*12,x=dv.getInt16(b,true)/2,z=dv.getInt16(b+2,true)/2,h=dv.getInt16(b+10,true)/2;o.position.set(x,0,z);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,h*EXH,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix);
-   cc.copy(cB).lerp(cA,Math.min(1,Math.pow(h/40,.7)));m.setColorAt(i,cc);del[i]=Math.hypot(x-cora[0],z-cora[1])/dmax*2.6+Math.random()*.25}
+   cc.copy(cB).lerp(cA,Math.min(1,Math.pow(h/40,.75)));m.setColorAt(i,cc);del[i]=Math.hypot(x-cora[0],z-cora[1])/dmax*2.6+Math.random()*.25}
   g.setAttribute('aDel',new THREE.InstancedBufferAttribute(del,1));m.frustumCulled=false;sc.add(m);
-  // encuadre en coordenadas proyectadas (incluye el canto de la losa)
-  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;for(const [x,z] of L){const px=A*x+C*z,py=B*x+D*z;x0=Math.min(x0,px);x1=Math.max(x1,px);y0=Math.min(y0,py-260);y1=Math.max(y1,py+LOSA*.9)}
-  const mx=(x1-x0)*.04,my=(y1-y0)*.05;vb=[x0-mx,y0-my,x1-x0+2*mx,y1-y0+2*my];listo=true;t0=performance.now();
+  // faro en Corabastos y aros que salen al ritmo de la onda
+  const fg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(cora[0],0,cora[1]),new THREE.Vector3(cora[0],900,cora[1])]);
+  faro=new THREE.Line(fg,new THREE.LineBasicMaterial({color:0xffc878,transparent:true,opacity:0}));sc.add(faro);
+  for(let k=0;k<3;k++){const a=new THREE.Mesh(new THREE.RingGeometry(.92,1,96),new THREE.MeshBasicMaterial({color:0xffc878,transparent:true,opacity:0,side:THREE.DoubleSide,depthWrite:false}));a.rotation.x=-Math.PI/2;a.position.set(cora[0],3,cora[1]);sc.add(a);aros.push(a)}
+  // encuadre en coordenadas proyectadas (con margen para el vaivén)
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;const A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K;
+  for(const [x,z] of L){const px=A*x+C*z,py=B*x+D*z;x0=Math.min(x0,px);x1=Math.max(x1,px);y0=Math.min(y0,py-300);y1=Math.max(y1,py+LOSA*.9)}
+  const mx=(x1-x0)*.08,my=(y1-y0)*.09;vb=[x0-mx,y0-my,x1-x0+2*mx,y1-y0+2*my];listo=true;t0=performance.now();
  }).catch(e=>console.warn('maqueta:',e));
  const ajustar=()=>{const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h||!vb)return false;r.setSize(w,h,false);
+  const A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K;
   let [x0,y0,vw,vh]=vb;if(w/h>vw/vh){const nn=vh*w/h;x0-=(nn-vw)/2;vw=nn}else{const nn=vw*h/w;y0-=(nn-vh)/2;vh=nn}
   const sx=2/vw,sy=-2/vh,dz=1/9000;cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();return true};
  new IntersectionObserver(es=>{vivo=es[0].isIntersecting},{threshold:0}).observe(cv);
- (function cuadro(t){requestAnimationFrame(cuadro);if(!listo||!vivo)return;const s=(t-t0)/1000;U.uT.value=MOV.on?s:9;if(ajustar())r.render(sc,cam)})(0);
+ let tA=0;
+ (function cuadro(t){requestAnimationFrame(cuadro);if(!listo||!vivo)return;const s=(t-t0)/1000,dt=Math.min(.05,(t-(tA||t))/1000);tA=t;
+  U.uT.value=MOV.on?s:9;
+  // vaivén suave de la vista (±4°) para que se lea el volumen
+  TH=(-30+(MOV.on?4*Math.sin(s*.18):0))*Math.PI/180;
+  // tráfico
+  if(traf&&MOV.on&&s>2.4){const S=traf.S;traf.forEach((q,i)=>{const sg=S[q.s];q.t+=q.v*dt/Math.max(1,sg[2]);if(q.t>1||q.t<0){q.s=(q.s+(q.v>0?1:-1)+S.length)%S.length;q.t=q.v>0?0:1}
+    const a=S[q.s][0],b=S[q.s][1];traf.p[i*3]=a[0]+(b[0]-a[0])*q.t;traf.p[i*3+1]=4;traf.p[i*3+2]=a[1]+(b[1]-a[1])*q.t});traf.g.attributes.position.needsUpdate=true}
+  else if(traf&&!MOV.on&&!traf.fijo){const S=traf.S;traf.forEach((q,i)=>{const a=S[q.s][0],b=S[q.s][1];traf.p[i*3]=a[0]+(b[0]-a[0])*q.t;traf.p[i*3+1]=4;traf.p[i*3+2]=a[1]+(b[1]-a[1])*q.t});traf.g.attributes.position.needsUpdate=true;traf.fijo=1}
+  // faro y aros sincronizados con la onda (cada 7.200/1.100 ≈ 6,5 s)
+  if(faro){const f=Math.max(0,s-3.2),ph=(f*1100%7200)/7200;faro.material.opacity=f>0?.35+.45*(1-ph):0;
+   aros.forEach((a,k)=>{const q=(ph+k*.12)%1,R=60+q*900;a.scale.set(R,R,R);a.material.opacity=f>0?(1-q)*.75:0})}
+  if(ajustar())r.render(sc,cam)})(0);
 })();
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
