@@ -613,7 +613,11 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 @keyframes aparece{from{opacity:0;transform:translateY(6px)}}
 .sw{width:14px;height:14px;flex:none;display:inline-block;border-radius:50%;background:var(--pc)}
 .sw.cora{box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 35%,transparent)}.sw.plaza{width:10px;height:10px}
-.sw.anillo{background:none;border:1.5px dashed var(--pc)}.sw.raya{border-radius:0;background:repeating-linear-gradient(45deg,var(--pc) 0 2px,transparent 2px 5px)}
+.sw.anillo{background:none;border:1.5px dashed var(--pc)}
+.sw.iso{width:44px;height:4px;border-radius:0;background:linear-gradient(90deg,var(--pc),color-mix(in srgb,var(--pc) 30%,transparent))}
+.sw.metro{width:30px;height:3px;border-radius:0;background:repeating-linear-gradient(90deg,#8fe7f2 0 8px,transparent 8px 12px)}
+.sw.est{background:#050607;border:2px solid #8fe7f2;width:10px;height:10px}
+.sw.huerta{background:#a3b845;border:2px solid #fff;width:10px;height:10px}.sw.raya{border-radius:0;background:repeating-linear-gradient(45deg,var(--pc) 0 2px,transparent 2px 5px)}
 .sw.grad{width:44px;height:10px;border-radius:0;background:linear-gradient(90deg,color-mix(in srgb,var(--pc) 12%,transparent),var(--pc))}.sw.txt{display:none}
 .sw.area{border-radius:0;background:color-mix(in srgb,var(--pc) 45%,transparent);border:1px solid var(--pc)}.sw.obra{width:9px;height:9px;border-radius:0}
 .sw.sube{border-radius:0;background:color-mix(in srgb,var(--pc) 50%,transparent);border:1px solid var(--pc)}.sw.igual{border-radius:0;background:rgba(169,179,175,.3);border:1px solid #a9b3af}
@@ -633,7 +637,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 .mk-ref .mk-t{font-size:calc(var(--u,10)*11px);fill:var(--tinta-3)}.mk-esc{stroke:var(--tinta-3);stroke-width:2;vector-effect:non-scaling-stroke}
 /* capas por paso */
 .capa{opacity:0;transition:opacity .7s ease;pointer-events:none}
-#mksvg[data-paso=F] .capa[data-capa=F],#mksvg[data-paso=B] .capa[data-capa=B],#mksvg[data-paso=C] .capa[data-capa=C],#mksvg[data-paso=D] .capa[data-capa=D],#mksvg[data-paso=A] .capa[data-capa=A],#mksvg[data-paso=E] .capa[data-capa=E]{opacity:1}
+#mksvg[data-paso=F] .capa[data-capa~=F],#mksvg[data-paso=B] .capa[data-capa~=B],#mksvg[data-paso=C] .capa[data-capa~=C],#mksvg[data-paso=D] .capa[data-capa~=D],#mksvg[data-paso=A] .capa[data-capa~=A],#mksvg[data-paso=E] .capa[data-capa~=E]{opacity:1}
 #mksvg[data-paso=F] .u-tintal{fill:url(#mkraya);fill-opacity:1}
 .raya{stroke:var(--pc);stroke-width:14;opacity:.55}.raya-f{fill:var(--pc);opacity:.08}
 #mksvg[data-paso=B] .mk-upz path{fill-opacity:calc(.07 + .7*var(--q))}
@@ -651,8 +655,30 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 .mk-pulso{fill:none;stroke:var(--pc);stroke-width:1.5;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;animation:mkpulso 2.2s ease-out infinite}
 .mk-pulso.lento{animation-duration:3s}
 @keyframes mkpulso{from{transform:scale(1);opacity:.9}to{transform:scale(5);opacity:0}}
-.mk-obra{fill:var(--pc);opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(0);transition:opacity .4s var(--d),transform .6s cubic-bezier(.16,1,.3,1) var(--d)}
-#mksvg[data-paso=C] .mk-obra{opacity:.9;transform:none}
+.mk-obra{fill:var(--pc);fill-opacity:.55;stroke:#fff;stroke-width:1;vector-effect:non-scaling-stroke;opacity:0;transition:opacity .5s var(--d)}
+#mksvg[data-paso=C] .mk-obra{opacity:1}
+/* accesibilidad a pie por la red de calles: 5 · 10 · 15 min */
+.mk-iso{fill:none;stroke:var(--pc);stroke-linecap:round;vector-effect:non-scaling-stroke}
+.mk-iso.i1{stroke-width:3;stroke-opacity:1}.mk-iso.i2{stroke-width:2;stroke-opacity:.6}.mk-iso.i3{stroke-width:1.4;stroke-opacity:.32}
+/* metro Línea 1 */
+.mk-metro-b{fill:none;stroke:#050607;stroke-width:7;vector-effect:non-scaling-stroke}
+.mk-metro{fill:none;stroke:#8fe7f2;stroke-width:3;stroke-dasharray:10 6;vector-effect:non-scaling-stroke;animation:mkmetro 1.6s linear infinite}
+@keyframes mkmetro{to{stroke-dashoffset:-16}}
+.mk-est-halo{fill:#8fe7f2;fill-opacity:0;stroke:#8fe7f2;stroke-opacity:0;stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+#mksvg[data-paso=D] .mk-est-halo{fill-opacity:.1;stroke-opacity:.7}
+.mk-est{fill:#050607;stroke:#8fe7f2;stroke-width:2.5;vector-effect:non-scaling-stroke}
+.capa .mk-palo{stroke:var(--pc)}
+.mk-t.est{font-size:calc(var(--u,10)*12px);fill:#8fe7f2}.mk-t.metro-t{fill:#8fe7f2}.mk-t.metro-t .mk-st{fill:#8fe7f2}
+.mk-t.obra-t{font-size:calc(var(--u,10)*11px);fill:#fff}
+.mk-huerta{fill:#a3b845;stroke:#fff;stroke-width:2.5;vector-effect:non-scaling-stroke}
+/* dependencia: carga que viaja y llegada a Corabastos */
+.mk-fl-luz{fill:none;stroke:var(--pc);stroke-width:calc(var(--w)*3.2);stroke-opacity:.12;stroke-linecap:round;vector-effect:non-scaling-stroke;filter:blur(3px)}
+.mk-carga{fill:#fff;stroke:var(--pc);stroke-width:2;vector-effect:non-scaling-stroke}
+.mk-llegada{fill:none;stroke:var(--pc);stroke-width:1.5;vector-effect:non-scaling-stroke;transform-box:fill-box;transform-origin:center;animation:mkllega 2.7s ease-out infinite}
+@keyframes mkllega{from{transform:scale(.15);opacity:1}to{transform:scale(1);opacity:0}}
+/* densidad: los volúmenes se dibujan en 3D (WebGL); aquí quedan solo las cifras */
+.pr-lado,.pr-tapa{display:none}
+#mksvg[data-paso=B] .mk-via3,#mksvg[data-paso=B] .mk-via4,#mksvg[data-paso=B] .mk-borde{display:none}
 .mk-tienda{fill:var(--pc);opacity:.55}.mk-cont{fill:var(--pc);opacity:.7}
 .mk-fl-base{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-opacity:.18;stroke-linecap:round;vector-effect:non-scaling-stroke}
 .mk-fl{fill:none;stroke:var(--pc);stroke-width:var(--w);stroke-linecap:round;stroke-dasharray:1.2 4;vector-effect:non-scaling-stroke;animation:mkflujo 1.2s linear infinite;animation-delay:var(--d)}
@@ -1242,11 +1268,13 @@ const ESC={
   g:()=>'<div class="val"><div class="bars"><div class="bar" style="--h:75%"><i></i><span>2022</span></div><div class="bar b2" style="--h:100%"><i></i><span>2026</span></div></div>'+
    '<div class="vnum"><b class="big">+'+num(33.4,1,'%')+'</b><span>valor catastral total de Kennedy</span><small>'+ic('suelo')+'suelo + '+ic('edificio')+'construcciones</small></div></div>'+
    '<div class="usos"><span class="u1">'+ic('brote')+'cultivo</span><span class="u2">'+ic('casa')+'vivienda</span><span class="u3">'+ic('tienda')+'comercio</span><div class="lote">'+ic('pin')+'Carvajal Osorio</div></div>'+
-   '<p class="frase">¿Qué uso permanece y <em>quién puede seguir usando ese suelo</em>?</p>',
-  src:'Catastro Bogotá 2022–2026'},
+   '<p class="frase">'+ic('brote')+'<em>Carvajal Osorio:</em> en la sede de la Junta de Acción Comunal funciona la huerta <em>Vive Vibra Verde</em>, parte de la ruta agroecológica del Jardín Botánico: cultiva y convierte en abono más de 6,5 t de residuos vegetales.</p>'+
+   '<p class="frase">'+ic('tren')+'Con el metro y nuevas obras alrededor, ¿qué uso permanece y <em>quién puede seguir usando ese suelo</em>?</p>',
+  src:'Catastro Bogotá 2022–2026 · Jardín Botánico de Bogotá · OSM'},
  D:{tag:'Hipótesis',hip:1,
   g:()=>'<div class="cadena"><span>'+ic('tren')+'nueva estación</span><i>'+ic('flecha')+'</i><span>'+ic('ojo')+'expectativa</span><i>'+ic('flecha')+'</i><span>'+ic('precio')+'precio esperado</span></div>'+
    '<div class="tend"><div class="t sube"><b>↑</b>Américas</div><div class="t sube"><b>↑</b>Carvajal</div><div class="t igual"><b>→</b>Patio Bonito</div><div class="t igual"><b>→</b>Corabastos</div></div>'+
+   '<p class="frase">'+ic('tren')+'Patio Bonito y Corabastos quedan cerca de <em>futuras estaciones de la Línea 1</em>, pero ahí los valores no subieron; sí subieron en <em>Américas y Carvajal</em>. La cercanía a una estación no basta para explicar el precio.</p>'+
    '<p class="frase">'+ic('lupa')+'Por comprobar: ¿suben los arriendos y <em>salen los comerciantes</em>?</p>',
   src:'Universidad Nacional · manzanas residenciales 2015–2023'},
  A:{tag:'Se cultiva lejos, llega a un solo punto',
@@ -1288,14 +1316,14 @@ ST.querySelectorAll('.hect').forEach(g=>{const n=+g.dataset.n;let s='';for(let i
    Mismo marco que el 3D: metros desde el centro de nube.bin (x este, z sur = abajo). Capas: silueta (limite.json), UPZ (upz.json),
    avenidas (vias.json), lugares de cada problema (lugares.json) y plazas distritales (plazas_distritales.json). */
 const LEY={
- F:[['cora','Corabastos · central mayorista'],['plaza','plaza de mercado distrital'],['anillo','15 min a pie (≈1,1 km)'],['raya','Tintal: menor proximidad']],
+ F:[['cora','Corabastos · central mayorista'],['plaza','plaza de mercado distrital'],['iso','a pie por las calles: 5 · 10 · 15 min'],['raya','Tintal: menor proximidad (SDP)']],
  B:[['grad','habitantes por hectárea (2024)'],['txt','434 Patio Bonito · 90 Tintal Norte']],
- C:[['area','UPZ Carvajal · cultivo urbano en Carvajal Osorio'],['obra','obras en construcción']],
- D:[['sube','valores en aumento (Américas, Carvajal)'],['igual','valores estables (Patio Bonito, Corabastos)']],
+ C:[['metro','Metro Línea 1 · en obra (2028)'],['obra','obras en construcción (OSM)'],['huerta','huerta de la JAC de Carvajal Osorio']],
+ D:[['metro','Metro Línea 1 y estaciones futuras'],['sube','valores en aumento (Américas, Carvajal)'],['igual','estables pese a la cercanía (Patio Bonito, Corabastos)']],
  A:[['flujo','toneladas que llegan a Corabastos (2022)'],['tienda','tiendas de barrio']],
  E:[['cora','Corabastos: residuos +48 h'],['pin','María Paz: 23 t retiradas (mar. 2026)'],['punto','contenedores de basura']]};
 const MKTAG={F:'dónde llegan los alimentos',B:'dónde vive la gente',C:'dónde compite el suelo',D:'dónde se espera que suba',A:'de dónde viene la comida',E:'dónde se acumulan los residuos'};
-Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distritales.json'].map(u=>fetch(u).then(r=>r.json()))).then(([LM,UZ,LG,VI,PZ])=>{
+Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distritales.json','contexto.json'].map(u=>fetch(u).then(r=>r.json()))).then(([LM,UZ,LG,VI,PZ,CX])=>{
  const svg=document.getElementById('mksvg');if(!svg)return;
  // vista axonométrica: giro θ y achatamiento k (proyección afín: líneas, curvas y círculos se proyectan exactos)
  const TH=-30*Math.PI/180,K=.56,A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K;
@@ -1326,39 +1354,52 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
  s+='<g class="mk-upz">'+UZ.upz.map(u=>'<path class="'+(clsU[u.n]||'')+'" style="--q:'+((u.dens-90)/(434-90)).toFixed(3)+'" d="'+Pth(u.poly)+'"/>').join('')+'</g>';
  const vias=j=>VI.vias.filter(v=>v[0]===j||(j===4&&v[0]>=4)).map(v=>{let d='';for(let i=1;i+1<v.length;i+=2)d+=(i===1?'M':'L')+v[i]+' '+v[i+1];return d}).join('');
  s+='<g clip-path="url(#mkclip)"><path class="mk-via3" d="'+vias(3)+'"/><path class="mk-via4" d="'+vias(4)+'"/></g><path class="mk-borde" d="'+Pth(LM.pts)+'"/>';
- s+='<g class="capa" data-capa="F">'+plz.map((p,i)=>'<circle class="mk-anillo-f" cx="'+p.c[0]+'" cy="'+p.c[1]+'" r="1125"/><circle class="mk-anillo" cx="'+p.c[0]+'" cy="'+p.c[1]+'" r="1125" pathLength="100" style="--d:'+(i*.3)+'s"/><path class="mk-plaza" d="'+Pth(p.poly)+'"/>').join('')+'</g>';
- s+='<g class="capa" data-capa="C">'+LG.C.pts.map((p,i)=>'<rect class="mk-obra" x="'+(p[0]-50)+'" y="'+(p[1]-50)+'" width="100" height="100" style="--d:'+(i*.015).toFixed(3)+'s"/>').join('')+'</g>';
+ // F · accesibilidad a pie por la red real de calles (contexto.json: Dijkstra desde cada plaza, 4,5 km/h)
+ const isoD=(a,b)=>CX.iso.filter(q=>q[0]>a&&q[0]<=b).map(q=>{let d='';for(let i=1;i+1<q.length;i+=2)d+=(i===1?'M':'L')+q[i]+' '+q[i+1];return d}).join('');
+ s+='<g class="capa" data-capa="F"><path class="mk-iso i3" d="'+isoD(750,1200)+'"/><path class="mk-iso i2" d="'+isoD(375,750)+'"/><path class="mk-iso i1" d="'+isoD(-1,375)+'"/>'+plz.map(p=>'<path class="mk-plaza" d="'+Pth(p.poly)+'"/>').join('')+'</g>';
+ // C · obras en construcción (polígonos de OSM) · D y C · Línea 1 del Metro (en obra)
+ const metroD='M'+CX.metro.map(p=>p.join(' ')).join('L');
+ s+='<g class="capa" data-capa="C">'+CX.obras.map((o,i)=>'<path class="mk-obra" style="--d:'+(i*.02).toFixed(2)+'s" d="'+Pth(o.poly)+'"/>').join('')+'</g>';
+ s+='<g class="capa capa-metro" data-capa="C D"><path class="mk-metro-b" d="'+metroD+'"/><path class="mk-metro" d="'+metroD+'"/>'+CX.estaciones.map(e=>'<circle class="mk-est-halo" cx="'+e.p[0]+'" cy="'+e.p[1]+'" r="500"/>').join('')+'</g>';
  s+='<g class="capa" data-capa="A">'+LG.A.pts.filter(p=>p[3]===0).map(p=>'<circle class="mk-tienda" cx="'+p[0]+'" cy="'+p[1]+'" r="28"/>').join('')+'</g>';
  s+='<g class="capa" data-capa="E">'+LG.E.pts.filter(p=>p[3]===0).map(p=>'<circle class="mk-cont" cx="'+p[0]+'" cy="'+p[1]+'" r="34"/>').join('')+'</g>';
  s+='</g>';
  // F · centralización (marcadores y textos, derechos)
  s+='<g class="capa" data-capa="F">'+pin(cora[0],cora[1],420,9,'mk-cora',2)+plz.map(p=>pin(p.c[0],p.c[1],300,6,'mk-plz',1)).join('')+
   t(cora[0],cora[1],420+170,'Corabastos','cen','central mayorista')+plz.map(p=>t(p.c[0],p.c[1],300+150,'Plaza '+p.n,'cen','plaza distrital')).join('')+
-  (()=>{const u=UZ.upz.find(u=>u.n==='Tintal Norte');return u?t(u.c[0],u.c[1],0,'Tintal','cen','menor proximidad'):''})()+
-  t(plz[0].c[0]+1125*.7,plz[0].c[1]+1125*.7,0,'15 min a pie','cen')+'</g>';
+  (()=>{const u=UZ.upz.find(u=>u.n==='Tintal Norte');return u?t(u.c[0],u.c[1],0,'Tintal','cen','menor proximidad'):''})()+'</g>';
  // B · densidad: cada UPZ sube según sus habitantes por hectárea
  const HMAX=850,simp=a=>{const n=Math.max(1,Math.floor(a.length/70));return a.filter((_,i)=>i%n===0)};
  const PR=UZ.upz.map(u=>({u,r:simp(u.poly),h:u.dens/434*HMAX,y:P(u.c[0],u.c[1])[1]})).sort((a,b)=>a.y-b.y);
  s+='<g class="capa" data-capa="B" id="mkprismas">'+PR.map((p,i)=>'<g class="mk-prisma" style="--q:'+((p.u.dens-90)/(434-90)).toFixed(3)+'"><path class="pr-lado l0" d=""/><path class="pr-lado l1" d=""/><path class="pr-lado l2" d=""/><path class="pr-tapa" d=""/>'+
   '<text class="mk-t cen dens'+(p.u.n==='Patio Bonito'||p.u.n==='Tintal Norte'?' g':'')+'" x="0" y="0">'+p.u.dens+'<tspan class="mk-st" x="0" dy="1.2em">'+esc2(p.u.n)+'</tspan></text></g>').join('')+'</g>';
  // C · Carvajal
- s+='<g class="capa" data-capa="C">'+(()=>{const u=UZ.upz.find(u=>u.n==='Carvajal');return u?t(u.c[0],u.c[1],0,'Carvajal','cen g','Carvajal Osorio · cultivo urbano'):''})()+'</g>';
+ const obN=CX.obras.filter(o=>o.n&&!/colegio/i.test(o.n)).sort((a,b)=>b.a-a.a).slice(0,5);
+ const est=(cl)=>CX.estaciones.map(e=>pin(e.p[0],e.p[1],200,5,'mk-est',0)+t(e.p[0],e.p[1],200+110,e.n.replace('Estación ','E'),'cen est '+cl)).join('');
+ const m0=CX.metro[Math.floor(CX.metro.length*.3)];
+ s+='<g class="capa" data-capa="C">'+(CX.huerta?pin(CX.huerta.p[0],CX.huerta.p[1],520,8,'mk-huerta',1)+t(CX.huerta.p[0]-120,CX.huerta.p[1],520+130,'Huerta Vive Vibra Verde','der','JAC Carvajal Osorio'):'')+
+  obN.map(o=>{const c=[o.poly.reduce((s,q)=>s+q[0],0)/o.poly.length,o.poly.reduce((s,q)=>s+q[1],0)/o.poly.length];return t(c[0],c[1],60,o.n,'cen obra-t')}).join('')+est('')+t(m0[0],m0[1],0,'Metro Línea 1','cen metro-t','en obra · abre en 2028')+'</g>';
  // D · especulación: flechas que suben o se quedan
+ s+='<g class="capa" data-capa="D">'+est('d')+t(m0[0],m0[1],0,'Metro Línea 1','cen metro-t','estaciones futuras · 500 m alrededor')+'</g>';
  s+='<g class="capa" data-capa="D">'+UZ.upz.filter(u=>clsU[u.n]&&u.n!=='Tintal Norte').map(u=>{const up=u.n==='Américas'||u.n==='Carvajal',a=P(u.c[0],u.c[1]),b=P(u.c[0],u.c[1],up?700:0);
    return (up?'<line class="mk-sube" x1="'+R(a[0])+'" y1="'+R(a[1])+'" x2="'+R(b[0])+'" y2="'+R(b[1])+'"/>':'')+t(u.c[0],u.c[1],up?820:0,(up?'↑ ':'→ ')+u.n,'cen g '+(up?'sube':'igual'),up?'valores en aumento':'valores estables')}).join('')+'</g>';
  // A · dependencia: arcos por el aire desde las regiones hasta Corabastos
  s+='<g class="capa" data-capa="A">'+RG.map(([n,tx,ton],i)=>{const o=P(org[i][0],org[i][1]),c=P(cora[0],cora[1]),mx=(org[i][0]+cora[0])/2,mz=(org[i][1]+cora[1])/2,m=P(mx,mz,4200),w=(2+ton/1016649*12).toFixed(1);
    const d='M'+R(o[0])+' '+R(o[1])+'Q'+R(m[0])+' '+R(m[1])+' '+R(c[0])+' '+R(c[1]);
-   return '<path class="mk-fl-base" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl" pathLength="100" style="--w:'+w+';--d:'+(i*.25)+'s" d="'+d+'"/>'+
+   // carga que viaja: más partículas cuanto más toneladas (1 por cada ~70 mil t)
+   const np=Math.max(3,Math.round(ton/70000)),dur=(5.5+i*.6).toFixed(1);let pts='';
+   for(let k=0;k<np;k++)pts+='<circle class="mk-carga" data-px="'+(2.2+ton/1016649*2.4).toFixed(1)+'" r="1"><animateMotion dur="'+dur+'s" repeatCount="indefinite" begin="-'+(k*dur/np).toFixed(2)+'s" path="'+d+'" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".4 0 .6 1"/></circle>';
+   return '<path class="mk-fl-base" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl-luz" style="--w:'+w+'" d="'+d+'"/><path class="mk-fl" pathLength="100" style="--w:'+w+';--d:'+(i*.25)+'s" d="'+d+'"/>'+pts+
     '<ellipse class="mk-origen" cx="'+R(o[0])+'" cy="'+R(o[1])+'" rx="'+(160+ton/1016649*260).toFixed(0)+'" ry="'+((160+ton/1016649*260)*K).toFixed(0)+'"/>'+t(org[i][0],org[i][1],0,n,'cen g reg',tx)}).join('')+
-  pin(cora[0],cora[1],260,11,'mk-cora',2)+t(cora[0],cora[1],260+190,'Corabastos','cen','2,2 millones de t')+'</g>';
+  (()=>{const c=P(cora[0],cora[1]);return [0,1,2].map(k=>'<ellipse class="mk-llegada" cx="'+R(c[0])+'" cy="'+R(c[1])+'" rx="420" ry="'+R(420*K)+'" style="animation-delay:'+(k*.9)+'s"/>').join('')})()+
+  pin(cora[0],cora[1],260,11,'mk-cora',2)+t(cora[0],cora[1],260+190,'Corabastos','cen g','2,2 millones de t · 2022')+'</g>';
  // E · residuos
  s+='<g class="capa" data-capa="E">'+pin(cora[0],cora[1],380,10,'mk-cora',2)+t(cora[0]-150,cora[1],380+170,'Corabastos','der','residuos acumulados +48 h')+
   (mp?pin(mp[0],mp[1],620,7,'mk-mp',1)+t(mp[0]+150,mp[1],620+140,'María Paz','','5 t orgánicos · 18 t voluminosos'):'')+'</g>';
  // escala y norte (flecha del norte girada como el mapa)
  const n0=P(0,0),n1=P(0,-600),ang=Math.atan2(n1[0]-n0[0],-(n1[1]-n0[1]))*180/Math.PI,sx=VB[0]+VB[2]-padx*1.6,sy=VB[1]+pady*1.8;
  s+='<g class="mk-ref"><g transform="translate('+R(sx)+' '+R(sy)+') rotate('+ang.toFixed(1)+')"><path class="mk-norte" d="M0 -190L70 60L0 20L-70 60Z"/></g>'+'<text class="mk-t cen" x="'+R(sx)+'" y="'+R(sy+260)+'">N</text></g>';
- svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;MK.proj={A,B,C,D};MK.lim=LM.pts;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
+ svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;MK.proj={A,B,C,D};MK.lim=LM.pts;MK.UZ=UZ.upz;MK.HMAX=HMAX;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
 }).catch(e=>console.warn('mapa:',e));
 const MK={};
 // volúmenes de densidad: suben al entrar al paso
@@ -1368,7 +1409,7 @@ function prismas(f){const box=document.getElementById('mkprismas');if(!box||!MK.
    const dx=b[0]-a[0],dz=b[1]-a[1],n=Math.hypot(dx,dz)||1,luz=Math.abs((dz*.6+dx*.8)/n),cl=luz<.4?0:luz<.75?1:2; // sombreado según hacia dónde mira la cara
    L[cl]+='M'+R(a0[0])+' '+R(a0[1])+'L'+R(b0[0])+' '+R(b0[1])+'L'+R(b1[0])+' '+R(b1[1])+'L'+R(a1[0])+' '+R(a1[1])+'Z'}
   for(let k=0;k<3;k++)g.children[k].setAttribute('d',L[k]);g.children[3].setAttribute('d',r.map((q,k)=>{const z=P(q[0],q[1],h);return (k?'L':'M')+R(z[0])+' '+R(z[1])}).join('')+'Z');
-  const c=P(p.u.c[0],p.u.c[1],h+120),tx=g.children[4];tx.setAttribute('x',R(c[0]));tx.setAttribute('y',R(c[1]));tx.firstElementChild.setAttribute('x',R(c[0]))})}
+  /* Tintal (bajo y al fondo) queda tapado por Calandaima: su cifra flota más arriba */const c=P(p.u.c[0],p.u.c[1],h+(p.u.n==='Tintal Norte'?620:120)),tx=g.children[4];tx.setAttribute('x',R(c[0]));tx.setAttribute('y',R(c[1]));tx.firstElementChild.setAttribute('x',R(c[0]))})}
 function subirPrismas(){if(!MK.PR)return;const t0=performance.now(),T=MOV.on?1400:1;cancelAnimationFrame(MK.raf);
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);prismas(e);if(q<1)MK.raf=requestAnimationFrame(f)};MK.raf=requestAnimationFrame(f)}
 function escalarMapa(){const svg=MK.svg;if(!svg)return;const u=MK.vb[2]/Math.max(1,svg.getBoundingClientRect().width);svg.style.setProperty('--u',u.toFixed(3));
@@ -1384,7 +1425,7 @@ function pasoMapa(id){const antes=MK.paso;MK.paso=id;const svg=MK.svg;document.g
 /* ---------- contexto 3D bajo el mapa axonométrico: los edificios reales de Kennedy (edif.bin) ----------
    Un lienzo WebGL detrás del SVG con la MISMA proyección del mapa (giro θ, achatamiento k). Se dibuja solo cuando cambia algo.
    Va en los pasos donde ayuda a leer el lugar; no en «crecimiento» ni «especulación», que se leen por sus volúmenes y colores. */
-const CON3D={F:1,C:1,A:1,E:1};
+const CON3D={F:'ed',C:'ed',D:'ed',A:'ed',E:'ed',B:'upz'}; // ed: edificios reales · upz: volúmenes de densidad (sin edificios)
 const M3={on:0,obj:0,sube:0,r:null,raf:0};
 function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
  const box=MK.svg.parentElement,cv=document.createElement('canvas');cv.className='mk-3d';box.insertBefore(cv,MK.svg);M3.cv=cv;
@@ -1397,11 +1438,19 @@ function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
  sc.add(new THREE.Mesh(g0,[new THREE.MeshBasicMaterial({color:0x101415,side:THREE.DoubleSide}),new THREE.MeshLambertMaterial({color:0x1d2324,side:THREE.DoubleSide})]));
  fetch('edif.bin').then(x=>x.arrayBuffer()).then(buf=>{const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?90000:total);
   const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
-  const mat=new THREE.MeshLambertMaterial({color:0x6c7472,side:THREE.DoubleSide});M3.mat=mat; // un tono abajo: los datos de cada paso van encima
+  const mat=new THREE.MeshLambertMaterial({color:0x2c3436,emissive:0x0b0e0f,side:THREE.DoubleSide});M3.mat=mat; // grafito oscuro: contexto que no compite con los datos
   mat.onBeforeCompile=sh=>{sh.uniforms.uSube={value:0};M3.uSube=sh.uniforms.uSube;sh.vertexShader='uniform float uSube;\n'+sh.vertexShader.replace('#include <begin_vertex>','vec3 transformed=vec3(position.x,position.y*uSube,position.z);')};
   const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D();
   for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,dv.getInt16(b+10,true)/2,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
-  m.frustumCulled=false;sc.add(m);M3.edif=m;dibujar3D()})}
+  m.frustumCulled=false;sc.add(m);M3.edif=m;modo3D();dibujar3D()});
+ // volúmenes de densidad por UPZ: sólidos con aristas claras (altura = habitantes por hectárea)
+ const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2b2416'),cTop=new THREE.Color('#e9b85a');
+ MK.UZ.forEach(u=>{const h=u.dens/434*MK.HMAX,q=(u.dens-90)/(434-90),shp=new THREE.Shape(u.poly.map(([x,z])=>new THREE.Vector2(x,z)));
+  const g=new THREE.ExtrudeGeometry(shp,{depth:h,bevelEnabled:false});g.rotateX(Math.PI/2);g.translate(0,h,0);
+  const col=cBase.clone().lerp(cTop,.15+.85*Math.pow(q,.9)),mm=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:col,emissive:col.clone().multiplyScalar(.06),side:THREE.DoubleSide}));
+  const ed=new THREE.LineSegments(new THREE.EdgesGeometry(g,25),new THREE.LineBasicMaterial({color:0xfff3d6,transparent:true,opacity:.55}));gU.add(mm,ed)});}
+// qué se ve en el lienzo según el paso
+function modo3D(){if(!M3.r)return;const md=CON3D[MK.paso];if(M3.edif)M3.edif.visible=md==='ed';if(M3.upz)M3.upz.visible=md==='upz'}
 // proyección: la del SVG (x=A·x+C·z, y=B·x+D·z−0,9·h), ajustada al tamaño real del elemento (preserveAspectRatio: meet)
 function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=rc.height;if(!w||!h)return false;
  let [x0,y0,vw,vh]=MK.vb;if(w/h>vw/vh){const n=vh*w/h;x0-=(n-vw)/2;vw=n}else{const n=vw*h/w;y0-=(n-vh)/2;vh=n}
@@ -1409,10 +1458,11 @@ function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=r
  const {A,B,C,D}=MK.proj,sx=2/vw,sy=-2/vh,dz=1/9000; // profundidad: lo más lejano (arriba en pantalla) y lo más bajo quedan detrás
  M3.cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);
  M3.cam.projectionMatrixInverse.copy(M3.cam.projectionMatrix).invert();return true}
-function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;M3.r.render(M3.sc,M3.cam)}
+function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;if(M3.upz)M3.upz.scale.y=Math.max(.001,M3.sube);M3.r.render(M3.sc,M3.cam)}
 function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M3.sube,a=M3.obj,T=MOV.on?1100:1;
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);M3.sube=de+(a-de)*e;M3.cv.style.opacity=Math.min(1,M3.sube*1.4);dibujar3D();if(q<1)M3.raf=requestAnimationFrame(f)};M3.raf=requestAnimationFrame(f)}
-{const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0;MK.svg.classList.toggle('con3d',!!o);if(o!==M3.obj){M3.obj=o;animar3D()}}}
+{const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0,md=CON3D[id]||'';MK.svg.classList.toggle('con3d',!!o);
+ if(md!==M3.md){const ant=M3.md;M3.md=md;if(ant&&md&&ant!==md){M3.sube=0;modo3D();animar3D();return}}modo3D();if(o!==M3.obj||o){M3.obj=o;animar3D()}}}
 {const em=escalarMapa;escalarMapa=function(){em();if(M3.r&&M3.obj)dibujar3D()}}
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
