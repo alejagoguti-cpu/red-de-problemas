@@ -705,7 +705,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 /* vista axonométrica: losa con espesor, pines y volúmenes */
 .mk-losa{fill:#050607;stroke:rgba(214,228,222,.35);stroke-width:1;vector-effect:non-scaling-stroke}
 .mk-losa-c{fill:url(#mklado);stroke:none}
-.mk-sil{fill:#101415}
+.mk-sil{fill:#141416}
 .mk-palo{stroke:var(--pc);stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.85}
 .mk-base{fill:var(--pc);opacity:.35}
 .pr-lado{fill:currentColor;stroke:currentColor;stroke-width:.9;stroke-linejoin:round;vector-effect:non-scaling-stroke}
@@ -1447,18 +1447,18 @@ const M3={on:0,obj:0,sube:0,r:null,raf:0};
 function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
  const box=MK.svg.parentElement,cv=document.createElement('canvas');cv.className='mk-3d';box.insertBefore(cv,MK.svg);M3.cv=cv;
  const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));M3.r=r;
- const sc=new THREE.Scene();M3.sc=sc;sc.add(new THREE.AmbientLight(0xffffff,.32));const dl=new THREE.DirectionalLight(0xfff6ea,1.15);dl.position.set(-.7,1,-.25);sc.add(dl);const dl2=new THREE.DirectionalLight(0x9fc4d6,.35);dl2.position.set(.8,.6,.4);sc.add(dl2);
+ const sc=new THREE.Scene();M3.sc=sc;sc.add(new THREE.AmbientLight(0xffffff,.32));const dl=new THREE.DirectionalLight(0xfff6ea,1.15);dl.position.set(-.7,1,-.25);sc.add(dl);const dl2=new THREE.DirectionalLight(0xffffff,.3);dl2.position.set(.8,.6,.4);sc.add(dl2);
  M3.cam=new THREE.Camera();M3.cam.matrixAutoUpdate=false;
  // suelo de la localidad
  // losa con espesor (la del SVG se oculta en estos pasos)
  const sh=new THREE.Shape(MK.lim.map(([x,z])=>new THREE.Vector2(x,z)));const g0=new THREE.ExtrudeGeometry(sh,{depth:190,bevelEnabled:false});g0.rotateX(Math.PI/2);
- sc.add(new THREE.Mesh(g0,[new THREE.MeshBasicMaterial({color:0x101415,side:THREE.DoubleSide}),new THREE.MeshLambertMaterial({color:0x1d2324,side:THREE.DoubleSide})]));
+ sc.add(new THREE.Mesh(g0,[new THREE.MeshBasicMaterial({color:0x141416,side:THREE.DoubleSide}),new THREE.MeshLambertMaterial({color:0x2a2a2e,side:THREE.DoubleSide})]));
  fetch('edif.bin').then(x=>x.arrayBuffer()).then(buf=>{const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?90000:total);
   const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
-  const mat=new THREE.MeshLambertMaterial({color:0x5c6664,emissive:0x0d1112,side:THREE.DoubleSide});M3.mat=mat; // grafito oscuro: contexto que no compite con los datos
+  const mat=new THREE.MeshLambertMaterial({color:0xffffff,emissive:0x0e0e0f,side:THREE.DoubleSide});M3.mat=mat;const cB3=new THREE.Color('#38373a'),cA3=new THREE.Color('#cfcac0'),cc3=new THREE.Color(); // grafito oscuro: contexto que no compite con los datos
   mat.onBeforeCompile=sh=>{sh.uniforms.uSube={value:0};M3.uSube=sh.uniforms.uSube;sh.vertexShader='uniform float uSube;\n'+sh.vertexShader.replace('#include <begin_vertex>','vec3 transformed=vec3(position.x,position.y*uSube,position.z);')};
   const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D();
-  for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,dv.getInt16(b+10,true)/2,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
+  for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);const hh=dv.getInt16(b+10,true)/2;o.scale.set(dv.getInt16(b+4,true)/2,hh*3,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix);cc3.copy(cB3).lerp(cA3,Math.min(1,Math.pow(hh/40,.75)));m.setColorAt(i,cc3)} // alturas ×3 (como la portada) y gris neutro según la altura
   m.frustumCulled=false;sc.add(m);M3.edif=m;modo3D();dibujar3D()});
  // volúmenes de densidad por UPZ: sólidos con aristas claras (altura = habitantes por hectárea)
  const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2b2416'),cTop=new THREE.Color('#e9b85a');
