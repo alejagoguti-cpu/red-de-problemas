@@ -600,6 +600,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 #story section.hero .hmaq{grid-column:2;grid-row:1;position:relative;height:min(86vh,820px);align-self:center}
 #hmaq{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:5;pointer-events:none}
 #story section.hero .hcard{position:relative;z-index:6}
+.agua-et{position:fixed;left:0;top:0;z-index:6;pointer-events:none;opacity:0;font:500 9.5px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:#9fd0e6;text-shadow:0 0 6px #050607,0 0 12px #050607;white-space:nowrap;transition:opacity .4s}
 .hmaq-n{position:absolute;right:4%;bottom:2%;font:500 10px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3)}.hmaq-n b{color:var(--tinta-1);font-weight:500}
 #story section.hero .hcard{grid-column:1;grid-row:1;text-align:left!important;width:auto!important}
 #story section.hero .hcard h1{font-size:clamp(3.6rem,1.4rem + 7vw,8.4rem)!important;line-height:.88!important}
@@ -633,8 +634,8 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 .sw.cora{box-shadow:0 0 0 3px color-mix(in srgb,var(--pc) 35%,transparent)}.sw.plaza{width:10px;height:10px}
 .sw.anillo{background:none;border:1.5px dashed var(--pc)}
 .sw.iso{width:44px;height:4px;border-radius:0;background:linear-gradient(90deg,var(--pc),color-mix(in srgb,var(--pc) 30%,transparent))}
-.sw.metro{width:30px;height:3px;border-radius:0;background:repeating-linear-gradient(90deg,#8fe7f2 0 8px,transparent 8px 12px)}
-.sw.est{background:#050607;border:2px solid #8fe7f2;width:10px;height:10px}
+.sw.metro{width:30px;height:5px;border-radius:0;background:linear-gradient(#d94f3f 0 40%,#cfc9bd 40%)}
+.sw.est{background:#050607;border:2px solid #f1ebdf;width:10px;height:10px}
 .sw.huerta{background:#a3b845;border:2px solid #fff;width:10px;height:10px}.sw.raya{border-radius:0;background:repeating-linear-gradient(45deg,var(--pc) 0 2px,transparent 2px 5px)}
 .sw.grad{width:44px;height:10px;border-radius:0;background:linear-gradient(90deg,color-mix(in srgb,var(--pc) 12%,transparent),var(--pc))}.sw.txt{display:none}
 .sw.area{border-radius:0;background:color-mix(in srgb,var(--pc) 45%,transparent);border:1px solid var(--pc)}.sw.obra{width:9px;height:9px;border-radius:0}
@@ -679,14 +680,16 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 .mk-iso{fill:none;stroke:var(--pc);stroke-linecap:round;vector-effect:non-scaling-stroke}
 .mk-iso.i1{stroke-width:1.3;stroke-opacity:.95}.mk-iso.i2{stroke-width:.9;stroke-opacity:.6}.mk-iso.i3{stroke-width:.6;stroke-opacity:.35}
 /* metro Línea 1 */
+/* el metro ahora es 3D (viaducto y trenes): la línea plana se oculta y las estaciones van en marfil */
+.mk-metro-b,.mk-metro{display:none}
 .mk-metro-b{fill:none;stroke:#050607;stroke-width:7;vector-effect:non-scaling-stroke}
 .mk-metro{fill:none;stroke:#8fe7f2;stroke-width:3;stroke-dasharray:10 6;vector-effect:non-scaling-stroke;animation:mkmetro 1.6s linear infinite}
 @keyframes mkmetro{to{stroke-dashoffset:-16}}
-.mk-est-halo{fill:#8fe7f2;fill-opacity:0;stroke:#8fe7f2;stroke-opacity:0;stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+.mk-est-halo{fill:#f1ebdf;fill-opacity:0;stroke:#f1ebdf;stroke-opacity:0;stroke-width:1;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
 #mksvg[data-paso=D] .mk-est-halo{fill-opacity:.1;stroke-opacity:.7}
-.mk-est{fill:#050607;stroke:#8fe7f2;stroke-width:2.5;vector-effect:non-scaling-stroke}
+.mk-est{fill:#050607;stroke:#f1ebdf;stroke-width:2.5;vector-effect:non-scaling-stroke}
 .capa .mk-palo{stroke:var(--pc)}
-.mk-t.est{font-size:calc(var(--u,10)*12px);fill:#8fe7f2}.mk-t.metro-t{fill:#8fe7f2}.mk-t.metro-t .mk-st{fill:#8fe7f2}
+.mk-t.est{font-size:calc(var(--u,10)*12px);fill:#f1ebdf}.mk-t.metro-t{fill:#f1ebdf}.mk-t.metro-t .mk-st{fill:#e3887a}
 .mk-t.obra-t{font-size:calc(var(--u,10)*11px);fill:#fff}
 .mk-huerta{fill:#a3b845;stroke:#fff;stroke-width:2.5;vector-effect:non-scaling-stroke}
 /* dependencia: carga que viaja y llegada a Corabastos */
@@ -1340,7 +1343,7 @@ ST.querySelectorAll('.hect').forEach(g=>{const n=+g.dataset.n;let s='';for(let i
 const LEY={
  F:[['cora','Corabastos · central mayorista'],['plaza','plaza de mercado distrital'],['iso','a pie por las calles: 5 · 10 · 15 min'],['raya','Tintal: menor proximidad (SDP)']],
  B:[['grad','habitantes por hectárea (2024)'],['txt','434 Patio Bonito · 90 Tintal Norte']],
- C:[['metro','Metro Línea 1 · en obra (2028)'],['obra','obras en construcción (OSM)'],['huerta','huerta de la JAC de Carvajal Osorio']],
+ C:[['metro','Metro Línea 1 · viaducto en obra (2028)'],['obra','obras en construcción (OSM)'],['huerta','huerta de la JAC de Carvajal Osorio']],
  D:[['metro','Metro Línea 1 y estaciones futuras'],['sube','valores en aumento (Américas, Carvajal)'],['igual','estables pese a la cercanía (Patio Bonito, Corabastos)']],
  A:[['flujo','toneladas que llegan a Corabastos (2022)'],['tienda','tiendas de barrio']],
  E:[['cora','Corabastos: residuos +48 h'],['pin','María Paz: 23 t retiradas (mar. 2026)'],['punto','745 contenedores de basura'],['recic','625 de reciclaje (UAESP)']]};
@@ -1417,7 +1420,7 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
  // escala y norte (flecha del norte girada como el mapa)
  const n0=P(0,0),n1=P(0,-600),ang=Math.atan2(n1[0]-n0[0],-(n1[1]-n0[1]))*180/Math.PI,sx=VB[0]+VB[2]-padx*1.6,sy=VB[1]+pady*1.8;
  s+='<g class="mk-ref"><g transform="translate('+R(sx)+' '+R(sy)+') rotate('+ang.toFixed(1)+')"><path class="mk-norte" d="M0 -190L70 60L0 20L-70 60Z"/></g>'+'<text class="mk-t cen" x="'+R(sx)+'" y="'+R(sy+260)+'">N</text></g>';
- svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;MK.proj={A,B,C,D};MK.lim=LM.pts;MK.UZ=UZ.upz;MK.HMAX=HMAX;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
+ svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;MK.proj={A,B,C,D};MK.lim=LM.pts;MK.UZ=UZ.upz;MK.HMAX=HMAX;MK.metro=CX.metro;MK.est=CX.estaciones;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
 }).catch(e=>console.warn('mapa:',e));
 const MK={};
 // volúmenes de densidad: suben al entrar al paso
@@ -1462,11 +1465,11 @@ function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
   for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);const hh=dv.getInt16(b+10,true)/2;o.scale.set(dv.getInt16(b+4,true)/2,hh*3,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix);cc3.copy(cB3).lerp(cA3,Math.min(1,Math.pow(hh/40,.75)));m.setColorAt(i,cc3)} // alturas ×3 (como la portada) y gris neutro según la altura
   m.frustumCulled=false;sc.add(m);M3.edif=m;modo3D();dibujar3D()});
  // volúmenes de densidad por UPZ: sólidos con aristas claras (altura = habitantes por hectárea)
- const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2b2820'),cTop=new THREE.Color('#9c843f'); // amarillo mostaza suave // arena apagada: sin amarillo chillón
+ const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#3a3220'),cTop=new THREE.Color('#a8892f'); // amarillo más presente, sin llegar a chillón // arena apagada: sin amarillo chillón
  const orden=MK.UZ.slice().sort((a,b)=>a.dens-b.dens).map(u=>u.n); // suben de la menos densa a la más densa (Patio Bonito al final)
  MK.UZ.forEach(u=>{const h=u.dens/434*MK.HMAX,q=(u.dens-90)/(434-90),shp=new THREE.Shape(u.poly.map(([x,z])=>new THREE.Vector2(x,z)));
   const g=new THREE.ExtrudeGeometry(shp,{depth:h,bevelEnabled:false});g.rotateX(Math.PI/2);g.translate(0,h,0);
-  const col=cBase.clone().lerp(cTop,.15+.85*Math.pow(q,.9)),mm=new THREE.Mesh(g,new THREE.MeshLambertMaterial({color:col,emissive:col.clone().multiplyScalar(.06),side:THREE.DoubleSide}));
+  const col=cBase.clone().lerp(cTop,.2+.8*Math.pow(q,.9)),mm=new THREE.Mesh(g,[new THREE.MeshLambertMaterial({color:col,emissive:col.clone().multiplyScalar(.08)}),new THREE.MeshBasicMaterial({color:col.clone().multiplyScalar(.62)})]); // tapa con luz, costados de un solo tono: sólido, sin rayas
   const ed=new THREE.LineSegments(new THREE.EdgesGeometry(g,25),new THREE.LineBasicMaterial({color:0xf2ece2,transparent:true,opacity:.32}));
   const sub=new THREE.Group();sub.add(mm,ed);sub.userData={n:u.n,ord:orden.indexOf(u.n)};sub.scale.y=.001;gU.add(sub)});}
 // densidad: cada UPZ sube por turno, «tum, tum, tum», con un pequeño rebote al llegar
@@ -1477,8 +1480,24 @@ function crecerUPZ(){cancelAnimationFrame(M3.rafU);const t0=performance.now(),fi
   if(M3.upz)M3.upz.children.forEach(g=>{const f=fUPZ(g.userData.ord,s);g.scale.y=Math.max(.001,f);ordDe[g.userData.n]=f});
   prismas(n=>ordDe[n]||0);dibujar3D();if(s<fin)M3.rafU=requestAnimationFrame(paso)};M3.rafU=requestAnimationFrame(paso)}
 function bajarUPZ(){cancelAnimationFrame(M3.rafU);if(M3.upz)M3.upz.children.forEach(g=>g.scale.y=.001);prismas(0)}
+// metro Línea 1 en 3D: viaducto elevado (~13 m reales ×3), columnas, estaciones y dos trenes en circulación
+function crearMetro(){if(M3.metro||!MK.metro||!M3.sc)return;const L=MK.metro,g=new THREE.Group();g.visible=false;M3.sc.add(g);M3.metro=g;
+ const H=55,cum=[0];for(let i=1;i<L.length;i++)cum.push(cum[i-1]+Math.hypot(L[i][0]-L[i-1][0],L[i][1]-L[i-1][1]));M3.mLen=cum[cum.length-1];
+ const en=d=>{d=((d%M3.mLen)+M3.mLen)%M3.mLen;let i=1;while(i<cum.length-1&&cum[i]<d)i++;const a=L[i-1],b=L[i],f=(d-cum[i-1])/Math.max(1e-6,cum[i]-cum[i-1]);return {x:a[0]+(b[0]-a[0])*f,z:a[1]+(b[1]-a[1])*f,ang:Math.atan2(b[1]-a[1],b[0]-a[0])}};M3.mEn=en;
+ const concreto=new THREE.MeshLambertMaterial({color:0xc9c4b8}),pilar=new THREE.MeshLambertMaterial({color:0x8f8b83});
+ for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i],l=Math.hypot(b[0]-a[0],b[1]-a[1]);if(l<1)continue;const m=new THREE.Mesh(new THREE.BoxGeometry(l+2,9,38),concreto);m.position.set((a[0]+b[0])/2,H,(a[1]+b[1])/2);m.rotation.y=-Math.atan2(b[1]-a[1],b[0]-a[0]);g.add(m)}
+ const pg=new THREE.CylinderGeometry(7,9,H,8);pg.translate(0,H/2,0);for(let d=0;d<M3.mLen;d+=70){const p=en(d),m=new THREE.Mesh(pg,pilar);m.position.set(p.x,0,p.z);g.add(m)}
+ (MK.est||[]).forEach(e=>{let bd=1e9,bp=null;for(let d=0;d<M3.mLen;d+=10){const p=en(d),q=Math.hypot(p.x-e.p[0],p.z-e.p[1]);if(q<bd){bd=q;bp=p}}
+  const s=new THREE.Mesh(new THREE.BoxGeometry(220,22,64),new THREE.MeshLambertMaterial({color:0xece8df}));s.position.set(bp.x,H+14,bp.z);s.rotation.y=-bp.ang;g.add(s);
+  const tch=new THREE.Mesh(new THREE.BoxGeometry(234,5,72),new THREE.MeshLambertMaterial({color:0xd94f3f}));tch.position.set(bp.x,H+27,bp.z);tch.rotation.y=-bp.ang;g.add(tch)});
+ // trenes: 6 vagones blancos con franja roja
+ const vag=new THREE.BoxGeometry(92,24,30),mv=new THREE.MeshLambertMaterial({color:0xf6f4ef,emissive:0x202020}),mr=new THREE.MeshLambertMaterial({color:0xd94f3f,emissive:0x2a0a08});
+ M3.trenes=[0,1].map(k=>{const tr=[];for(let c=0;c<6;c++){const v=new THREE.Group(),b=new THREE.Mesh(vag,mv),f=new THREE.Mesh(new THREE.BoxGeometry(92.6,5,30.6),mr);f.position.y=-4;v.add(b,f);g.add(v);tr.push(v)}return {tr,k}})}
+function moverTrenes(s){if(!M3.trenes)return;M3.trenes.forEach(({tr,k})=>{const base=k?M3.mLen-(s*140)%M3.mLen:(s*140+M3.mLen*.45)%M3.mLen;tr.forEach((v,c)=>{const p=M3.mEn(base+(k?1:-1)*c*96);v.position.set(p.x,55+17,p.z);v.rotation.y=-p.ang})})}
+function animarMetro(){cancelAnimationFrame(M3.rafM);const t0=performance.now();const f=t=>{if(!(MK.paso==='C'||MK.paso==='D'))return;moverTrenes(MOV.on?(t-t0)/1000:0);dibujar3D();if(MOV.on)M3.rafM=requestAnimationFrame(f)};M3.rafM=requestAnimationFrame(f)}
 // qué se ve en el lienzo según el paso
-function modo3D(){if(!M3.r)return;const md=CON3D[MK.paso];if(M3.edif)M3.edif.visible=md==='ed';if(M3.upz)M3.upz.visible=md==='upz'}
+function modo3D(){if(!M3.r)return;const md=CON3D[MK.paso];if(M3.edif)M3.edif.visible=md==='ed';if(M3.upz)M3.upz.visible=md==='upz';
+ crearMetro();if(M3.metro){const on=MK.paso==='C'||MK.paso==='D';M3.metro.visible=on;if(on)animarMetro()}}
 // proyección: la del SVG (x=A·x+C·z, y=B·x+D·z−0,9·h), ajustada al tamaño real del elemento (preserveAspectRatio: meet)
 function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=rc.height;if(!w||!h)return false;
  let [x0,y0,vw,vh]=MK.vb;if(w/h>vw/vh){const n=vh*w/h;x0-=(n-vw)/2;vw=n}else{const n=vw*h/w;y0-=(n-vh)/2;vh=n}
@@ -1502,9 +1521,16 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
  const sc=new THREE.Scene(),cam=new THREE.Camera();cam.matrixAutoUpdate=false;
  // luz neutra y cálida (sin tinte verde ni azul)
  sc.add(new THREE.AmbientLight(0xffffff,.36));const sol=new THREE.DirectionalLight(0xfff1e2,1.15);sol.position.set(-.7,1,-.2);sc.add(sol);const fr=new THREE.DirectionalLight(0xffffff,.28);fr.position.set(.8,.5,.5);sc.add(fr);
- const U={uT:{value:0},uC:{value:new THREE.Vector2()}};let vb=null,listo=false,t0=0,vivo=true,traf=null,cora=null,faro=null,aros=[];
- Promise.all([fetch('limite.json').then(x=>x.json()),fetch('edif.bin').then(x=>x.arrayBuffer()),fetch('vias.json').then(x=>x.json()),fetch('lugares.json').then(x=>x.json())]).then(([LM,buf,VI,LG])=>{
+ const U={uT:{value:0},uC:{value:new THREE.Vector2()}};let vb=null,listo=false,t0=0,vivo=true,traf=null,cora=null,faro=null,aros=[],etAgua=[];const vq=new THREE.Vector3();
+ Promise.all([fetch('limite.json').then(x=>x.json()),fetch('edif.bin').then(x=>x.arrayBuffer()),fetch('vias.json').then(x=>x.json()),fetch('lugares.json').then(x=>x.json()),fetch('agua.json').then(x=>x.json()).catch(()=>({agua:[]}))]).then(([LM,buf,VI,LG,AG])=>{
   const L=LM.pts;cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;U.uC.value.set(cora[0],cora[1]);
+  // agua: río Bogotá, humedales y lagos (agua.json), con su nombre
+  const cAg={rio:0x3f86ad,humedal:0x3f8c8a,agua:0x4a88b0};
+  AG.agua.forEach(a=>{const s=new THREE.Shape(a.poly.map(([x,z])=>new THREE.Vector2(x,z)));const ga=new THREE.ShapeGeometry(s);ga.rotateX(Math.PI/2);
+   const ma=new THREE.Mesh(ga,new THREE.MeshBasicMaterial({color:cAg[a.t],transparent:true,opacity:a.t==='humedal'?.85:.9,side:THREE.DoubleSide,depthWrite:false}));ma.position.y=2.5;ma.renderOrder=2;sc.add(ma)});
+  const nomb={},cen=p=>[p.reduce((s,q)=>s+q[0],0)/p.length,p.reduce((s,q)=>s+q[1],0)/p.length],ar=p=>{let a=0;for(let i=0,j=p.length-1;i<p.length;j=i++)a+=p[j][0]*p[i][1]-p[i][0]*p[j][1];return Math.abs(a)/2};
+  AG.agua.forEach(a=>{const n=/r[ií]o bogot/i.test(a.n)?'Río Bogotá':/la vaca/i.test(a.n)?'Humedal La Vaca':/el burro/i.test(a.n)?'Humedal El Burro':/techo/i.test(a.n)?'Humedal de Techo':/timiza/i.test(a.n)?'Lago Timiza':null;if(!n)return;const A0=ar(a.poly);if(!nomb[n]||nomb[n].a<A0)nomb[n]={a:A0,p:cen(a.poly),t:a.t}});
+  etAgua=Object.entries(nomb).map(([n,o])=>{const d=document.createElement('div');d.className='agua-et';d.textContent=n;document.body.appendChild(d);return {d,v:new THREE.Vector3(o.p[0],8,o.p[1])}});
   const dentro=(x,y)=>{let c=false;for(let i=0,j=L.length-1;i<L.length;j=i++)if((L[i][1]>y)!==(L[j][1]>y)&&x<(L[j][0]-L[i][0])*(y-L[i][1])/(L[j][1]-L[i][1])+L[i][0])c=!c;return c};
   // losa con espesor, recortada exacta por el límite
   const sh=new THREE.Shape(L.map(([x,z])=>new THREE.Vector2(x,z)));const gs=new THREE.ExtrudeGeometry(sh,{depth:LOSA,bevelEnabled:false});gs.rotateX(Math.PI/2);
@@ -1563,6 +1589,7 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
   vivo=pT<1;cv.style.opacity=pT<.9?1:Math.max(0,1-(pT-.9)/.1);cv.style.visibility=vivo?'visible':'hidden';
   // el mapa del paso 1 aparece solo cuando la maqueta llega: no se ven dos Kennedy a la vez
   const MKMAPA=MKE&&MKE.querySelector('.mk-mapa');if(MKMAPA){const o=pT<.88?0:Math.min(1,(pT-.88)/.12);MKMAPA.style.opacity=o.toFixed(3)}
+  if(pT>.33||!vivo)etAgua.forEach(e=>{if(e.d.style.opacity!=='0')e.d.style.opacity=0});
   if(!listo||!vivo)return;const s=(t-t0)/1000,dt=Math.min(.05,(t-(tA||t))/1000);tA=t;
   U.uT.value=MOV.on?s:9;
   // vaivén suave de la vista (±4°) para que se lea el volumen; se apaga al salir para calzar con el mapa
@@ -1574,7 +1601,9 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
   // faro y aros sincronizados con la onda (cada 7.200/1.100 ≈ 6,5 s)
   if(faro){const f=Math.max(0,s-3.2),ph=(f*1100%7200)/7200;faro.material.opacity=f>0?.35+.45*(1-ph):0;
    aros.forEach((a,k)=>{const q=(ph+k*.12)%1,R=60+q*900;a.scale.set(R,R,R);a.material.opacity=f>0?(1-q)*.75:0})}
-  if(ajustar())r.render(sc,cam)})(0);
+  if(ajustar()){r.render(sc,cam);
+   // nombres del agua, solo mientras se ve la portada
+   const op=Math.max(0,1-pT*3);etAgua.forEach(e=>{vq.copy(e.v).applyMatrix4(cam.projectionMatrix);e.d.style.opacity=(op*(s>2.6?1:0)).toFixed(2);e.d.style.transform='translate('+((vq.x+1)/2*innerWidth).toFixed(1)+'px,'+((1-vq.y)/2*innerHeight).toFixed(1)+'px) translate(-50%,-50%)'})}})(0);
 })();
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
