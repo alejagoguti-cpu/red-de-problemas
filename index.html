@@ -799,7 +799,7 @@ const dl=new THREE.DirectionalLight(0xffffff,.9);dl.position.set(1,1.2,1.5);scen
 const pl=new THREE.PointLight(0x88aaff,.8,0);pl.position.set(-ext,ext,ext);scene.add(pl);
 // nodos esféricos con ícono y texto, aristas finas
 const NC={A:'#3e8f6f',B:'#6f55b0',C:'#3f72a8',D:'#a24a8d',E:'#37868c',F:'#b8693f'};
-const PC={A:'#a3b845',B:'#cdb38f',C:'#dba73a',D:'#d4553f',E:'#a77b5a',F:'#ee8a45'};
+const PC={A:'#a3b845',B:'#d9bf6e',C:'#dba73a',D:'#d4553f',E:'#a77b5a',F:'#ee8a45'};
 const ICONS={
 A:x=>{x.strokeRect(-46,-28,54,42);x.beginPath();x.moveTo(8,-14);x.lineTo(32,-14);x.lineTo(46,2);x.lineTo(46,14);x.lineTo(8,14);x.stroke();x.beginPath();x.arc(-24,22,9,0,7);x.stroke();x.beginPath();x.arc(30,22,9,0,7);x.stroke()},
 B:x=>{[-22,22].forEach(c=>{x.beginPath();x.arc(c,-20,11,0,7);x.stroke();x.beginPath();x.arc(c,34,20,Math.PI,0);x.stroke()})},
@@ -1462,7 +1462,7 @@ function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
   for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);const hh=dv.getInt16(b+10,true)/2;o.scale.set(dv.getInt16(b+4,true)/2,hh*3,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix);cc3.copy(cB3).lerp(cA3,Math.min(1,Math.pow(hh/40,.75)));m.setColorAt(i,cc3)} // alturas ×3 (como la portada) y gris neutro según la altura
   m.frustumCulled=false;sc.add(m);M3.edif=m;modo3D();dibujar3D()});
  // volúmenes de densidad por UPZ: sólidos con aristas claras (altura = habitantes por hectárea)
- const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2a2724'),cTop=new THREE.Color('#8f7a5e'); // arena apagada: sin amarillo chillón
+ const gU=new THREE.Group();gU.visible=false;sc.add(gU);M3.upz=gU;const cBase=new THREE.Color('#2b2820'),cTop=new THREE.Color('#9c843f'); // amarillo mostaza suave // arena apagada: sin amarillo chillón
  const orden=MK.UZ.slice().sort((a,b)=>a.dens-b.dens).map(u=>u.n); // suben de la menos densa a la más densa (Patio Bonito al final)
  MK.UZ.forEach(u=>{const h=u.dens/434*MK.HMAX,q=(u.dens-90)/(434-90),shp=new THREE.Shape(u.poly.map(([x,z])=>new THREE.Vector2(x,z)));
   const g=new THREE.ExtrudeGeometry(shp,{depth:h,bevelEnabled:false});g.rotateX(Math.PI/2);g.translate(0,h,0);
