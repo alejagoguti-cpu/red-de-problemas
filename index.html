@@ -674,6 +674,12 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 @keyframes mkflujo2{to{stroke-dashoffset:11}}
 .mk-origen{fill:var(--pc);fill-opacity:.18;stroke:var(--pc);stroke-width:1.2;vector-effect:non-scaling-stroke}
 .mk-norte{fill:var(--tinta-2)}
+/* contexto 3D (edificios reales) detrás del mapa */
+.mk-3d{position:absolute;z-index:0;pointer-events:none;opacity:0}
+#mksvg{position:relative;z-index:1}
+#mksvg.con3d .mk-sil{fill-opacity:0}
+#mksvg.con3d .mk-losa,#mksvg.con3d .mk-losa-c{display:none}
+#mksvg.con3d .mk-via3{stroke:rgba(214,228,222,.08)}#mksvg.con3d .mk-via4{stroke:rgba(214,228,222,.22)}
 @media(max-width:700px){
  #mk{display:block}
  #mk .mk-mapa{position:sticky;top:0;height:54vh;padding:12px 12px 8px;z-index:2;background:var(--campo-0);border-bottom:1px solid var(--linea)}
@@ -1352,7 +1358,7 @@ Promise.all(['limite.json','upz.json','lugares.json','vias.json','plazas_distrit
  // escala y norte (flecha del norte girada como el mapa)
  const n0=P(0,0),n1=P(0,-600),ang=Math.atan2(n1[0]-n0[0],-(n1[1]-n0[1]))*180/Math.PI,sx=VB[0]+VB[2]-padx*1.6,sy=VB[1]+pady*1.8;
  s+='<g class="mk-ref"><g transform="translate('+R(sx)+' '+R(sy)+') rotate('+ang.toFixed(1)+')"><path class="mk-norte" d="M0 -190L70 60L0 20L-70 60Z"/></g>'+'<text class="mk-t cen" x="'+R(sx)+'" y="'+R(sy+260)+'">N</text></g>';
- svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
+ svg.innerHTML=s;MK.svg=svg;MK.vb=VB;MK.PR=PR;MK.P=P;MK.proj={A,B,C,D};MK.lim=LM.pts;escalarMapa();prismas(0);pasoMapa(MK.paso||'F');
 }).catch(e=>console.warn('mapa:',e));
 const MK={};
 // volúmenes de densidad: suben al entrar al paso
@@ -1375,6 +1381,39 @@ function pasoMapa(id){const antes=MK.paso;MK.paso=id;const svg=MK.svg;document.g
  // encuadre: en «dependencia» se aleja para ver llegar los alimentos desde las regiones
  const meta=id==='A'?MK.VBA:MK.VBK;if(!meta)return;const ini=MK.vbAct.slice(),t0=performance.now(),T=MOV.on?1100:1;cancelAnimationFrame(MK.rafv);
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=q<.5?4*q*q*q:1-Math.pow(-2*q+2,3)/2;MK.vbAct=ini.map((v,i)=>v+(meta[i]-v)*e);svg.setAttribute('viewBox',MK.vbAct.map(v=>v.toFixed(1)).join(' '));MK.vb=MK.vbAct;escalarMapa();if(q<1)MK.rafv=requestAnimationFrame(f)};MK.rafv=requestAnimationFrame(f)}
+/* ---------- contexto 3D bajo el mapa axonométrico: los edificios reales de Kennedy (edif.bin) ----------
+   Un lienzo WebGL detrás del SVG con la MISMA proyección del mapa (giro θ, achatamiento k). Se dibuja solo cuando cambia algo.
+   Va en los pasos donde ayuda a leer el lugar; no en «crecimiento» ni «especulación», que se leen por sus volúmenes y colores. */
+const CON3D={F:1,C:1,A:1,E:1};
+const M3={on:0,obj:0,sube:0,r:null,raf:0};
+function crear3D(){if(M3.r||!MK.svg||!MK.proj)return;
+ const box=MK.svg.parentElement,cv=document.createElement('canvas');cv.className='mk-3d';box.insertBefore(cv,MK.svg);M3.cv=cv;
+ const r=new THREE.WebGLRenderer({canvas:cv,antialias:true,alpha:true});r.setPixelRatio(Math.min(devicePixelRatio,2));M3.r=r;
+ const sc=new THREE.Scene();M3.sc=sc;sc.add(new THREE.AmbientLight(0xffffff,.55));const dl=new THREE.DirectionalLight(0xffffff,.75);dl.position.set(-.6,1,-.35);sc.add(dl);
+ M3.cam=new THREE.Camera();M3.cam.matrixAutoUpdate=false;
+ // suelo de la localidad
+ // losa con espesor (la del SVG se oculta en estos pasos)
+ const sh=new THREE.Shape(MK.lim.map(([x,z])=>new THREE.Vector2(x,z)));const g0=new THREE.ExtrudeGeometry(sh,{depth:190,bevelEnabled:false});g0.rotateX(Math.PI/2);
+ sc.add(new THREE.Mesh(g0,[new THREE.MeshBasicMaterial({color:0x101415,side:THREE.DoubleSide}),new THREE.MeshLambertMaterial({color:0x1d2324,side:THREE.DoubleSide})]));
+ fetch('edif.bin').then(x=>x.arrayBuffer()).then(buf=>{const dv=new DataView(buf),total=dv.getUint32(4,true),n=Math.min(total,innerWidth<700?90000:total);
+  const g=new THREE.BoxGeometry(1,1,1);g.translate(0,.5,0);
+  const mat=new THREE.MeshLambertMaterial({color:0x6c7472,side:THREE.DoubleSide});M3.mat=mat; // un tono abajo: los datos de cada paso van encima
+  mat.onBeforeCompile=sh=>{sh.uniforms.uSube={value:0};M3.uSube=sh.uniforms.uSube;sh.vertexShader='uniform float uSube;\n'+sh.vertexShader.replace('#include <begin_vertex>','vec3 transformed=vec3(position.x,position.y*uSube,position.z);')};
+  const m=new THREE.InstancedMesh(g,mat,n),o=new THREE.Object3D();
+  for(let i=0;i<n;i++){const b=8+i*12;o.position.set(dv.getInt16(b,true)/2,0,dv.getInt16(b+2,true)/2);o.rotation.set(0,dv.getInt16(b+8,true)/10000,0);o.scale.set(dv.getInt16(b+4,true)/2,dv.getInt16(b+10,true)/2,dv.getInt16(b+6,true)/2);o.updateMatrix();m.setMatrixAt(i,o.matrix)}
+  m.frustumCulled=false;sc.add(m);M3.edif=m;dibujar3D()})}
+// proyección: la del SVG (x=A·x+C·z, y=B·x+D·z−0,9·h), ajustada al tamaño real del elemento (preserveAspectRatio: meet)
+function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=rc.height;if(!w||!h)return false;
+ let [x0,y0,vw,vh]=MK.vb;if(w/h>vw/vh){const n=vh*w/h;x0-=(n-vw)/2;vw=n}else{const n=vw*h/w;y0-=(n-vh)/2;vh=n}
+ M3.r.setSize(w,h,false);Object.assign(M3.cv.style,{width:w+'px',height:h+'px',left:(rc.left-svg.parentElement.getBoundingClientRect().left)+'px',top:(rc.top-svg.parentElement.getBoundingClientRect().top)+'px'}); // el SVG no tiene offsetTop
+ const {A,B,C,D}=MK.proj,sx=2/vw,sy=-2/vh,dz=1/9000; // profundidad: lo más lejano (arriba en pantalla) y lo más bajo quedan detrás
+ M3.cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);
+ M3.cam.projectionMatrixInverse.copy(M3.cam.projectionMatrix).invert();return true}
+function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;M3.r.render(M3.sc,M3.cam)}
+function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M3.sube,a=M3.obj,T=MOV.on?1100:1;
+ const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);M3.sube=de+(a-de)*e;M3.cv.style.opacity=Math.min(1,M3.sube*1.4);dibujar3D();if(q<1)M3.raf=requestAnimationFrame(f)};M3.raf=requestAnimationFrame(f)}
+{const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0;MK.svg.classList.toggle('con3d',!!o);if(o!==M3.obj){M3.obj=o;animar3D()}}}
+{const em=escalarMapa;escalarMapa=function(){em();if(M3.r&&M3.obj)dibujar3D()}}
 const pasoObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)pasoMapa(e.target.dataset.k)}),{rootMargin:'-45% 0px -45% 0px'});
 ST.querySelectorAll('.paso').forEach(p=>pasoObs.observe(p));
 function contar(card){card.querySelectorAll('.cnt').forEach(b=>{const v=+b.dataset.v,d=+b.dataset.d,t0=performance.now(),T=MOV.on?1600:1;
