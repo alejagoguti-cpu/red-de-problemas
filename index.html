@@ -683,7 +683,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 /* el metro ahora es 3D (viaducto y trenes): la línea plana se oculta y las estaciones van en marfil */
 .mk-metro-b,.mk-metro{display:none}
 .metro-lupa{position:absolute;z-index:2;pointer-events:none;border:1px solid rgba(241,235,223,.55);box-shadow:0 0 0 4px rgba(5,6,7,.6)}
-.metro-lupa span{position:absolute;left:8px;bottom:6px;font:500 9px var(--letra-dato);letter-spacing:.1em;text-transform:uppercase;color:#f1ebdf;text-shadow:0 0 6px #050607}
+.metro-lupa span{position:absolute;left:8px;right:8px;bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 9px var(--letra-dato);letter-spacing:.1em;text-transform:uppercase;color:#f1ebdf;text-shadow:0 0 6px #050607}
 .mk-metro-b{fill:none;stroke:#050607;stroke-width:7;vector-effect:non-scaling-stroke}
 .mk-metro{fill:none;stroke:#8fe7f2;stroke-width:3;stroke-dasharray:10 6;vector-effect:non-scaling-stroke;animation:mkmetro 1.6s linear infinite}
 @keyframes mkmetro{to{stroke-dashoffset:-16}}
