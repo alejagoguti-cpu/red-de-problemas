@@ -600,7 +600,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 #story section.hero .hmaq{grid-column:2;grid-row:1;position:relative;height:min(86vh,820px);align-self:center}
 #hmaq{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:5;pointer-events:none}
 #story section.hero .hcard{position:relative;z-index:6}
-.agua-et{position:fixed;left:0;top:0;z-index:6;pointer-events:none;opacity:0;font:500 9.5px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:#9fd0e6;text-shadow:0 0 6px #050607,0 0 12px #050607;white-space:nowrap;transition:opacity .4s}
+.agua-et{position:fixed;left:0;top:0;z-index:6;pointer-events:none;opacity:0;font:500 9.5px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:#8fd0c9;text-shadow:0 0 6px #050607,0 0 12px #050607;white-space:nowrap;transition:opacity .4s}
 .hmaq-n{position:absolute;right:4%;bottom:2%;font:500 10px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3)}.hmaq-n b{color:var(--tinta-1);font-weight:500}
 #story section.hero .hcard{grid-column:1;grid-row:1;text-align:left!important;width:auto!important}
 #story section.hero .hcard h1{font-size:clamp(3.6rem,1.4rem + 7vw,8.4rem)!important;line-height:.88!important}
@@ -1525,11 +1525,15 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
  Promise.all([fetch('limite.json').then(x=>x.json()),fetch('edif.bin').then(x=>x.arrayBuffer()),fetch('vias.json').then(x=>x.json()),fetch('lugares.json').then(x=>x.json()),fetch('agua.json').then(x=>x.json()).catch(()=>({agua:[]}))]).then(([LM,buf,VI,LG,AG])=>{
   const L=LM.pts;cora=LG.A.hitos.find(h=>h.n==='Corabastos').p;U.uC.value.set(cora[0],cora[1]);
   // agua: río Bogotá, humedales y lagos (agua.json), con su nombre
-  const cAg={rio:0x3f86ad,humedal:0x3f8c8a,agua:0x4a88b0};
+  // todo en el color de los humedales y recortado exacto por el límite (prueba punto-en-polígono en el sombreador)
+  const NL=Math.min(L.length,128),lim=[];for(let i=0;i<NL;i++)lim.push(new THREE.Vector2(L[Math.floor(i*L.length/NL)][0],L[Math.floor(i*L.length/NL)][1]));while(lim.length<128)lim.push(lim[0].clone()); // el arreglo del sombreador tiene 128 casillas fijas
+  const matAg=new THREE.ShaderMaterial({uniforms:{uL:{value:lim},uN:{value:NL},uC:{value:new THREE.Color(0x3f8c8a)}},transparent:true,depthWrite:false,side:THREE.DoubleSide,
+   vertexShader:'varying vec2 vP;void main(){vP=position.xz;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+   fragmentShader:'uniform vec2 uL[128];uniform int uN;uniform vec3 uC;varying vec2 vP;void main(){bool d=false;for(int i=0;i<128;i++){if(i>=uN)break;int j=i==0?uN-1:i-1;vec2 a=uL[i],b=uL[0];for(int k=0;k<128;k++){if(k==j){b=uL[k];break;}}if((a.y>vP.y)!=(b.y>vP.y)&&vP.x<(b.x-a.x)*(vP.y-a.y)/(b.y-a.y)+a.x)d=!d;}if(!d)discard;gl_FragColor=vec4(uC,.88);}'});
   AG.agua.forEach(a=>{const s=new THREE.Shape(a.poly.map(([x,z])=>new THREE.Vector2(x,z)));const ga=new THREE.ShapeGeometry(s);ga.rotateX(Math.PI/2);
-   const ma=new THREE.Mesh(ga,new THREE.MeshBasicMaterial({color:cAg[a.t],transparent:true,opacity:a.t==='humedal'?.85:.9,side:THREE.DoubleSide,depthWrite:false}));ma.position.y=2.5;ma.renderOrder=2;sc.add(ma)});
+   const ma=new THREE.Mesh(ga,matAg);ma.position.y=2.5;ma.renderOrder=2;sc.add(ma)});
   const nomb={},cen=p=>[p.reduce((s,q)=>s+q[0],0)/p.length,p.reduce((s,q)=>s+q[1],0)/p.length],ar=p=>{let a=0;for(let i=0,j=p.length-1;i<p.length;j=i++)a+=p[j][0]*p[i][1]-p[i][0]*p[j][1];return Math.abs(a)/2};
-  AG.agua.forEach(a=>{const n=/r[ií]o bogot/i.test(a.n)?'Río Bogotá':/la vaca/i.test(a.n)?'Humedal La Vaca':/el burro/i.test(a.n)?'Humedal El Burro':/techo/i.test(a.n)?'Humedal de Techo':/timiza/i.test(a.n)?'Lago Timiza':null;if(!n)return;const A0=ar(a.poly);if(!nomb[n]||nomb[n].a<A0)nomb[n]={a:A0,p:cen(a.poly),t:a.t}});
+  AG.agua.forEach(a=>{const n=/la vaca/i.test(a.n)?'Humedal La Vaca':/el burro/i.test(a.n)?'Humedal El Burro':/techo/i.test(a.n)?'Humedal de Techo':/timiza/i.test(a.n)?'Lago Timiza':null;if(!n)return;const A0=ar(a.poly);if(!nomb[n]||nomb[n].a<A0)nomb[n]={a:A0,p:cen(a.poly),t:a.t}});
   etAgua=Object.entries(nomb).map(([n,o])=>{const d=document.createElement('div');d.className='agua-et';d.textContent=n;document.body.appendChild(d);return {d,v:new THREE.Vector3(o.p[0],8,o.p[1])}});
   const dentro=(x,y)=>{let c=false;for(let i=0,j=L.length-1;i<L.length;j=i++)if((L[i][1]>y)!==(L[j][1]>y)&&x<(L[j][0]-L[i][0])*(y-L[i][1])/(L[j][1]-L[i][1])+L[i][0])c=!c;return c};
   // losa con espesor, recortada exacta por el límite
