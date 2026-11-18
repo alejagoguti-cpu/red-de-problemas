@@ -598,7 +598,8 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 /* ============ PORTADA: maqueta axonométrica ============ */
 #story section.hero{position:relative;background:radial-gradient(70% 60% at 68% 52%,#0d1314 0%,var(--campo-0) 70%);display:grid!important;grid-template-columns:minmax(0,40fr) minmax(0,60fr);align-items:center!important;justify-content:stretch!important;padding:0 3vw 0 5vw!important;min-height:100vh;pointer-events:auto;overflow:hidden}
 #story section.hero .hmaq{grid-column:2;grid-row:1;position:relative;height:min(86vh,820px);align-self:center}
-#hmaq{width:100%;height:100%;display:block}
+#hmaq{position:fixed;inset:0;width:100vw;height:100vh;display:block;z-index:5;pointer-events:none}
+#story section.hero .hcard{position:relative;z-index:6}
 .hmaq-n{position:absolute;right:4%;bottom:2%;font:500 10px var(--letra-dato);letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-3)}.hmaq-n b{color:var(--tinta-1);font-weight:500}
 #story section.hero .hcard{grid-column:1;grid-row:1;text-align:left!important;width:auto!important}
 #story section.hero .hcard h1{font-size:clamp(3.6rem,1.4rem + 7vw,8.4rem)!important;line-height:.88!important}
@@ -1542,18 +1543,30 @@ function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M
   // encuadre en coordenadas proyectadas (con margen para el vaivén)
   let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;const A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K;
   for(const [x,z] of L){const px=A*x+C*z,py=B*x+D*z;x0=Math.min(x0,px);x1=Math.max(x1,px);y0=Math.min(y0,py-300);y1=Math.max(y1,py+LOSA*.9)}
-  const mx=(x1-x0)*.08,my=(y1-y0)*.09;vb=[x0-mx,y0-my,x1-x0+2*mx,y1-y0+2*my];listo=true;t0=performance.now();
+  const mx=(x1-x0)*.02,my=(y1-y0)*.03;vb=[x0-mx,y0-my,x1-x0+2*mx,y1-y0+2*my];listo=true;t0=performance.now();
  }).catch(e=>console.warn('maqueta:',e));
- const ajustar=()=>{const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h||!vb)return false;r.setSize(w,h,false);
-  const A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K;
-  let [x0,y0,vw,vh]=vb;if(w/h>vw/vh){const nn=vh*w/h;x0-=(nn-vw)/2;vw=nn}else{const nn=vw*h/w;y0-=(nn-vh)/2;vh=nn}
-  const sx=2/vw,sy=-2/vh,dz=1/9000;cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();return true};
- new IntersectionObserver(es=>{vivo=es[0].isIntersecting},{threshold:0}).observe(cv);
+ /* El lienzo es fijo y ocupa la pantalla. En la portada Kennedy se ve grande; al bajar, la maqueta se encoge y vuela hasta
+    calzar exacta con el mapa del paso 1 (misma proyección: basta con interpolar escala y desplazamiento en pantalla). */
+ const HERO=document.querySelector('#story section.hero'),MKE=document.getElementById('mk');let pT=0;
+ const encaje=(R,v)=>{const s=Math.min(R.w/v[2],R.h/v[3]);return {s,ox:R.x+(R.w-v[2]*s)/2-v[0]*s,oy:R.y+(R.h-v[3]*s)/2-v[1]*s}};
+ const ajustar=()=>{const W=innerWidth,Hh=innerHeight;if(!vb)return false;if(cv.width!==Math.round(W*r.getPixelRatio())||cv.height!==Math.round(Hh*r.getPixelRatio()))r.setSize(W,Hh,false);
+  const movil=W<=700,R0=movil?{x:8,y:Hh*.07,w:W-16,h:Hh*.44}:{x:W*.27,y:Hh*.04,w:W*.72,h:Hh*.92};let E=encaje(R0,vb);
+  // destino: el mapa del paso 1 cuando ya está fijo arriba
+  if(pT>0&&MK.svg&&MK.vb&&MKE){const a=MK.svg.getBoundingClientRect();const E1=encaje({x:a.left,y:a.top,w:a.width,h:a.height},MK.vb); // aterriza donde está el mapa en pantalla
+   const e=pT<.5?4*pT*pT*pT:1-Math.pow(-2*pT+2,3)/2;E={s:E.s+(E1.s-E.s)*e,ox:E.ox+(E1.ox-E.ox)*e,oy:E.oy+(E1.oy-E.oy)*e}}
+  const A=Math.cos(TH),B=Math.sin(TH)*K,C=-Math.sin(TH),D=Math.cos(TH)*K,kx=2*E.s/W,ky=2*E.s/Hh,dz=1/9000;
+  cam.projectionMatrix.set(A*kx,0,C*kx,E.ox*2/W-1, -B*ky,.9*ky,-D*ky,1-E.oy*2/Hh, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);cam.projectionMatrixInverse.copy(cam.projectionMatrix).invert();return true};
  let tA=0;
- (function cuadro(t){requestAnimationFrame(cuadro);if(!listo||!vivo)return;const s=(t-t0)/1000,dt=Math.min(.05,(t-(tA||t))/1000);tA=t;
+ (function cuadro(t){requestAnimationFrame(cuadro);
+  // progreso de la salida: 0 en la portada, 1 cuando la portada ya pasó
+  if(HERO){const hr=HERO.getBoundingClientRect();pT=Math.max(0,Math.min(1,-hr.top/hr.height))}
+  vivo=pT<1;cv.style.opacity=pT<.9?1:Math.max(0,1-(pT-.9)/.1);cv.style.visibility=vivo?'visible':'hidden';
+  // el mapa del paso 1 aparece solo cuando la maqueta llega: no se ven dos Kennedy a la vez
+  const MKMAPA=MKE&&MKE.querySelector('.mk-mapa');if(MKMAPA){const o=pT<.88?0:Math.min(1,(pT-.88)/.12);MKMAPA.style.opacity=o.toFixed(3)}
+  if(!listo||!vivo)return;const s=(t-t0)/1000,dt=Math.min(.05,(t-(tA||t))/1000);tA=t;
   U.uT.value=MOV.on?s:9;
-  // vaivén suave de la vista (±4°) para que se lea el volumen
-  TH=(-30+(MOV.on?4*Math.sin(s*.18):0))*Math.PI/180;
+  // vaivén suave de la vista (±4°) para que se lea el volumen; se apaga al salir para calzar con el mapa
+  TH=(-30+(MOV.on?4*Math.sin(s*.18)*(1-pT):0))*Math.PI/180;
   // tráfico
   if(traf&&MOV.on&&s>2.4){const S=traf.S;traf.forEach((q,i)=>{const sg=S[q.s];q.t+=q.v*dt/Math.max(1,sg[2]);if(q.t>1||q.t<0){q.s=(q.s+(q.v>0?1:-1)+S.length)%S.length;q.t=q.v>0?0:1}
     const a=S[q.s][0],b=S[q.s][1];traf.p[i*3]=a[0]+(b[0]-a[0])*q.t;traf.p[i*3+1]=4;traf.p[i*3+2]=a[1]+(b[1]-a[1])*q.t});traf.g.attributes.position.needsUpdate=true}
