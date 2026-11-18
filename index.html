@@ -682,6 +682,8 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion #
 /* metro Línea 1 */
 /* el metro ahora es 3D (viaducto y trenes): la línea plana se oculta y las estaciones van en marfil */
 .mk-metro-b,.mk-metro{display:none}
+.metro-lupa{position:absolute;z-index:2;pointer-events:none;border:1px solid rgba(241,235,223,.55);box-shadow:0 0 0 4px rgba(5,6,7,.6)}
+.metro-lupa span{position:absolute;left:8px;bottom:6px;font:500 9px var(--letra-dato);letter-spacing:.1em;text-transform:uppercase;color:#f1ebdf;text-shadow:0 0 6px #050607}
 .mk-metro-b{fill:none;stroke:#050607;stroke-width:7;vector-effect:non-scaling-stroke}
 .mk-metro{fill:none;stroke:#8fe7f2;stroke-width:3;stroke-dasharray:10 6;vector-effect:non-scaling-stroke;animation:mkmetro 1.6s linear infinite}
 @keyframes mkmetro{to{stroke-dashoffset:-16}}
@@ -1480,20 +1482,36 @@ function crecerUPZ(){cancelAnimationFrame(M3.rafU);const t0=performance.now(),fi
   if(M3.upz)M3.upz.children.forEach(g=>{const f=fUPZ(g.userData.ord,s);g.scale.y=Math.max(.001,f);ordDe[g.userData.n]=f});
   prismas(n=>ordDe[n]||0);dibujar3D();if(s<fin)M3.rafU=requestAnimationFrame(paso)};M3.rafU=requestAnimationFrame(paso)}
 function bajarUPZ(){cancelAnimationFrame(M3.rafU);if(M3.upz)M3.upz.children.forEach(g=>g.scale.y=.001);prismas(0)}
-// metro Línea 1 en 3D: viaducto elevado (~13 m reales ×3), columnas, estaciones y dos trenes en circulación
+// metro Línea 1 en 3D: viaducto en U sobre columnas con cabezal, estaciones con vidrio y torres de acceso, y dos trenes
+// (dimensiones exageradas ×3 en altura y ~×2 en planta, como el resto del modelo, para que se lean a esta escala)
 function crearMetro(){if(M3.metro||!MK.metro||!M3.sc)return;const L=MK.metro,g=new THREE.Group();g.visible=false;M3.sc.add(g);M3.metro=g;
  const H=55,cum=[0];for(let i=1;i<L.length;i++)cum.push(cum[i-1]+Math.hypot(L[i][0]-L[i-1][0],L[i][1]-L[i-1][1]));M3.mLen=cum[cum.length-1];
  const en=d=>{d=((d%M3.mLen)+M3.mLen)%M3.mLen;let i=1;while(i<cum.length-1&&cum[i]<d)i++;const a=L[i-1],b=L[i],f=(d-cum[i-1])/Math.max(1e-6,cum[i]-cum[i-1]);return {x:a[0]+(b[0]-a[0])*f,z:a[1]+(b[1]-a[1])*f,ang:Math.atan2(b[1]-a[1],b[0]-a[0])}};M3.mEn=en;
- const concreto=new THREE.MeshLambertMaterial({color:0xc9c4b8}),pilar=new THREE.MeshLambertMaterial({color:0x8f8b83});
- for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i],l=Math.hypot(b[0]-a[0],b[1]-a[1]);if(l<1)continue;const m=new THREE.Mesh(new THREE.BoxGeometry(l+2,9,38),concreto);m.position.set((a[0]+b[0])/2,H,(a[1]+b[1])/2);m.rotation.y=-Math.atan2(b[1]-a[1],b[0]-a[0]);g.add(m)}
- const pg=new THREE.CylinderGeometry(7,9,H,8);pg.translate(0,H/2,0);for(let d=0;d<M3.mLen;d+=70){const p=en(d),m=new THREE.Mesh(pg,pilar);m.position.set(p.x,0,p.z);g.add(m)}
+ const M=c=>new THREE.MeshLambertMaterial({color:c}),losa=M(0xd3cec4),viga=M(0x9e998f),baranda=M(0xe6e2d9),pilar=M(0xb3aea4),cabezal=M(0xc4bfb5);
+ const caja=(w,h,d,mat,x,y,z,ang,ox=0,oz=0)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);const c=Math.cos(-ang),s=Math.sin(-ang);m.position.set(x+ox*c-oz*s,y,z+ox*s+oz*c);m.rotation.y=-ang;g.add(m);return m};
+ // tablero en U: losa, viga inferior y dos barandas
+ for(let i=1;i<L.length;i++){const a=L[i-1],b=L[i],l=Math.hypot(b[0]-a[0],b[1]-a[1]);if(l<1)continue;const x=(a[0]+b[0])/2,z=(a[1]+b[1])/2,an=Math.atan2(b[1]-a[1],b[0]-a[0]);
+  caja(l+2,5,34,losa,x,H,z,an);caja(l+2,9,20,viga,x,H-7,z,an);caja(l+2,7,2.5,baranda,x,H+6,z,an,0,16);caja(l+2,7,2.5,baranda,x,H+6,z,an,0,-16)}
+ // columnas ovaladas con cabezal en T cada ~70 m
+ const pg=new THREE.CylinderGeometry(6,7.5,H-12,14);pg.translate(0,(H-12)/2,0);
+ for(let d=35;d<M3.mLen;d+=70){const p=en(d),m=new THREE.Mesh(pg,pilar);m.position.set(p.x,0,p.z);m.rotation.y=-p.ang;m.scale.set(1.7,1,1);g.add(m);caja(14,8,40,cabezal,p.x,H-14,p.z,p.ang)}
+ // estaciones: plataforma ancha, vidrio a los lados, cubierta roja y torres de acceso a la calle
+ const vidrio=new THREE.MeshLambertMaterial({color:0x9fc0cc,transparent:true,opacity:.45}),rojo=M(0xd24a3c),plat=M(0xeeeae2),torre=M(0xc9c4ba);
  (MK.est||[]).forEach(e=>{let bd=1e9,bp=null;for(let d=0;d<M3.mLen;d+=10){const p=en(d),q=Math.hypot(p.x-e.p[0],p.z-e.p[1]);if(q<bd){bd=q;bp=p}}
-  const s=new THREE.Mesh(new THREE.BoxGeometry(220,22,64),new THREE.MeshLambertMaterial({color:0xece8df}));s.position.set(bp.x,H+14,bp.z);s.rotation.y=-bp.ang;g.add(s);
-  const tch=new THREE.Mesh(new THREE.BoxGeometry(234,5,72),new THREE.MeshLambertMaterial({color:0xd94f3f}));tch.position.set(bp.x,H+27,bp.z);tch.rotation.y=-bp.ang;g.add(tch)});
- // trenes: 6 vagones blancos con franja roja
- const vag=new THREE.BoxGeometry(92,24,30),mv=new THREE.MeshLambertMaterial({color:0xf6f4ef,emissive:0x202020}),mr=new THREE.MeshLambertMaterial({color:0xd94f3f,emissive:0x2a0a08});
- M3.trenes=[0,1].map(k=>{const tr=[];for(let c=0;c<6;c++){const v=new THREE.Group(),b=new THREE.Mesh(vag,mv),f=new THREE.Mesh(new THREE.BoxGeometry(92.6,5,30.6),mr);f.position.y=-4;v.add(b,f);g.add(v);tr.push(v)}return {tr,k}})}
-function moverTrenes(s){if(!M3.trenes)return;M3.trenes.forEach(({tr,k})=>{const base=k?M3.mLen-(s*140)%M3.mLen:(s*140+M3.mLen*.45)%M3.mLen;tr.forEach((v,c)=>{const p=M3.mEn(base+(k?1:-1)*c*96);v.position.set(p.x,55+17,p.z);v.rotation.y=-p.ang})})}
+  const {x,z,ang}=bp;caja(250,8,90,plat,x,H+2,z,ang);caja(240,18,2,vidrio,x,H+15,z,ang,0,44);caja(240,18,2,vidrio,x,H+15,z,ang,0,-44);
+  caja(262,4,100,rojo,x,H+26,z,ang);caja(250,3,92,M(0xb43a2e),x,H+23,z,ang);
+  [-1,1].forEach(sx=>{caja(26,H+20,24,torre,x,(H+20)/2,z,ang,sx*95,sx*62);caja(28,4,26,rojo,x,H+22,z,ang,sx*95,sx*62)});
+  if(/3$/.test(e.n))M3.lupa={x,z,n:e.n,sub:e.sub}});
+ // trenes: 6 vagones; carrocería blanca, banda de ventanas, franja roja, frente con parabrisas y luces
+ const blanco=new THREE.MeshLambertMaterial({color:0xf5f3ee,emissive:0x1c1c1c}),vent=new THREE.MeshLambertMaterial({color:0x1d262c,emissive:0x0b1a22}),franja=new THREE.MeshLambertMaterial({color:0xd24a3c,emissive:0x2a0905}),
+  luz=new THREE.MeshBasicMaterial({color:0xfff6d8}),techo=M(0xcfcbc3);
+ const vagon=(cabeza)=>{const v=new THREE.Group(),add=(w,h,d,m,x,y,z)=>{const q=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);q.position.set(x,y,z);v.add(q)};
+  add(84,20,26,blanco,0,0,0);add(80,7,26.6,vent,0,4,0);add(84.4,3,26.8,franja,0,-6,0);add(40,3,14,techo,0,11.5,0);
+  if(cabeza){add(10,16,22,blanco,47,-1,0);add(4,8,20,vent,51.5,3,0);add(1.5,3,5,luz,53,-5,8);add(1.5,3,5,luz,53,-5,-8);add(10.4,3,22.4,franja,47,-6,0)}
+  return v};
+ M3.trenes=[0,1].map(k=>{const tr=[];for(let c=0;c<6;c++){const v=vagon(c===0||c===5);if(c===5)v.children.forEach(q=>{q.position.x*=-1});g.add(v);tr.push(v)}return {tr,k}})}
+function moverTrenes(s){if(!M3.trenes)return;M3.trenes.forEach(({tr,k})=>{const dir=k?-1:1,base=k?M3.mLen-(s*140)%M3.mLen:(s*140+M3.mLen*.45)%M3.mLen;
+ tr.forEach((v,c)=>{const p=M3.mEn(base-dir*c*90);v.position.set(p.x,55+16,p.z);v.rotation.y=-p.ang+(k?Math.PI:0)})})}
 function animarMetro(){cancelAnimationFrame(M3.rafM);const t0=performance.now();const f=t=>{if(!(MK.paso==='C'||MK.paso==='D'))return;moverTrenes(MOV.on?(t-t0)/1000:0);dibujar3D();if(MOV.on)M3.rafM=requestAnimationFrame(f)};M3.rafM=requestAnimationFrame(f)}
 // qué se ve en el lienzo según el paso
 function modo3D(){if(!M3.r)return;const md=CON3D[MK.paso];if(M3.edif)M3.edif.visible=md==='ed';if(M3.upz)M3.upz.visible=md==='upz';
@@ -1505,7 +1523,19 @@ function proy3D(){const svg=MK.svg,rc=svg.getBoundingClientRect(),w=rc.width,h=r
  const {A,B,C,D}=MK.proj,sx=2/vw,sy=-2/vh,dz=1/9000; // profundidad: lo más lejano (arriba en pantalla) y lo más bajo quedan detrás
  M3.cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);
  M3.cam.projectionMatrixInverse.copy(M3.cam.projectionMatrix).invert();return true}
-function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;M3.r.render(M3.sc,M3.cam)}
+function dibujar3D(){if(!M3.r||!proy3D())return;if(M3.uSube)M3.uSube.value=M3.sube;M3.r.render(M3.sc,M3.cam);lupaMetro()}
+// lupa: acercamiento a una estación del metro, dibujado en un recuadro del mismo lienzo
+function lupaMetro(){const on=M3.metro&&M3.metro.visible&&M3.lupa;let el=M3.lupaEl;
+ if(!el){el=M3.lupaEl=document.createElement('div');el.className='metro-lupa';M3.cv.parentElement.appendChild(el)}
+ if(!on){el.style.display='none';return}
+ const r=M3.r,cw=M3.cv.clientWidth,chh=M3.cv.clientHeight,w=Math.round(Math.min(340,cw*.42)),h=Math.round(w*.68),x=14,y=14;
+ const {A,B,C,D}=MK.proj,cx=A*M3.lupa.x+C*M3.lupa.z,cy=B*M3.lupa.x+D*M3.lupa.z-.9*55,vw=820,vh=vw*h/w,x0=cx-vw/2,y0=cy-vh/2,sx=2/vw,sy=-2/vh,dz=1/9000;
+ const P=M3.cam.projectionMatrix.clone();
+ M3.cam.projectionMatrix.set(A*sx,0,C*sx,-x0*sx-1, B*sy,-.9*sy,D*sy,-y0*sy+1, -B*dz,-.5*dz,-D*dz,0, 0,0,0,1);
+ const vy=chh-y-h;r.setScissorTest(true);r.setViewport(x,vy,w,h);r.setScissor(x,vy,w,h);r.setClearColor(0x0b0c0d,1);r.clear();r.render(M3.sc,M3.cam);
+ r.setScissorTest(false);r.setViewport(0,0,cw,chh);r.setClearColor(0x000000,0);M3.cam.projectionMatrix.copy(P);
+ Object.assign(el.style,{display:'block',left:(parseFloat(M3.cv.style.left)+x)+'px',top:(parseFloat(M3.cv.style.top)+y)+'px',width:w+'px',height:h+'px'});
+ el.innerHTML='<span>'+esc2(M3.lupa.n)+' · '+esc2(M3.lupa.sub)+'</span>'}
 function animar3D(){cancelAnimationFrame(M3.raf);const t0=performance.now(),de=M3.sube,a=M3.obj,T=MOV.on?1100:1;
  const f=t=>{const q=Math.min(1,(t-t0)/T),e=1-Math.pow(1-q,3);M3.sube=de+(a-de)*e;M3.cv.style.opacity=Math.min(1,M3.sube*1.4);dibujar3D();if(q<1)M3.raf=requestAnimationFrame(f)};M3.raf=requestAnimationFrame(f)}
 {const pm=pasoMapa;pasoMapa=function(id){pm(id);if(!MK.svg)return;crear3D();const o=CON3D[id]?1:0,md=CON3D[id]||'';MK.svg.classList.toggle('con3d',!!o);
