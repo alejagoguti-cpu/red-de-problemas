@@ -256,6 +256,24 @@ header p{font-size:12.5px;color:var(--mut)}
 /* ============ ENTRADA: Kennedy en nube de puntos que se vuelve la red ============ */
 body.intro header,body.intro .legend,body.intro .goprop,body.intro .goconecto{opacity:0!important;visibility:hidden}
 header,.legend,.goprop,.goconecto{transition:opacity .9s ease,visibility 0s}
+/* conectografía del módulo 12 sobre la ciudad (botón «Conectografía») */
+#cgl{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;visibility:hidden;overflow:hidden}
+#cgs{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#cgs .cgpol{font:800 14px Geist,system-ui,sans-serif;fill:#fff;stroke:#0b0d10;stroke-width:3;paint-order:stroke;text-anchor:middle;dominant-baseline:central}
+.cgb{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;border-radius:50%;padding:0;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 72%,transparent);box-shadow:0 3px 14px rgba(0,0,0,.55),0 0 18px color-mix(in srgb,var(--c) 45%,transparent);display:grid;place-items:center;overflow:visible;transition:filter .18s}
+.cgb:hover{filter:brightness(1.2)}
+.cgb img{width:58%;height:58%;pointer-events:none}
+.cgb span{display:none;position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:4px;width:150px;font:500 10.5px/1.25 Geist,system-ui,sans-serif;color:#fff;text-align:center;text-shadow:0 1px 6px #000,0 0 2px #000;pointer-events:none}
+#cgl.cerca .cgb span{display:block}
+#cgleg{position:fixed;left:20px;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);z-index:3;width:290px;padding:12px 14px 13px;background:rgba(13,15,18,.74);border:1px solid rgba(255,255,255,.075);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);font-size:12px;color:#e9ebec;opacity:0;visibility:hidden;transition:opacity .6s,visibility 0s .6s}
+#cgleg.on{opacity:1;visibility:visible;transition:opacity .6s}
+#cgleg b{display:block;font:500 9.5px 'Geist Mono',ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:#646c71;padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.075)}
+#cgleg div{display:flex;align-items:center;gap:9px;margin:6px 0}
+#cgleg i{width:11px;height:11px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 8px var(--c)}
+#cgleg em{margin-left:auto;font:500 10.5px 'Geist Mono',ui-monospace,monospace;color:#9aa2a7;font-style:normal}
+#cgleg small{display:block;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.075);color:#646c71;font-size:11px;line-height:1.45}
+body.conecto .legend{opacity:0!important;visibility:hidden}
+@media(max-width:600px){#cgleg{left:12px;right:12px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 66px);font-size:11px;padding:9px 11px}#cgleg small{display:none}#cgleg div{margin:3px 0}}
 /* botón a la conectografía (conectografia.html): mismo tamaño que «Ver la propuesta», en versión contorno */
 .goconecto{position:fixed;right:20px;top:20px;z-index:4;display:flex;align-items:center;gap:9px;background:rgba(13,15,18,.74);color:var(--fg);border:1px solid rgba(207,255,94,.38);border-radius:10px;padding:10px 18px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:opacity .9s ease,border-color .2s,color .2s,background .2s}
 .goconecto svg{width:15px;height:15px;flex:none;fill:none;stroke:#cfff5e;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -1926,50 +1944,103 @@ function recorrido(dt,now){
  capasGuion(i,f,dt);
  return s;
 }
-// ---------- CONECTOGRAFÍA: la red explota y cada problema aterriza en su lugar real de Kennedy ----------
-// Botón «Conectografía» (arriba a la derecha en la red). Las partículas de las esferas vuelven a armar la ciudad
-// (nube.bin, edificios, vías y límite), cada problema baja flotando sobre el centro de los lugares donde ocurre
-// (lugares.json) con un tallo hasta el suelo, y los ríos de partículas siguen uniendo los problemas. «Volver a la red» lo deshace.
-const CG={c:0,to:0,t0:0,from:0,cam:null,land:null,lines:null,ep:null,stems:null};
-function cgLand(){if(CG.land||!H.vistaP)return CG.land;const L=N.map(n=>{const v=H.vistaP[n.id+'v'];return v?new V3(v.c.x,0,v.c.z):new V3()});
- for(let it=0;it<200;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const d=new V3(L[j].x-L[i].x,0,L[j].z-L[i].z);let l=d.length();if(l>=250)continue;if(l<.01){d.set(Math.cos(i+j*2),0,Math.sin(i+j*2));l=1}d.multiplyScalar((250-l)/2/l);L[i].sub(d);L[j].add(d)}
- CG.land=L.map((p,i)=>({g:p.clone(),p:new V3(p.x,110+(i%3)*34,p.z)}));
- N.forEach(n=>{n.p0=n.p.clone()});CG.lines=ARC.map(a=>scene.children.find(o=>o.isLine&&o.material===a.lm));
- const g=new THREE.BufferGeometry(),pos=new Float32Array(N.length*6),col=new Float32Array(N.length*6);N.forEach((n,i)=>{const c=new THREE.Color(PC[n.id]);col.set([c.r*.25,c.g*.25,c.b*.25,c.r,c.g,c.b],i*6)});
- g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));
- CG.stems=new THREE.LineSegments(g,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false}));CG.stems.renderOrder=4;CG.stems.frustumCulled=false;scene.add(CG.stems);
- return CG.land}
-function cgIr(on){if(!cgLand())return;CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
- const [p,t]=vista(0,0),cc=new V3();CG.land.forEach(l=>cc.add(l.g));cc.divideScalar(CG.land.length);const nt=t.clone().lerp(cc,.45);p.add(nt.clone().sub(t));CG.cam={fP:cam.position.clone(),fT:ctl.target.clone(),tP:on?p:RED_POS.clone(),tT:on?nt:new V3()};
- if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;ctl.enabled=false;ctl.autoRotate=false;vtx=vty=0;
- if(on&&!CG.ep)CG.ep=edgePick.splice(0);document.body.classList.toggle('conecto',on);cgBoton()}
+// ---------- CONECTOGRAFÍA: la red explota y aparece la conectografía del módulo 12 sobre Kennedy ----------
+// Botón «Conectografía». Las esferas de los seis problemas estallan, sus partículas vuelven a armar la ciudad
+// (nube.bin, edificios, vías, límite) y aparecen las burbujas de la conectografía del módulo 12
+// (anasoficasca-code.github.io/modelamiento2/modulo-12-problemas.html, al «Materializar»): mismas causas,
+// mismas coordenadas, misma separación, altura y tamaño según conexiones, tallos y flechas con + y −.
+// Lo único distinto: cada burbuja toma el color del problema de esta red al que pertenece (CGCLASE).
+// Marco: las coordenadas del módulo 12 son el mismo sistema local del simulador que usa nube.bin
+// (centro de su red = 5341,33 / 3161,9 = LC de tools/limite_build.js), así que basta restar el centro de la nube.
+const CGSUB={ // causas del módulo 12 (x, y en el sistema local); 'del' = eliminada en el módulo (no se dibuja, pero cuenta en la separación)
+ n1:[['s1_1','Infiltración de camiones pesados de escala regional en calles barriales de una sola calzada',6315.4,2529.8],['s1_2','Filas de camiones y congestión represada sobre las avenidas principales',8097.5,2265.9],['s1_3','Deterioro continuo de la capa de rodadura ante el tránsito de carga pesada',7197.9,3738.8],['s1_4','Conflicto y entrecruzamiento de flujos entre camiones, vehículos particulares, bicipatios y peatones',6876.1,3052.3],['s1_5','Ingreso vehicular en ángulo recto que obliga a frenar sobre la calzada arterial',6303.1,3748.1]],
+ n2:[['s2_1','Vertimiento de lixiviados orgánicos al alcantarillado sin tratamiento',7563.4,3372.6],['s2_2','Escorrentía de residuos de alimentos',6220.1,1816.0],['s2_3','Eutrofización y tinción de aguas en la cuenca hídrica',5823.4,4944.2],['s2_4','Vertimiento de grasas y agua de lavado de bodegas hacia canales superficiales',6048.5,4123.4],['s2_5','Escorrentía de alimentos',4746.1,4233.7],['s2_6','Vertimiento de lixiviados por residuos inorgánicos',8889.5,3352.4,'del'],['s2_7','Vertimiento de agua sucia y lixiviados al alcantarillado pluvial sin tratamiento',8216.2,4012.9],['s2_8','Arrastre de basuras desde la calle hacia los canales de agua en eventos de lluvia',6505.6,4421.9],['s2_9','Infiltración de agua contaminada en la franja del humedal',6012.9,1933.1],['s2_10','Barrera física del cerramiento privado sobre la franja de protección ambiental',5710.4,1911.4,'del'],['s2_11','Insuficiencia de redes sanitarias destinadas a la limpieza de bodegas',6779.3,2429.1]],
+ n3:[['s3_1','Entrada masiva de carga alimentaria regional en un solo predio',7351.1,2267.9],['s3_2','Represión de camiones en espera ante la diferencia entre horarios de llegada y venta',5695.7,2640.7,'del'],['s3_3','Saturación comercial intensiva en un grupo reducido de bodegas',6488.3,2252.8],['s3_4','Llegada masiva y continua de carga alimentaria regional a un único punto urbano',6252.8,1993.0],['s3_5','Represión de camiones en vía pública durante la espera de apertura de bodegas',6707.5,1990.2],['s3_6','Mezcla física de comercialización mayorista con almacenamiento, empaque y preparación de alimentos',5701.5,2460.8],['s3_7','Saturación comercial intensiva en una franja reducida de bodegas',5901.1,2200.8],['s3_8','Aglomeración de compradores, carretas y vehículos en los accesos a los sectores de venta',6426.7,3000.7]],
+ n4:[['s4_1','Crecimiento de torres de apartamentos sobre infraestructuras con capacidad límite',7888.5,4383.3],['s4_2','Construcción de edificios que superan la altura permitida sobre vías estrechas',7293.7,1833.1,'del'],['s4_3','Fricción en la convivencia directa entre conjuntos residenciales y zonas de bodegaje',5413.3,2762.6],['s4_4','Coincidencia temporal entre los viajes de residentes y el transporte de carga',7239.1,2609.5],['s4_5','Ocupación de vías barriales con carros particulares ante estacionamientos agotados',6678.7,2917.5],['s4_6','Construcción masiva de torres residenciales superando la capacidad de las vías barriales',7933.8,2667.8],['s4_7','Generación concentrada de viajes cotidianos desde conjuntos verticales hacia pocos corredores',7932.3,3554.7],['s4_8','Saturación del sistema masivo (TransMilenio y SITP) por exceso de pasajeros en horas pico',7626.1,2222.8],['s4_9','Retraso en las frecuencias de buses debido al parqueo informal en los carriles mixtos',6809.2,3351.5]],
+ n5:[['s5_1','Ocupación comercial de andenes estrechos con cajas, huacales y mercancía',6476.6,1793.7],['s5_2','Instalación de puestos informales de venta de alimentos sobre la calzada vehicular',6928.1,2589.0],['s5_3','Expulsión de peatones hacia la calle junto al tránsito de camiones pesados',6360.9,1445.0],['s5_4','Aglomeración peatonal sobre aceras fragmentadas e invadidas',7114.5,2739.4,'del'],['s5_5','Apropiación comercial de vías residenciales fuera del muro de cerramiento',6093.0,2745.6]],
+ n6:[['s6_1','Acumulación de basura orgánica superando la capacidad de los contenedores',6163.3,2183.0],['s6_2','Estacionamiento prolongado de camiones de gran tonelaje en calles residenciales',5999.0,3425.2],['s6_3','Derrame de lixiviados sobre el pavimento a la intemperie',5996.5,2353.4],['s6_4','Bloqueo de puntos de recolección de basura con vehículos parqueados',6875.5,2245.9],['s6_5','Generación de malos olores y focos sanitarios junto a las zonas de vivienda',6678.0,2583.5]],
+ n7:[['s7_1','Rigidez de los instrumentos normativos distritales frente a la autoorganización local',6534.1,2038.6,'del'],['s7_2','Brecha entre las determinantes del POT y las dinámicas reales de uso del suelo',6340.3,2150.3,'del'],['s7_3','Coexistencia de regímenes normativos entre regulación pública y administración privada',6668.3,2250.1,'del'],['s7_4','Consolidación de dinámicas informales al margen de controles institucionales',7566.6,1609.0,'del'],['s7_5','Pérdida de eficacia en los mecanismos institucionales de regulación territorial',6596.9,2422.9,'del']]};
+const CGREL=[['s1_5','s1_2','+'],['s1_2','s1_1','+'],['s1_1','s1_4','+'],['s1_4','s1_3','+'],
+ ['s2_11','s2_1','+'],['s2_4','s2_1','+'],['s2_1','s2_7','+'],['s2_7','s2_8','+'],['s2_10','s2_9','+'],['s2_2','s2_9','+'],['s2_9','s2_3','+'],['s2_8','s2_3','+'],['s2_6','s2_3','+'],
+ ['s3_1','s3_5','+'],['s3_4','s3_2','+'],['s3_5','s3_8','+'],['s3_2','s3_8','+'],['s3_8','s3_3','+'],['s3_8','s3_7','+'],['s3_3','s3_6','+'],
+ ['s4_1','s4_7','+'],['s4_6','s4_7','+'],['s4_7','s4_8','+'],['s4_8','s4_9','+'],['s4_2','s4_5','+'],['s4_4','s4_3','+'],
+ ['s5_1','s5_3','+'],['s5_3','s5_4','+'],['s5_2','s5_5','+'],
+ ['s6_1','s6_4','+'],['s6_4','s6_5','+'],['s6_2','s6_3','+'],['s6_3','s6_5','+'],
+ ['s7_1','s7_2','+'],['s7_2','s7_3','+'],['s7_3','s7_4','+'],['s7_4','s7_5','+'],['s7_5','s7_1','+'],
+ // entre problemáticas
+ ['s2_3','s3_2','+'],['s1_1','s3_5','+'],['s4_1','s3_1','+'],['s3_3','s4_1','-'],['s7_3','s1_2','-'],['s6_5','s7_2','+'],['s6_2','s2_1','+'],['s2_5','s6_1','+'],['s2_1','s1_5','+'],['s2_2','s5_3','+'],['s5_1','s4_2','+'],['s5_2','s1_2','+'],['s1_4','s6_2','+']];
+// clasificación de cada causa en los seis problemas de esta red (A dependencia de alimentos externos, B crecimiento poblacional,
+// C valorización del suelo, D especulación, E gestión de residuos sólidos, F centralización de servicios)
+const CGCLASE={s1_1:'A',s1_2:'F',s1_3:'A',s1_4:'F',s1_5:'F',
+ s2_1:'E',s2_2:'E',s2_3:'E',s2_4:'E',s2_5:'E',s2_7:'E',s2_8:'E',s2_9:'E',s2_11:'E',
+ s3_1:'A',s3_3:'F',s3_4:'A',s3_5:'F',s3_6:'F',s3_7:'F',s3_8:'F',
+ s4_1:'B',s4_3:'C',s4_4:'B',s4_5:'B',s4_6:'D',s4_7:'B',s4_8:'B',s4_9:'B',
+ s5_1:'F',s5_2:'D',s5_3:'F',s5_5:'C',
+ s6_1:'E',s6_2:'A',s6_3:'E',s6_4:'E',s6_5:'E'};
+const CGFOV=18; // ángulo estrecho: se ve casi como la cámara ortográfica del módulo 12
+const CG={c:0,to:0,t0:0,from:0,cam:null,ok:false,nodos:null,rel:null,lay:null,svg:null,pk:null,ep:null};
+function cgArma(){if(CG.ok)return;CG.ok=true;
+ const L=[],BY={};Object.keys(CGSUB).forEach(m=>CGSUB[m].forEach(([id,t,x,y,d])=>{const n={id,t,x,y,del:!!d,m};L.push(n);BY[id]=n}));
+ // misma separación mínima que el módulo 12 (180 unidades, 400 pasadas, mismo orden)
+ for(let it=0;it<400;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i],b=L[j];let dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy);
+  if(d<180){if(d<.1){const g=i*1.37+j*2.1;dx=Math.cos(g)*200;dy=Math.sin(g)*200;d=200}const o=(180-d)/2,ux=dx/d,uy=dy/d;a.x-=ux*o;a.y-=uy*o;b.x+=ux*o;b.y+=uy*o}}
+ // grado (como el módulo: todas las relaciones registradas), tamaño y altura
+ L.forEach(n=>n.deg=0);CGREL.forEach(([a,b])=>{if(BY[a])BY[a].deg++;if(BY[b])BY[b].deg++});
+ const K=10*ESCALA; // 1 unidad del módulo 12 (=10 m) en unidades de esta escena
+ const SZ=innerWidth<600?.6:1; // en celular las burbujas se achican para que no se tapen
+ L.forEach(n=>{n.d=Math.round((n.deg<=1?34:n.deg===2?44:n.deg===3?54:66)*SZ);n.h=(3+Math.min(n.deg,7)*6)*K;
+  n.p=new V3((n.x-7188)*ESCALA,n.h,-(n.y-2045.46)*ESCALA);n.g=new V3(n.p.x,0,n.p.z);n.k=CGCLASE[n.id]||'F';n.col=PC[n.k]});
+ CG.nodos=L.filter(n=>!n.del);CG.rel=CGREL.filter(([a,b])=>BY[a]&&BY[b]&&!BY[a].del&&!BY[b].del).map(([a,b,s])=>({a:BY[a],b:BY[b],s}));
+ // capa HTML (burbujas) + SVG (tallos, flechas y signos)
+ const lay=document.createElement('div');lay.id='cgl';const NS='http://www.w3.org/2000/svg',sv=document.createElementNS(NS,'svg');sv.id='cgs';lay.appendChild(sv);document.body.appendChild(lay);CG.lay=lay;CG.svg=sv;
+ const defs=document.createElementNS(NS,'defs');ORDEN.forEach(k=>{const mk=document.createElementNS(NS,'marker');mk.id='cga'+k;mk.setAttribute('viewBox','0 0 10 10');mk.setAttribute('refX','8');mk.setAttribute('refY','5');mk.setAttribute('markerWidth','6');mk.setAttribute('markerHeight','6');mk.setAttribute('orient','auto-start-reverse');
+  const pa=document.createElementNS(NS,'path');pa.setAttribute('d','M0 0L10 5L0 10z');pa.setAttribute('fill',PC[k]);mk.appendChild(pa);defs.appendChild(mk)});sv.appendChild(defs);
+ const ico={};ORDEN.forEach(k=>{const c=document.createElement('canvas');c.width=c.height=128;const x=c.getContext('2d');x.translate(64,64);x.scale(.62,.62);x.strokeStyle='#fff';x.lineWidth=9;x.lineCap=x.lineJoin='round';ICONS[k](x);ico[k]=c.toDataURL()});
+ CG.nodos.forEach(n=>{n.st=document.createElementNS(NS,'line');n.st.setAttribute('stroke',n.col);n.st.setAttribute('stroke-width','1');n.st.setAttribute('stroke-opacity','.5');n.st.setAttribute('stroke-dasharray','2 3');sv.appendChild(n.st)});
+ CG.rel.forEach(r=>{r.l=document.createElementNS(NS,'line');r.l.setAttribute('stroke',r.a.col);r.l.setAttribute('stroke-width','2');r.l.setAttribute('stroke-opacity','.85');r.l.setAttribute('marker-end','url(#cga'+r.a.k+')');sv.appendChild(r.l);
+  r.tx=document.createElementNS(NS,'text');r.tx.textContent=r.s==='-'?'−':'+';r.tx.setAttribute('class','cgpol');sv.appendChild(r.tx)});
+ CG.nodos.forEach(n=>{const b=document.createElement('button');b.type='button';b.className='cgb';b.style.cssText='--c:'+n.col+';width:'+n.d+'px;height:'+n.d+'px';
+  b.innerHTML='<img alt="" src="'+ico[n.k]+'"><span>'+esc2(n.t)+'</span>';b.setAttribute('aria-label',n.t);
+  b.onpointerenter=()=>cgTip(n,b);b.onpointerleave=()=>{if(CG.fij!==n)tip.style.display='none'};b.onclick=e=>{e.stopPropagation();CG.fij=CG.fij===n?null:n;cgTip(n,b);if(!CG.fij)tip.style.display='none'};lay.appendChild(b);n.el=b});
+ // leyenda: los seis problemas y cuántas causas quedaron en cada uno
+ const lg=document.createElement('div');lg.id='cgleg';lg.innerHTML='<b>Conectografía · causas por problema</b>'+ORDEN.map(k=>'<div style="--c:'+PC[k]+'"><i></i><span>'+esc2(byId[k].t)+'</span><em>'+CG.nodos.filter(n=>n.k===k).length+'</em></div>').join('')+'<small>Mismas causas y lugares de la conectografía del módulo 12. Altura y tamaño: cuántas conexiones tiene. Flechas: qué provoca qué (+ refuerza, − reduce).</small>';document.body.appendChild(lg);CG.leg=lg;
+ addEventListener('pointerdown',e=>{if(CG.fij&&!e.target.closest('.cgb')){CG.fij=null;tip.style.display='none'}})}
+function cgTip(n,b){const r=b.getBoundingClientRect();tip.innerHTML='<b style="color:'+n.col+'">'+esc2(byId[n.k].t)+'</b>'+esc2(n.t);tip.style.display='block';tip.style.left=Math.min(r.right+8,innerWidth-290)+'px';tip.style.top=Math.max(8,Math.min(r.top,innerHeight-120))+'px'}
+function cgIr(on){cgArma();CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
+ // vista axonométrica del módulo 12: misma dirección y mismo encuadre (cámara ortográfica de 190/1,55 de media altura)
+ const K=10*ESCALA,T=new V3((1444.5+5341.33-7188)*ESCALA,24.68*K,-((3161.9+58.8)-2045.46)*ESCALA),dir=new V3(67.8,451,964.7).normalize(),d=(190/1.55)*K/Math.tan(CGFOV*Math.PI/360)*VFIT();
+ CG.cam={fP:cam.position.clone(),fT:ctl.target.clone(),tP:on?T.clone().addScaledVector(dir,d):RED_POS.clone(),tT:on?T:new V3()};
+ if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;ctl.enabled=false;ctl.autoRotate=false;vtx=vty=0;CG.fij=null;tip.style.display='none';
+ if(on&&!CG.pk){CG.pk=pick.splice(0);CG.ep=edgePick.splice(0)}document.body.classList.toggle('conecto',on);cgBoton()}
 function cgBoton(){const b=document.querySelector('.goconecto .t');if(b)b.textContent=CG.to?'Volver a la red':'Conectografía'}
-function cgAplica(c){const bl=Math.sin(c*Math.PI),sc=1-.55*c;
- N.forEach((n,i)=>{const L=CG.land[i],q=Math.max(0,Math.min(1,c*1.25-i*.04)),e=q*q*(3-2*q);
-  n.p.lerpVectors(n.p0,L.p,e);if(bl>.001){pp.copy(n.p0);if(pp.lengthSq()<1)pp.set(0,1,0);n.p.addScaledVector(pp.normalize(),Math.sin(e*Math.PI)*170)}
-  n.nd.position.copy(n.p);n.nd.scale.setScalar(n.nr*2*256/200*sc*(1+bl*.15));n.mesh.position.copy(n.p);n.mesh.scale.setScalar(sc);n.sp.position.copy(n.p);n.rp.position.copy(n.p);n.core.position.copy(n.p);
-  CG.stems.geometry.attributes.position.array.set([L.g.x,0,L.g.z,n.p.x,n.p.y,n.p.z],i*6)});
- CG.stems.geometry.attributes.position.needsUpdate=true;CG.stems.material.opacity=Math.max(0,c-.7)/.3*.8;CG.stems.visible=c>.7;
- ARC.forEach((a,i)=>{const A=a.e.a.p,B=a.e.b.p,mid=A.clone().add(B).multiplyScalar(.5),d=B.clone().sub(A),Lg=d.length();
-  const out=mid.lengthSq()>1?mid.clone().normalize():UPV.clone(),side=new V3().crossVectors(d,out).normalize();
-  const net=mid.clone().addScaledVector(out,Lg*.28).addScaledVector(side,(i%2?1:-1)*Lg*.1),land=mid.clone().addScaledVector(UPV,Lg*.32);
-  a.cur.v0.copy(A);a.cur.v2.copy(B);a.cur.v1.lerpVectors(net,land,c);a.side.copy(side);
-  const len=Math.max(1,a.cur.getLength());a.t0=Math.min(.45,a.e.a.nr*sc*1.12/len);a.t1=Math.max(.55,1-a.e.b.nr*sc*1.12/len);
-  const ln=CG.lines[i];if(ln){const arr=ln.geometry.attributes.position.array;for(let k=0;k<=72;k++){a.cur.getPoint(a.t0+(a.t1-a.t0)*k/72,pq);arr[k*3]=pq.x;arr[k*3+1]=pq.y;arr[k*3+2]=pq.z}ln.geometry.attributes.position.needsUpdate=true;if(a.e.k==='m')ln.computeLineDistances()}
-  a.cur.getPoint(a.t0,pq);ancA.set([pq.x,pq.y,pq.z],i*12);a.cur.getPoint(a.t1,pq);ancA.set([pq.x,pq.y,pq.z],i*12+6)});
- ancG.attributes.position.data.needsUpdate=true;
+function cgDevuelve(){if(CG.pk){pick.push(...CG.pk);edgePick.push(...CG.ep);CG.pk=CG.ep=null}}
+const cgV=new V3();
+function cgAplica(c){const bl=Math.sin(c*Math.PI),out=1-Math.min(1,c*1.6);
+ // las esferas de la red estallan hacia afuera y se apagan
+ N.forEach(n=>{cgV.copy(n.p);if(cgV.lengthSq()<1)cgV.set(0,1,0);cgV.normalize();n.nd.position.copy(n.p).addScaledVector(cgV,c*420);n.nd.scale.setScalar(n.nr*2*256/200*(1+c*.8));n.nd.material.opacity*=out;n.lb.style.opacity=(parseFloat(n.lb.style.opacity)||0)*out;n.lb.style.pointerEvents=c>.05?'none':''});
+ ARC.forEach(a=>a.lm.opacity*=out);sPts.material.opacity=out;ancP.material.opacity*=out;
  // la ciudad se vuelve a armar con las mismas partículas
  const U=H.U;if(U){U.uMix.value=1-c;U.uFade.value=.08*(1-c);U.uRise.value=1;U.uAlpha.value=1;U.uDim.value=1;U.uJit.value=0}
  const ca=Math.max(0,c-.55)/.45;
  if(H.B.mesh){const B=H.B.u;B.uRise.value=ca;B.uA.value=ca;B.uDim.value=1;H.B.mesh.visible=ca>.01}
  H.V.u.uA.value=ca*.8;if(H.V.mesh)H.V.mesh.visible=ca>.01;
  H.L.u.uA.value=ca;H.L.u.uT.value=H.t;H.L.objs.forEach(l=>{l.material.opacity=ca*l.userData.op;l.visible=ca>.01});if(H.L.wall)H.L.wall.visible=ca>.01;
- if(H.M){H.M.uT.value=H.t;for(let j=0;j<6;j++)H.M.uShow.value[j]=ca*.75}}
-function conecto(dt,now){if(!CG.land)return;
- if(H.modo!=='red'){if(CG.c>0||CG.to){CG.to=0;CG.c=0;CG.cam=null;cgAplica(0);if(CG.ep){edgePick.push(...CG.ep);CG.ep=null}document.body.classList.remove('conecto');cgBoton();ctl.enabled=false}return}
+ if(H.M)H.M.uShow.value.fill(0);
+ // burbujas de la conectografía
+ const bo=Math.max(0,c-.7)/.3;CG.lay.style.opacity=bo.toFixed(3);CG.lay.style.visibility=bo>.01?'visible':'hidden';CG.leg.classList.toggle('on',c>.7&&CG.to===1);if(bo<.01)return;
+ const r=renderer.domElement.getBoundingClientRect(),W=r.width,Hh=r.height,pr=v=>{cgV.copy(v).project(cam);return {x:(cgV.x+1)/2*W,y:(1-cgV.y)/2*Hh,v:cgV.z<1}};
+ const zoom=cam.position.distanceTo(ctl.target);CG.lay.classList.toggle('cerca',zoom<260);
+ CG.nodos.forEach(n=>{const p=pr(n.p),g=pr(n.g);n.s=p;n.el.style.display=p.v?'':'none';n.el.style.transform='translate('+(p.x-n.d/2).toFixed(1)+'px,'+(p.y-n.d/2).toFixed(1)+'px)';
+  if(p.v){n.st.setAttribute('x1',g.x.toFixed(1));n.st.setAttribute('y1',g.y.toFixed(1));n.st.setAttribute('x2',p.x.toFixed(1));n.st.setAttribute('y2',p.y.toFixed(1))}n.st.style.display=p.v?'':'none'});
+ CG.rel.forEach(l=>{const a=l.a.s,b=l.b.s;if(!a.v||!b.v){l.l.style.display=l.tx.style.display='none';return}l.l.style.display=l.tx.style.display='';
+  const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,ux=dx/d,uy=dy/d,ra=l.a.d/2,rb=l.b.d/2+3;
+  l.l.setAttribute('x1',(a.x+ux*ra).toFixed(1));l.l.setAttribute('y1',(a.y+uy*ra).toFixed(1));l.l.setAttribute('x2',(b.x-ux*rb).toFixed(1));l.l.setAttribute('y2',(b.y-uy*rb).toFixed(1));
+  l.tx.setAttribute('x',(a.x+dx*.72).toFixed(1));l.tx.setAttribute('y',(a.y+dy*.72).toFixed(1))})}
+function conecto(dt,now){if(!CG.ok)return;
+ if(H.modo!=='red'){if(CG.c>0||CG.to){CG.to=0;CG.c=0;cam.fov=45;cam.updateProjectionMatrix();CG.cam=null;cgAplica(0);cgDevuelve();document.body.classList.remove('conecto');cgBoton();ctl.enabled=false;N.forEach(n=>n.lb.style.pointerEvents='')}return}
  if(CG.cam){const k=Math.min(1,(now-CG.t0)/(CG.to?3400:2600)),q=eio(k);CG.c=CG.from+(CG.to-CG.from)*q;
-  cam.position.lerpVectors(CG.cam.fP,CG.cam.tP,q).addScaledVector(UPV,Math.sin(q*Math.PI)*260);ctl.target.lerpVectors(CG.cam.fT,CG.cam.tT,q);
-  if(k>=1){CG.cam=null;ctl.enabled=true;if(!CG.to){ctl.autoRotate=MOV.on;if(CG.ep){edgePick.push(...CG.ep);CG.ep=null}}}}
+  cam.position.lerpVectors(CG.cam.fP,CG.cam.tP,q).addScaledVector(UPV,Math.sin(q*Math.PI)*260);ctl.target.lerpVectors(CG.cam.fT,CG.cam.tT,q);cam.fov=45+(CGFOV-45)*CG.c;cam.updateProjectionMatrix();
+  if(k>=1){CG.cam=null;ctl.enabled=true;if(!CG.to){ctl.autoRotate=MOV.on;cgDevuelve();N.forEach(n=>{n.nd.position.copy(n.p);n.lb.style.pointerEvents=''})}}}
  if(CG.c>0||CG.cam)cgAplica(CG.c)}
 document.querySelector('.goconecto').addEventListener('click',e=>{e.preventDefault();if(CG.cam||H.modo!=='red')return;cgIr(!CG.to)});
 // ---------- pausa del movimiento ----------
