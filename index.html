@@ -273,6 +273,9 @@ header,.legend,.goprop,.goconecto{transition:opacity .9s ease,visibility 0s}
 #cgleg em{margin-left:auto;font:500 10.5px 'Geist Mono',ui-monospace,monospace;color:#9aa2a7;font-style:normal}
 #cgleg small{display:block;margin-top:9px;padding-top:9px;border-top:1px solid rgba(255,255,255,.075);color:#646c71;font-size:11px;line-height:1.45}
 body.conecto .legend{opacity:0!important;visibility:hidden}
+#cgfr{position:fixed;inset:0;width:100%;height:100%;border:0;z-index:3;opacity:0;visibility:hidden;background:#0b0c0f}
+#cgcarga{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:3;font:500 10.5px 'Geist Mono',ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:#9aa2a7;opacity:0;transition:opacity .4s;pointer-events:none}
+#cgleg{z-index:5}
 @media(max-width:600px){#cgleg{left:12px;right:12px;width:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 66px);font-size:11px;padding:9px 11px}#cgleg small{display:none}#cgleg div{margin:3px 0}}
 /* botón a la conectografía (conectografia.html): mismo tamaño que «Ver la propuesta», en versión contorno */
 .goconecto{position:fixed;right:20px;top:20px;z-index:4;display:flex;align-items:center;gap:9px;background:rgba(13,15,18,.74);color:var(--fg);border:1px solid rgba(207,255,94,.38);border-radius:10px;padding:10px 18px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:opacity .9s ease,border-color .2s,color .2s,background .2s}
@@ -2002,11 +2005,16 @@ function cgArma(){if(CG.ok)return;CG.ok=true;
  CG.nodos.forEach(n=>{const b=document.createElement('button');b.type='button';b.className='cgb';b.style.cssText='--c:'+n.col+';width:'+n.d+'px;height:'+n.d+'px';
   b.innerHTML='<img alt="" src="'+ico[n.k]+'"><span>'+esc2(n.t)+'</span>';b.setAttribute('aria-label',n.t);
   b.onpointerenter=()=>cgTip(n,b);b.onpointerleave=()=>{if(CG.fij!==n)tip.style.display='none'};b.onclick=e=>{e.stopPropagation();CG.fij=CG.fij===n?null:n;cgTip(n,b);if(!CG.fij)tip.style.display='none'};lay.appendChild(b);n.el=b});
+ // el módulo 12 en modo conectografía (se carga al primer clic y queda listo para la próxima vez)
+ CG.fr=document.createElement('iframe');CG.fr.id='cgfr';CG.fr.title='Conectografía de Kennedy (módulo 12)';document.body.appendChild(CG.fr);
+ CG.carga=document.createElement('div');CG.carga.id='cgcarga';CG.carga.textContent='Cargando la axonometría…';document.body.appendChild(CG.carga);
+ addEventListener('message',e=>{if(e.data==='m12:listo'){CG.listo=true;if(CG.c>0)cgAplica(CG.c)}});
  // leyenda: los seis problemas y cuántas causas quedaron en cada uno
- const lg=document.createElement('div');lg.id='cgleg';lg.innerHTML='<b>Conectografía · causas por problema</b>'+ORDEN.map(k=>'<div style="--c:'+PC[k]+'"><i></i><span>'+esc2(byId[k].t)+'</span><em>'+CG.nodos.filter(n=>n.k===k).length+'</em></div>').join('')+'<small>Mismas causas y lugares de la conectografía del módulo 12. Altura y tamaño: cuántas conexiones tiene. Flechas: qué provoca qué (+ refuerza, − reduce).</small>';document.body.appendChild(lg);CG.leg=lg;
+ const lg=document.createElement('div');lg.id='cgleg';lg.innerHTML='<b>Conectografía · causas por problema</b>'+ORDEN.map(k=>'<div style="--c:'+PC[k]+'"><i></i><span>'+esc2(byId[k].t)+'</span><em>'+CG.nodos.filter(n=>n.k===k).length+'</em></div>').join('')+'<small>La conectografía del módulo 12: mismas causas y lugares, con el color del problema al que pertenece cada una. Toca una burbuja para leerla.</small>';document.body.appendChild(lg);CG.leg=lg;
  addEventListener('pointerdown',e=>{if(CG.fij&&!e.target.closest('.cgb')){CG.fij=null;tip.style.display='none'}})}
 function cgTip(n,b){const r=b.getBoundingClientRect();tip.innerHTML='<b style="color:'+n.col+'">'+esc2(byId[n.k].t)+'</b>'+esc2(n.t);tip.style.display='block';tip.style.left=Math.min(r.right+8,innerWidth-290)+'px';tip.style.top=Math.max(8,Math.min(r.top,innerHeight-120))+'px'}
-function cgIr(on){cgArma();CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
+const CGURL='https://anasoficasca-code.github.io/modelamiento2/modulo-12-problemas.html?conecto=1';
+function cgIr(on){cgArma();if(on&&!CG.fr.src)CG.fr.src=CGURL;CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
  // vista axonométrica del módulo 12: misma dirección y mismo encuadre (cámara ortográfica de 190/1,55 de media altura)
  const K=10*ESCALA,T=new V3((1444.5+5341.33-7188)*ESCALA,24.68*K,-((3161.9+58.8)-2045.46)*ESCALA),dir=new V3(67.8,451,964.7).normalize(),d=(190/1.55)*K/Math.tan(CGFOV*Math.PI/360)*VFIT();
  CG.cam={fP:cam.position.clone(),fT:ctl.target.clone(),tP:on?T.clone().addScaledVector(dir,d):RED_POS.clone(),tT:on?T:new V3()};
@@ -2021,13 +2029,11 @@ function cgAplica(c){const bl=Math.sin(c*Math.PI),out=1-Math.min(1,c*1.6);
  ARC.forEach(a=>a.lm.opacity*=out);sPts.material.opacity=out;ancP.material.opacity*=out;
  // la ciudad se vuelve a armar con las mismas partículas
  const U=H.U;if(U){U.uMix.value=1-c;U.uFade.value=.08*(1-c);U.uRise.value=1;U.uAlpha.value=1;U.uDim.value=1;U.uJit.value=0}
- const ca=Math.max(0,c-.55)/.45;
- if(H.B.mesh){const B=H.B.u;B.uRise.value=ca;B.uA.value=ca;B.uDim.value=1;H.B.mesh.visible=ca>.01}
- H.V.u.uA.value=ca*.8;if(H.V.mesh)H.V.mesh.visible=ca>.01;
- H.L.u.uA.value=ca;H.L.u.uT.value=H.t;H.L.objs.forEach(l=>{l.material.opacity=ca*l.userData.op;l.visible=ca>.01});if(H.L.wall)H.L.wall.visible=ca>.01;
- if(H.M)H.M.uShow.value.fill(0);
- // burbujas de la conectografía
- const bo=Math.max(0,c-.7)/.3;CG.lay.style.opacity=bo.toFixed(3);CG.lay.style.visibility=bo>.01?'visible':'hidden';CG.leg.classList.toggle('on',c>.7&&CG.to===1);if(bo<.01)return;
+ if(H.B.mesh)H.B.mesh.visible=false;if(H.V.mesh)H.V.mesh.visible=false;H.L.objs.forEach(l=>l.visible=false);if(H.L.wall)H.L.wall.visible=false;if(H.M)H.M.uShow.value.fill(0);
+ // al final entra la axonometría del módulo 12 (su mismo mapa y sus burbujas, con los colores de esta red)
+ const fo=CG.listo?Math.max(0,c-.72)/.28:0;CG.fr.style.opacity=fo.toFixed(3);CG.fr.style.visibility=fo>.01?'visible':'hidden';CG.fr.style.pointerEvents=fo>.95?'auto':'none';
+ CG.carga.style.opacity=(c>.9&&!CG.listo&&CG.to===1)?1:0;CG.leg.classList.toggle('on',c>.7&&CG.to===1);
+ CG.lay.style.visibility='hidden';return;
  const r=renderer.domElement.getBoundingClientRect(),W=r.width,Hh=r.height,pr=v=>{cgV.copy(v).project(cam);return {x:(cgV.x+1)/2*W,y:(1-cgV.y)/2*Hh,v:cgV.z<1}};
  const zoom=cam.position.distanceTo(ctl.target);CG.lay.classList.toggle('cerca',zoom<260);
  CG.nodos.forEach(n=>{const p=pr(n.p),g=pr(n.g);n.s=p;n.el.style.display=p.v?'':'none';n.el.style.transform='translate('+(p.x-n.d/2).toFixed(1)+'px,'+(p.y-n.d/2).toFixed(1)+'px)';
