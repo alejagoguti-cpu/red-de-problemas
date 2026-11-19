@@ -260,12 +260,6 @@ header,.legend,.goprop,.goconecto{transition:opacity .9s ease,visibility 0s}
 .goconecto{position:fixed;right:20px;top:20px;z-index:4;display:flex;align-items:center;gap:9px;background:rgba(13,15,18,.74);color:var(--fg);border:1px solid rgba(207,255,94,.38);border-radius:10px;padding:10px 18px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:opacity .9s ease,border-color .2s,color .2s,background .2s}
 .goconecto svg{width:15px;height:15px;flex:none;fill:none;stroke:#cfff5e;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .goconecto:hover{color:#cfff5e;border-color:#cfff5e;background:rgba(207,255,94,.1)}
-/* conectografía (solo la red, modo oscuro) abierta sobre la página, sin salir de ella */
-#conov{position:fixed;inset:0;z-index:60;background:#0b0d10;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
-#conov.on{opacity:1;visibility:visible;transition:opacity .45s ease}
-#conov iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
-#conov .cx{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 16px);z-index:2;display:flex;align-items:center;gap:8px;background:rgba(13,15,18,.8);color:#e9ebec;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
-#conov .cx:hover{color:#cfff5e;border-color:#cfff5e}
 @media(max-width:600px){.goconecto{top:auto;left:12px;right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);justify-content:center;padding:11px 10px;letter-spacing:.12em}}
 #intro{position:absolute;inset:0;z-index:5;pointer-events:none;font-family:var(--ui-mono);color:#9aa2a7;opacity:0;transition:opacity .8s}
 body.intro #intro{opacity:1;pointer-events:auto;cursor:pointer}
@@ -764,18 +758,7 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion .
 <div><svg viewBox="0 0 34 10"><path d="M1 5h6M12 5h6M23 5h6" stroke="#b5c48a" stroke-width="1.4"/></svg>Punteado: se complementan</div>
 <button type="button" class="mov" id="bmov">Pausar movimiento</button><small>Cada esfera es un problema; su tamaño, cuántas conexiones tiene. Las partículas son los puntos de la ciudad de Kennedy.</small></div>
 <div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
-<div id="conov" aria-hidden="true"><button type="button" class="cx">× Volver a la red</button></div>
-<script>/* botón Conectografía al lado de «Ver la propuesta»: abre solo la conectografía, aquí mismo */
-(()=>{const ov=document.getElementById('conov');let fr=null;
- const pon=()=>{const g=document.querySelector('.goprop'),c=document.querySelector('.goconecto');if(!g||!c)return;c.style.right=innerWidth>600?(g.offsetWidth+28)+'px':''};
- const abrir=e=>{e.preventDefault();if(!fr){fr=document.createElement('iframe');fr.title='Conectografía';fr.src='conectografia.html?embed=1';ov.appendChild(fr)}ov.classList.add('on');ov.setAttribute('aria-hidden','false');setTimeout(()=>fr.focus(),300)};
- const cerrar=()=>{ov.classList.remove('on');ov.setAttribute('aria-hidden','true')};
- addEventListener('DOMContentLoaded',()=>{pon();document.querySelector('.goconecto').addEventListener('click',abrir)});
- addEventListener('load',pon);addEventListener('resize',pon);document.fonts&&document.fonts.ready.then(pon);
- ov.querySelector('.cx').onclick=cerrar;addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on'))cerrar()});
- addEventListener('message',e=>{if(e.data==='conectografia:cerrar')cerrar()})})();
-</script>
-<a class="goconecto" href="conectografia.html?embed=1"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="8" r="2.2"/><circle cx="12" cy="18" r="2.6"/><path d="M7 7l10 1M6.2 8l4.6 8M17.8 10l-4.4 6"/></svg>Conectografía</a>
+<a class="goconecto" href="#" role="button"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="8" r="2.2"/><circle cx="12" cy="18" r="2.6"/><path d="M7 7l10 1M6.2 8l4.6 8M17.8 10l-4.4 6"/></svg><span class="t">Conectografía</span></a>
 <div id="tip"></div>
 <dialog id="panel" aria-labelledby="ph-t"></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1943,6 +1926,52 @@ function recorrido(dt,now){
  capasGuion(i,f,dt);
  return s;
 }
+// ---------- CONECTOGRAFÍA: la red explota y cada problema aterriza en su lugar real de Kennedy ----------
+// Botón «Conectografía» (arriba a la derecha en la red). Las partículas de las esferas vuelven a armar la ciudad
+// (nube.bin, edificios, vías y límite), cada problema baja flotando sobre el centro de los lugares donde ocurre
+// (lugares.json) con un tallo hasta el suelo, y los ríos de partículas siguen uniendo los problemas. «Volver a la red» lo deshace.
+const CG={c:0,to:0,t0:0,from:0,cam:null,land:null,lines:null,ep:null,stems:null};
+function cgLand(){if(CG.land||!H.vistaP)return CG.land;const L=N.map(n=>{const v=H.vistaP[n.id+'v'];return v?new V3(v.c.x,0,v.c.z):new V3()});
+ for(let it=0;it<200;it++)for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const d=new V3(L[j].x-L[i].x,0,L[j].z-L[i].z);let l=d.length();if(l>=250)continue;if(l<.01){d.set(Math.cos(i+j*2),0,Math.sin(i+j*2));l=1}d.multiplyScalar((250-l)/2/l);L[i].sub(d);L[j].add(d)}
+ CG.land=L.map((p,i)=>({g:p.clone(),p:new V3(p.x,110+(i%3)*34,p.z)}));
+ N.forEach(n=>{n.p0=n.p.clone()});CG.lines=ARC.map(a=>scene.children.find(o=>o.isLine&&o.material===a.lm));
+ const g=new THREE.BufferGeometry(),pos=new Float32Array(N.length*6),col=new Float32Array(N.length*6);N.forEach((n,i)=>{const c=new THREE.Color(PC[n.id]);col.set([c.r*.25,c.g*.25,c.b*.25,c.r,c.g,c.b],i*6)});
+ g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('color',new THREE.BufferAttribute(col,3));
+ CG.stems=new THREE.LineSegments(g,new THREE.LineBasicMaterial({vertexColors:true,transparent:true,opacity:0,depthWrite:false,depthTest:false,blending:THREE.AdditiveBlending,fog:false}));CG.stems.renderOrder=4;CG.stems.frustumCulled=false;scene.add(CG.stems);
+ return CG.land}
+function cgIr(on){if(!cgLand())return;CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
+ const [p,t]=vista(0,0),cc=new V3();CG.land.forEach(l=>cc.add(l.g));cc.divideScalar(CG.land.length);const nt=t.clone().lerp(cc,.45);p.add(nt.clone().sub(t));CG.cam={fP:cam.position.clone(),fT:ctl.target.clone(),tP:on?p:RED_POS.clone(),tT:on?nt:new V3()};
+ if(P.open)P.close();sel=null;hov=null;focus(null);tw=null;ctl.enabled=false;ctl.autoRotate=false;vtx=vty=0;
+ if(on&&!CG.ep)CG.ep=edgePick.splice(0);document.body.classList.toggle('conecto',on);cgBoton()}
+function cgBoton(){const b=document.querySelector('.goconecto .t');if(b)b.textContent=CG.to?'Volver a la red':'Conectografía'}
+function cgAplica(c){const bl=Math.sin(c*Math.PI),sc=1-.55*c;
+ N.forEach((n,i)=>{const L=CG.land[i],q=Math.max(0,Math.min(1,c*1.25-i*.04)),e=q*q*(3-2*q);
+  n.p.lerpVectors(n.p0,L.p,e);if(bl>.001){pp.copy(n.p0);if(pp.lengthSq()<1)pp.set(0,1,0);n.p.addScaledVector(pp.normalize(),Math.sin(e*Math.PI)*170)}
+  n.nd.position.copy(n.p);n.nd.scale.setScalar(n.nr*2*256/200*sc*(1+bl*.15));n.mesh.position.copy(n.p);n.mesh.scale.setScalar(sc);n.sp.position.copy(n.p);n.rp.position.copy(n.p);n.core.position.copy(n.p);
+  CG.stems.geometry.attributes.position.array.set([L.g.x,0,L.g.z,n.p.x,n.p.y,n.p.z],i*6)});
+ CG.stems.geometry.attributes.position.needsUpdate=true;CG.stems.material.opacity=Math.max(0,c-.7)/.3*.8;CG.stems.visible=c>.7;
+ ARC.forEach((a,i)=>{const A=a.e.a.p,B=a.e.b.p,mid=A.clone().add(B).multiplyScalar(.5),d=B.clone().sub(A),Lg=d.length();
+  const out=mid.lengthSq()>1?mid.clone().normalize():UPV.clone(),side=new V3().crossVectors(d,out).normalize();
+  const net=mid.clone().addScaledVector(out,Lg*.28).addScaledVector(side,(i%2?1:-1)*Lg*.1),land=mid.clone().addScaledVector(UPV,Lg*.32);
+  a.cur.v0.copy(A);a.cur.v2.copy(B);a.cur.v1.lerpVectors(net,land,c);a.side.copy(side);
+  const len=Math.max(1,a.cur.getLength());a.t0=Math.min(.45,a.e.a.nr*sc*1.12/len);a.t1=Math.max(.55,1-a.e.b.nr*sc*1.12/len);
+  const ln=CG.lines[i];if(ln){const arr=ln.geometry.attributes.position.array;for(let k=0;k<=72;k++){a.cur.getPoint(a.t0+(a.t1-a.t0)*k/72,pq);arr[k*3]=pq.x;arr[k*3+1]=pq.y;arr[k*3+2]=pq.z}ln.geometry.attributes.position.needsUpdate=true;if(a.e.k==='m')ln.computeLineDistances()}
+  a.cur.getPoint(a.t0,pq);ancA.set([pq.x,pq.y,pq.z],i*12);a.cur.getPoint(a.t1,pq);ancA.set([pq.x,pq.y,pq.z],i*12+6)});
+ ancG.attributes.position.data.needsUpdate=true;
+ // la ciudad se vuelve a armar con las mismas partículas
+ const U=H.U;if(U){U.uMix.value=1-c;U.uFade.value=.08*(1-c);U.uRise.value=1;U.uAlpha.value=1;U.uDim.value=1;U.uJit.value=0}
+ const ca=Math.max(0,c-.55)/.45;
+ if(H.B.mesh){const B=H.B.u;B.uRise.value=ca;B.uA.value=ca;B.uDim.value=1;H.B.mesh.visible=ca>.01}
+ H.V.u.uA.value=ca*.8;if(H.V.mesh)H.V.mesh.visible=ca>.01;
+ H.L.u.uA.value=ca;H.L.u.uT.value=H.t;H.L.objs.forEach(l=>{l.material.opacity=ca*l.userData.op;l.visible=ca>.01});if(H.L.wall)H.L.wall.visible=ca>.01;
+ if(H.M){H.M.uT.value=H.t;for(let j=0;j<6;j++)H.M.uShow.value[j]=ca*.75}}
+function conecto(dt,now){if(!CG.land)return;
+ if(H.modo!=='red'){if(CG.c>0||CG.to){CG.to=0;CG.c=0;CG.cam=null;cgAplica(0);if(CG.ep){edgePick.push(...CG.ep);CG.ep=null}document.body.classList.remove('conecto');cgBoton();ctl.enabled=false}return}
+ if(CG.cam){const k=Math.min(1,(now-CG.t0)/(CG.to?3400:2600)),q=eio(k);CG.c=CG.from+(CG.to-CG.from)*q;
+  cam.position.lerpVectors(CG.cam.fP,CG.cam.tP,q).addScaledVector(UPV,Math.sin(q*Math.PI)*260);ctl.target.lerpVectors(CG.cam.fT,CG.cam.tT,q);
+  if(k>=1){CG.cam=null;ctl.enabled=true;if(!CG.to){ctl.autoRotate=MOV.on;if(CG.ep){edgePick.push(...CG.ep);CG.ep=null}}}}
+ if(CG.c>0||CG.cam)cgAplica(CG.c)}
+document.querySelector('.goconecto').addEventListener('click',e=>{e.preventDefault();if(CG.cam||H.modo!=='red')return;cgIr(!CG.to)});
 // ---------- pausa del movimiento ----------
 {const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel&&H.modo==='red';pinta()}}
 // ---------- bucle ----------
@@ -1959,8 +1988,8 @@ let LT2=performance.now();const MKEL=document.getElementById('mk'),HERO0=documen
   if(!sel){if(g){if(innerWidth>700){vtx=-Math.min(270,innerWidth*.19);vty=0}else{vtx=0;vty=innerHeight*.24}}else if(vtx<0||(innerWidth<=700&&vty>0&&!P.open)){vtx=0;vty=0}
    if(!hov){const want=(s>=8&&s<9)?byId.F:null;if(live!==want)focus(want)}}
   H.guionF=(s>=8&&s<9&&!sel)?byId.F:null;
-  if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now)}
- else recorrido(dt,now);
+  if(H.U){if(MOV.on)H.t+=dt;H.U.uT.value=H.t;N.forEach((n,j)=>H.U.uNA.value[j]=n.co)}tick(t||0);ctl.update();constelacion(dt,now);conecto(dt,now)}
+ else{conecto(dt,now);recorrido(dt,now)}
  // mientras el mapa limpio cubre la pantalla no hace falta dibujar el 3D
  const mkr=MKEL&&MKEL.getBoundingClientRect(),hr0=HERO0&&HERO0.getBoundingClientRect();if(!(mkr&&mkr.top<=0&&mkr.bottom>=innerHeight)&&!(hr0&&hr0.bottom>=innerHeight*.98))pintar(); // la portada y el mapa tapan el 3D viejo: no se dibuja
 })();
