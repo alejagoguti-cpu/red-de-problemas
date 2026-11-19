@@ -136,9 +136,14 @@ header p{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--mut)}
  .lb.c{max-width:150px}
 }
 @media(max-width:760px) and (max-height:520px){header p,.stats{display:none}}
+/* ?embed=1: solo la conectografía (la red y Materializar), para abrirla dentro de la red de problemas */
+html.embed header,html.embed .legend,html.embed #panel{display:none!important}
+html.embed #go{bottom:calc(var(--sb) + 26px)}
+html.embed #hint{display:block;bottom:calc(var(--sb) + 84px)}
 </style>
 </head>
 <body>
+<script>if(/[?&]embed=1/.test(location.search))document.documentElement.classList.add('embed')</script>
 <canvas id="c" tabindex="0" aria-label="Red 3D de las problemáticas de Kennedy"></canvas>
 <div id="lbl"></div>
 <div id="load" class="mono">Armando la red…</div>
@@ -414,7 +419,7 @@ function selecciona(n){ST.sel=n;const R=n?relacionados(n):null;
  NODES.forEach(m=>m.ta=!R||R.has(m)?1:.13);
  EDGES.forEach(e=>{let on;if(!n)on=true;else if(n.k==='p')on=e.k==='pc'?e.a===n:(e.a.par===n||e.b.par===n);else on=e.k==='pc'?e.b===n:(e.a===n||e.b===n);e.ta=on?1:.06});
  CH.classList.toggle('sel',!!n);NODES.forEach(m=>m.chip&&m.chip.classList.toggle('on',n===m||(n&&n.par===m)));
- if(n){panel(n);ctl.autoRotate=false}else{PANEL.classList.remove('open');ctl.autoRotate=!RM&&!ST.land}}
+ if(n){if(!EMB)panel(n);ctl.autoRotate=false}else{PANEL.classList.remove('open');ctl.autoRotate=!RM&&!ST.land}}
 function chipC(c,extra){return '<button type="button" class="ch" data-id="'+c.id+'" style="--k:'+c.col+'">'+(extra||'')+esc(c.t)+'</button>'}
 function geoTxt(n){return n.g.lat.toFixed(5)+'° N · '+Math.abs(n.g.lng).toFixed(5)+'° O'}
 function panel(n){PANEL.style.setProperty('--c',n.col);let h;
@@ -440,7 +445,8 @@ function panel(n){PANEL.style.setProperty('--c',n.col);let h;
  PANEL.querySelector('.x').onclick=()=>selecciona(null);
  PANEL.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>selecciona(BY[b.dataset.id]))}
 function corta(t){return t.length>58?t.slice(0,56).replace(/\s+\S*$/,'')+'…':t}
-addEventListener('keydown',e=>{if(e.key==='Escape')selecciona(null)});
+const EMB=document.documentElement.classList.contains('embed');
+addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(EMB&&!ST.sel&&parent!==window)parent.postMessage('conectografia:cerrar','*');selecciona(null)});
 
 /* ---------- materializar ---------- */
 const GO=document.getElementById('go'),GOT=document.getElementById('goT'),HINT=document.getElementById('hint');

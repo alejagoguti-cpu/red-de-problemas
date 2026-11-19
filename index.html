@@ -257,9 +257,15 @@ header p{font-size:12.5px;color:var(--mut)}
 body.intro header,body.intro .legend,body.intro .goprop,body.intro .goconecto{opacity:0!important;visibility:hidden}
 header,.legend,.goprop,.goconecto{transition:opacity .9s ease,visibility 0s}
 /* botón a la conectografía (conectografia.html): mismo tamaño que «Ver la propuesta», en versión contorno */
-.goconecto{position:absolute;right:20px;top:68px;z-index:2;display:flex;align-items:center;gap:9px;background:rgba(13,15,18,.74);color:var(--fg);border:1px solid rgba(207,255,94,.38);border-radius:10px;padding:10px 18px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:opacity .9s ease,border-color .2s,color .2s,background .2s}
+.goconecto{position:absolute;right:20px;top:20px;z-index:2;display:flex;align-items:center;gap:9px;background:rgba(13,15,18,.74);color:var(--fg);border:1px solid rgba(207,255,94,.38);border-radius:10px;padding:10px 18px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;cursor:pointer;box-shadow:0 12px 32px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:opacity .9s ease,border-color .2s,color .2s,background .2s}
 .goconecto svg{width:15px;height:15px;flex:none;fill:none;stroke:#cfff5e;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .goconecto:hover{color:#cfff5e;border-color:#cfff5e;background:rgba(207,255,94,.1)}
+/* conectografía (solo la red, modo oscuro) abierta sobre la página, sin salir de ella */
+#conov{position:fixed;inset:0;z-index:60;background:#0b0d10;opacity:0;visibility:hidden;transition:opacity .45s ease,visibility 0s .45s}
+#conov.on{opacity:1;visibility:visible;transition:opacity .45s ease}
+#conov iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+#conov .cx{position:absolute;right:16px;top:calc(env(safe-area-inset-top,0px) + 16px);z-index:2;display:flex;align-items:center;gap:8px;background:rgba(13,15,18,.8);color:#e9ebec;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 14px;font:600 11px Geist,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;cursor:pointer;-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px)}
+#conov .cx:hover{color:#cfff5e;border-color:#cfff5e}
 @media(max-width:600px){.goprop{right:calc(50% + 4px)}.goconecto{top:auto;left:calc(50% + 4px);right:12px;bottom:calc(env(safe-area-inset-bottom,0px) + 14px);justify-content:center;padding:11px 10px;letter-spacing:.12em}}
 #intro{position:absolute;inset:0;z-index:5;pointer-events:none;font-family:var(--ui-mono);color:#9aa2a7;opacity:0;transition:opacity .8s}
 body.intro #intro{opacity:1;pointer-events:auto;cursor:pointer}
@@ -571,8 +577,6 @@ header h1{font-size:2rem!important}
 .crit{counter-reset:cr}.crit li{grid-template-columns:auto 1fr;align-items:center;gap:10px;font-size:13px;line-height:1.4;color:var(--tinta-2)}
 .crit li .ico{width:22px;height:22px;color:var(--c)}
 .tres{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}.tres span{display:flex;align-items:center;gap:5px;padding:4px 8px;border:1px solid var(--linea-media);font:500 9.5px var(--letra-dato);text-transform:uppercase;color:var(--tinta-2)}.tres .ico{width:13px;height:13px;color:var(--c)}
-#story a.ir.ir2{background:transparent;color:#cfff5e;border:1px solid #cfff5e;padding:10px 15px;margin-left:6px}
-#story a.ir.ir2:hover{background:rgba(207,255,94,.12)}
 #story a.ir{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:11px 16px;background:#cfff5e;color:#050607;text-decoration:none;font:500 11px var(--letra-dato);letter-spacing:.14em;text-transform:uppercase;pointer-events:auto}
 #story a.ir .ico{width:16px;height:16px}
 /* en la red, las dos tarjetas del guion siguen visibles (encima de la red interactiva) */
@@ -761,7 +765,18 @@ body.redguion header,body.redguion .legend,body.redguion .goprop,body.redguion .
 <button type="button" class="mov" id="bmov">Pausar movimiento</button><small>Cada esfera es un problema; su tamaño, cuántas conexiones tiene. Las partículas son los puntos de la ciudad de Kennedy.</small></div>
 <div id="dv"><div class="dvb"></div><div class="dvw"><div class="dvc"></div></div><aside class="dvd"></aside></div>
 <a class="goprop" href="propuesta.html">Ver la propuesta →</a>
-<a class="goconecto" href="conectografia.html"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="8" r="2.2"/><circle cx="12" cy="18" r="2.6"/><path d="M7 7l10 1M6.2 8l4.6 8M17.8 10l-4.4 6"/></svg>Conectografía</a>
+<div id="conov" aria-hidden="true"><button type="button" class="cx">× Volver a la red</button></div>
+<script>/* botón Conectografía al lado de «Ver la propuesta»: abre solo la conectografía, aquí mismo */
+(()=>{const ov=document.getElementById('conov');let fr=null;
+ const pon=()=>{const g=document.querySelector('.goprop'),c=document.querySelector('.goconecto');if(!g||!c)return;c.style.right=innerWidth>600?(g.offsetWidth+28)+'px':''};
+ const abrir=e=>{e.preventDefault();if(!fr){fr=document.createElement('iframe');fr.title='Conectografía';fr.src='conectografia.html?embed=1';ov.appendChild(fr)}ov.classList.add('on');ov.setAttribute('aria-hidden','false');setTimeout(()=>fr.focus(),300)};
+ const cerrar=()=>{ov.classList.remove('on');ov.setAttribute('aria-hidden','true')};
+ addEventListener('DOMContentLoaded',()=>{pon();document.querySelector('.goconecto').addEventListener('click',abrir)});
+ addEventListener('load',pon);addEventListener('resize',pon);document.fonts&&document.fonts.ready.then(pon);
+ ov.querySelector('.cx').onclick=cerrar;addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('on'))cerrar()});
+ addEventListener('message',e=>{if(e.data==='conectografia:cerrar')cerrar()})})();
+</script>
+<a class="goconecto" href="conectografia.html?embed=1"><svg viewBox="0 0 24 24"><circle cx="5" cy="6" r="2.2"/><circle cx="19" cy="8" r="2.2"/><circle cx="12" cy="18" r="2.6"/><path d="M7 7l10 1M6.2 8l4.6 8M17.8 10l-4.4 6"/></svg>Conectografía</a>
 <div id="tip"></div>
 <dialog id="panel" aria-labelledby="ph-t"></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -1339,7 +1354,7 @@ const ESC={
   '<div style="--d:.4s"><b>'+ic('caja')+'Operativa</b><span>recibir <i>→</i> clasificar <i>→</i> retirar a tiempo</span></div></div></article></section>'+
   '<section class="rd"><article class="card esc red2" style="--c:#cfff5e"><div class="num">De la red a la propuesta</div><h2>Tres criterios</h2>'+
   '<ol class="crit"><li style="--d:0s">'+ic('tienda')+'<span>Acercar puntos de venta <em>donde falta acceso</em></span></li><li style="--d:.2s">'+ic('casa')+'<span>Condiciones de <em>permanencia</em> para productores y comerciantes</span></li><li style="--d:.4s">'+ic('reloj')+'<span>Menos tiempo de <em>residuos acumulados</em></span></li></ol>'+
-  '<div class="tres"><span>'+ic('casa')+'qué va a los barrios</span><span>'+ic('caja')+'qué se comparte en Bavaria</span><span>'+ic('ojo')+'cómo medimos</span></div><a class="ir" href="propuesta.html">Ver la propuesta '+ic('flecha')+'</a> <a class="ir ir2" href="conectografia.html">Conectografía '+ic('flecha')+'</a></article></section>'+
+  '<div class="tres"><span>'+ic('casa')+'qué va a los barrios</span><span>'+ic('caja')+'qué se comparte en Bavaria</span><span>'+ic('ojo')+'cómo medimos</span></div><a class="ir" href="propuesta.html">Ver la propuesta '+ic('flecha')+'</a></article></section>'+
   '<section class="fin" aria-label="La red de problemas"></section>';
  ST.innerHTML=h;document.body.appendChild(ST)}
 // gráficos que se arman al entrar en pantalla: personas, hectáreas y contadores
