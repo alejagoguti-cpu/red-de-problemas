@@ -2013,7 +2013,7 @@ function cgArma(){if(CG.ok)return;CG.ok=true;
  const lg=document.createElement('div');lg.id='cgleg';lg.innerHTML='<b>Conectografía · causas por problema</b>'+ORDEN.map(k=>'<div style="--c:'+PC[k]+'"><i></i><span>'+esc2(byId[k].t)+'</span><em>'+CG.nodos.filter(n=>n.k===k).length+'</em></div>').join('')+'<small>La conectografía del módulo 12: mismas causas y lugares, con el color del problema al que pertenece cada una. Toca una burbuja para leerla.</small>';document.body.appendChild(lg);CG.leg=lg;
  addEventListener('pointerdown',e=>{if(CG.fij&&!e.target.closest('.cgb')){CG.fij=null;tip.style.display='none'}})}
 function cgTip(n,b){const r=b.getBoundingClientRect();tip.innerHTML='<b style="color:'+n.col+'">'+esc2(byId[n.k].t)+'</b>'+esc2(n.t);tip.style.display='block';tip.style.left=Math.min(r.right+8,innerWidth-290)+'px';tip.style.top=Math.max(8,Math.min(r.top,innerHeight-120))+'px'}
-const CGURL='https://anasoficasca-code.github.io/modelamiento2/modulo-12-problemas.html?conecto=1';
+const CGURL='https://anasoficasca-code.github.io/modelamiento2/modulo-12-problemas.html?conecto=1&v=39';
 function cgIr(on){cgArma();if(on&&!CG.fr.src)CG.fr.src=CGURL;CG.to=on?1:0;CG.from=CG.c;CG.t0=performance.now();
  // vista axonométrica del módulo 12: misma dirección y mismo encuadre (cámara ortográfica de 190/1,55 de media altura)
  const K=10*ESCALA,T=new V3((1444.5+5341.33-7188)*ESCALA,24.68*K,-((3161.9+58.8)-2045.46)*ESCALA),dir=new V3(67.8,451,964.7).normalize(),d=(190/1.55)*K/Math.tan(CGFOV*Math.PI/360)*VFIT();
