@@ -2061,7 +2061,7 @@ if(new URLSearchParams(location.search).has('incrustado')){
  let quiere=0,avisada=0;
  const alFin=()=>{const f=SECS[SECS.length-1];const y=f.getBoundingClientRect().top+scrollY;if(Math.abs(scrollY-y)>2)scrollTo(0,y)};
  addEventListener('message',e=>{if(e.data==='red:explota')quiere=1;else if(e.data==='red:volver')quiere=0});
- setInterval(()=>{alFin();if(H.modo!=='red')return;if(!avisada){avisada=1;try{parent.postMessage('red:lista','*')}catch(_){}}
+ setInterval(()=>{alFin();if(H.modo!=='red')return;if(!avisada){avisada=1;CG.pre=1;cgArma();if(!CG.fr.src)CG.fr.src=CGURL;try{parent.postMessage('red:lista','*')}catch(_){}} // el mapa de la explosión empieza a bajar de una vez
   if(!CG.cam&&quiere!==(CG.to||0))cgIr(!!quiere)},200);
 }
 // ---------- pausa del movimiento ----------
