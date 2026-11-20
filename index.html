@@ -2054,6 +2054,16 @@ function conecto(dt,now){
   if(k>=1){CG.cam=null;ctl.enabled=true;if(!CG.to){ctl.autoRotate=MOV.on;cgDevuelve();N.forEach(n=>{n.nd.position.copy(n.p);n.lb.style.pointerEvents=''})}}}
  if(CG.c>0||CG.cam)cgAplica(CG.c)}
 document.querySelector('.goconecto').addEventListener('click',e=>{e.preventDefault();if(CG.cam||H.modo!=='red')return;cgIr(!CG.to)});
+// ---------- modo incrustado (?incrustado=1): solo la red, sin interfaz; la página que lo contiene manda «red:explota» / «red:volver» ----------
+if(new URLSearchParams(location.search).has('incrustado')){
+ document.documentElement.classList.add('incrustado');
+ const st=document.createElement('style');st.textContent='html.incrustado,html.incrustado body{overflow:hidden!important;scrollbar-width:none}html.incrustado ::-webkit-scrollbar{display:none}html.incrustado #story,html.incrustado #modelo,html.incrustado header,html.incrustado .legend,html.incrustado .goprop,html.incrustado .goconecto,html.incrustado #volver,html.incrustado #dv{visibility:hidden!important;pointer-events:none!important}';document.head.appendChild(st);
+ let quiere=0,avisada=0;
+ const alFin=()=>{const f=SECS[SECS.length-1];const y=f.getBoundingClientRect().top+scrollY;if(Math.abs(scrollY-y)>2)scrollTo(0,y)};
+ addEventListener('message',e=>{if(e.data==='red:explota')quiere=1;else if(e.data==='red:volver')quiere=0});
+ setInterval(()=>{alFin();if(H.modo!=='red')return;if(!avisada){avisada=1;try{parent.postMessage('red:lista','*')}catch(_){}}
+  if(!CG.cam&&quiere!==(CG.to||0))cgIr(!!quiere)},200);
+}
 // ---------- pausa del movimiento ----------
 {const b=document.getElementById('bmov');const pinta=()=>{b.textContent=MOV.on?'Pausar movimiento':'Reanudar movimiento'};pinta();b.onclick=()=>{MOV.on=!MOV.on;ctl.autoRotate=MOV.on&&!sel&&H.modo==='red';pinta()}}
 // ---------- bucle ----------
