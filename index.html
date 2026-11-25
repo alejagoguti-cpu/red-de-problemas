@@ -1153,8 +1153,10 @@ function select(n){
   d.g.map(kpis).join('')+cards+
   '<div class="rel"><b>'+d.rel[0]+'</b><div class="chain">'+d.rel[1].split(' → ').map(x=>'<span>'+x+'</span>').join('<i>→</i>')+'</div></div>'+
   '<div class="nt"><b>Precisión.</b> '+d.n+'</div>'+
+  (window.CRIT?CRIT.panel(n.id):'')+
   '<div class="gh">FUENTES</div><ul class="sl">'+d.s.map(i=>'<li><a href="'+SRC[i][1]+'" target="_blank" rel="noopener"><b>['+i+']</b> '+SRC[i][0]+'</a></li>').join('')+'</ul></div>';
  P.querySelector('.godeep').onclick=()=>openDeep(n);
+ if(window.CRIT)CRIT.wirePanel(P,n.id);
  if(!P.open)P.show();P.scrollTop=0;
  P.querySelector('.x').onclick=closePanel;
  countUp(P);
@@ -1357,7 +1359,7 @@ const ESC={
   '<div style="--d:.4s"><b>'+ic('caja')+'Operativa</b><span>recibir <i>→</i> clasificar <i>→</i> retirar a tiempo</span></div></div></article></section>'+
   '<section class="rd"><article class="card esc red2" style="--c:#cfff5e"><div class="num">De la red a la propuesta</div><h2>Tres criterios</h2>'+
   '<ol class="crit"><li style="--d:0s">'+ic('tienda')+'<span>Acercar puntos de venta <em>donde falta acceso</em></span></li><li style="--d:.2s">'+ic('casa')+'<span>Condiciones de <em>permanencia</em> para productores y comerciantes</span></li><li style="--d:.4s">'+ic('reloj')+'<span>Menos tiempo de <em>residuos acumulados</em></span></li></ol>'+
-  '<div class="tres"><span>'+ic('casa')+'qué va a los barrios</span><span>'+ic('caja')+'qué se comparte en Bavaria</span><span>'+ic('ojo')+'cómo medimos</span></div><a class="ir" href="propuesta.html">Ver la propuesta '+ic('flecha')+'</a></article></section>'+
+  '<div class="tres"><span>'+ic('casa')+'qué va a los barrios</span><span>'+ic('caja')+'qué se comparte en Bavaria</span><span>'+ic('ojo')+'cómo medimos</span></div><a class="ir" href="propuesta.html">Ver la propuesta '+ic('flecha')+'</a> <a class="ir" href="#cr-intro" data-acrit>Del diagnóstico a los criterios '+ic('flecha')+'</a></article></section>'+
   '<section class="fin" aria-label="La red de problemas"></section>';
  ST.innerHTML=h;document.body.appendChild(ST)}
 // gráficos que se arman al entrar en pantalla: personas, hectáreas y contadores
@@ -2087,5 +2089,6 @@ let LT2=performance.now();const MKEL=document.getElementById('mk'),HERO0=documen
 })();
 </script>
 <script src="modelo.js?v=7" defer></script>
+<script src="criterios.js?v=1" defer></script>
 </body>
 </html>

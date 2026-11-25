@@ -65,7 +65,9 @@ header p{margin:10px 0 0;font-size:12.5px;line-height:1.5;color:var(--mut)}
 .lb{--c:#fff;position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;gap:3px;white-space:nowrap;will-change:transform;opacity:0;transition:opacity .35s}
 .lb.p{white-space:normal;width:170px;text-align:center}
 .lb b{font:500 12.5px/1.2 Geist,system-ui,sans-serif;color:#fff;text-shadow:0 1px 10px rgba(0,0,0,.95),0 0 2px rgba(0,0,0,.9);letter-spacing:-.005em}
-.lb small{font:500 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c);text-shadow:0 1px 8px rgba(0,0,0,.95)}
+.lb small{display:inline-flex;align-items:center;gap:5px;font:500 9px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--c);text-shadow:0 1px 8px rgba(0,0,0,.95)}
+.li{width:12px;height:12px;flex:none;fill:none;stroke:var(--c);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
+#tip .mono .li{margin-right:6px}
 .lb.c{max-width:200px;white-space:normal;text-align:center}
 .lb.c b{font-size:11px;font-weight:400;color:#dfe3e5;line-height:1.3}
 
@@ -156,9 +158,10 @@ html.embed #hint{display:block;bottom:calc(var(--sb) + 84px)}
 </header>
 
 <aside class="legend ui" aria-label="Problemáticas">
- <div class="ttl mono"><span>Problemáticas</span><span>causas</span></div>
+ <div class="ttl mono"><span>Problemáticas · color e ícono</span><span>causas</span></div>
  <div class="chips" id="chips"></div>
  <div class="conv">
+  <div><svg viewBox="0 0 34 14" style="height:14px"><circle cx="9" cy="7" r="6" fill="#0d1013" stroke="#e9ebec" stroke-width="1.6"/><circle cx="9" cy="7" r="2" fill="#e9ebec"/><circle cx="26" cy="7" r="3.6" fill="#e9ebec"/><circle cx="26" cy="7" r="1.2" fill="#0d1013"/></svg>Disco con ícono: problemática · esfera: causa, con el color y el ícono de su problemática</div>
   <div><svg viewBox="0 0 34 10"><path d="M1 5h32" stroke="#8a93a0" stroke-width="1.2" opacity=".7"/></svg>Problemática → causa</div>
   <div><svg viewBox="0 0 34 10"><path d="M1 5h32" stroke="#e9ebec" stroke-width="1.4"/><g fill="#fff"><circle cx="9" cy="5" r="1.6"/><circle cx="21" cy="5" r="1.6"/></g></svg>Una causa provoca otra</div>
   <div><svg viewBox="0 0 34 10"><path d="M1 5h32" stroke="#cfff5e" stroke-width="1.4"/><g fill="#cfff5e"><circle cx="13" cy="5" r="1.8"/><circle cx="27" cy="5" r="1.8"/></g></svg>Enlace entre problemáticas</div>
@@ -190,13 +193,13 @@ const ICO={
  anden:'M12 3.4a1.9 1.9 0 1 1 0 3.8a1.9 1.9 0 1 1 0-3.8z M12 8.5v6.5 M8 12l4-2 4 2 M9.5 21l2.5-6 2.5 6',
  residuo:'M4 7h16 M9 7V4h6v3 M6 7l1 13h10l1-13 M10 11v6 M14 11v6'};
 const PROB=[
- {id:'n1',corto:'Colapso de la red vial local y arterial',full:'Colapso de la red vial local y de los corredores arteriales',c:'#5b8ad6',ico:'vial',x:6280.0,y:2050.0,
+ {id:'n1',corto:'Colapso de la red vial local y arterial',full:'Colapso de la red vial local y de los corredores arteriales',c:'#ffd23f',ico:'vial',x:6280.0,y:2050.0,
   causas:[['s1_1','Infiltración de camiones pesados de escala regional en calles barriales de una sola calzada',6315.4,2529.8],
    ['s1_2','Filas de camiones y congestión represada sobre las avenidas principales',8097.5,2265.9],
    ['s1_3','Deterioro continuo de la capa de rodadura ante el tránsito de carga pesada',7197.9,3738.8],
    ['s1_4','Conflicto y entrecruzamiento de flujos entre camiones, vehículos particulares, bicipatios y peatones',6876.1,3052.3],
    ['s1_5','Ingreso vehicular en ángulo recto que obliga a frenar sobre la calzada arterial',6303.1,3748.1]]},
- {id:'n2',corto:'Contaminación de la red hídrica',full:'Contaminación y alteración biofísica de la red hídrica y cuerpos de agua',c:'#d669a8',ico:'agua',x:6096.0,y:2297.4,
+ {id:'n2',corto:'Contaminación de la red hídrica',full:'Contaminación y alteración biofísica de la red hídrica y cuerpos de agua',c:'#3d9bff',ico:'agua',x:6096.0,y:2297.4,
   causas:[['s2_1','Vertimiento de lixiviados orgánicos al alcantarillado sin tratamiento',7563.4,3372.6],
    ['s2_2','Escorrentía de residuos de alimentos',6220.1,1816.0],
    ['s2_3','Eutrofización y tinción de aguas en la cuenca hídrica',5823.4,4944.2],
@@ -206,7 +209,7 @@ const PROB=[
    ['s2_8','Arrastre de basuras desde la calle hacia los canales de agua en eventos de lluvia',6505.6,4421.9],
    ['s2_9','Infiltración de agua contaminada en la franja del humedal',6012.9,1933.1],
    ['s2_11','Insuficiencia de redes sanitarias destinadas a la limpieza de bodegas',6779.3,2429.1]]},
- {id:'n3',corto:'Concentración del mercado mayorista',full:'Concentración metropolitana del mercado mayorista de alimentos en la trama barrial',c:'#e2635a',ico:'mercado',x:6396.0,y:2168.0,
+ {id:'n3',corto:'Concentración del mercado mayorista',full:'Concentración metropolitana del mercado mayorista de alimentos en la trama barrial',c:'#ff4d5a',ico:'mercado',x:6396.0,y:2168.0,
   causas:[['s3_1','Entrada masiva de carga alimentaria regional en un solo predio',7351.1,2267.9],
    ['s3_3','Saturación comercial intensiva en un grupo reducido de bodegas',6488.3,2252.8],
    ['s3_4','Llegada masiva y continua de carga alimentaria regional a un único punto urbano',6252.8,1993.0],
@@ -214,7 +217,7 @@ const PROB=[
    ['s3_6','Mezcla física de comercialización mayorista con almacenamiento, empaque y preparación de alimentos',5701.5,2460.8],
    ['s3_7','Saturación comercial intensiva en una franja reducida de bodegas',5901.1,2200.8],
    ['s3_8','Aglomeración de compradores, carretas y vehículos en los accesos a los sectores de venta',6426.7,3000.7]]},
- {id:'n4',corto:'Sobrecarga por densificación en altura',full:'Sobrecarga infraestructural de la densificación residencial en altura',c:'#9b7ede',ico:'torre',x:6150.0,y:2280.0,
+ {id:'n4',corto:'Sobrecarga por densificación en altura',full:'Sobrecarga infraestructural de la densificación residencial en altura',c:'#b07cff',ico:'torre',x:6150.0,y:2280.0,
   causas:[['s4_1','Crecimiento de torres de apartamentos sobre infraestructuras con capacidad límite',7888.5,4383.3],
    ['s4_3','Fricción en la convivencia directa entre conjuntos residenciales y zonas de bodegaje',5413.3,2762.6],
    ['s4_4','Coincidencia temporal entre los viajes de residentes y el transporte de carga',7239.1,2609.5],
@@ -223,12 +226,12 @@ const PROB=[
    ['s4_7','Generación concentrada de viajes cotidianos desde conjuntos verticales hacia pocos corredores',7932.3,3554.7],
    ['s4_8','Saturación del sistema masivo (TransMilenio y SITP) por exceso de pasajeros en horas pico',7626.1,2222.8],
    ['s4_9','Retraso en las frecuencias de buses debido al parqueo informal en los carriles mixtos',6809.2,3351.5]]},
- {id:'n5',corto:'Interferencia en el espacio público',full:'Interferencia de actividades logísticas en la red de espacio público barrial',c:'#4caf7d',ico:'anden',x:6440.0,y:2190.0,
+ {id:'n5',corto:'Interferencia en el espacio público',full:'Interferencia de actividades logísticas en la red de espacio público barrial',c:'#2ee6a6',ico:'anden',x:6440.0,y:2190.0,
   causas:[['s5_1','Ocupación comercial de andenes estrechos con cajas, huacales y mercancía',6476.6,1793.7],
    ['s5_2','Instalación de puestos informales de venta de alimentos sobre la calzada vehicular',6928.1,2589.0],
    ['s5_3','Expulsión de peatones hacia la calle junto al tránsito de camiones pesados',6360.9,1445.0],
    ['s5_5','Apropiación comercial de vías residenciales fuera del muro de cerramiento',6093.0,2745.6]]},
- {id:'n6',corto:'Acumulación de residuos y transporte pesado',full:'Acumulación de residuos y transporte pesado sobre la red ecológica',c:'#e8a33d',ico:'residuo',x:6480.0,y:2220.0,
+ {id:'n6',corto:'Acumulación de residuos y transporte pesado',full:'Acumulación de residuos y transporte pesado sobre la red ecológica',c:'#ff8a3d',ico:'residuo',x:6480.0,y:2220.0,
   causas:[['s6_1','Acumulación de basura orgánica superando la capacidad de los contenedores',6163.3,2183.0],
    ['s6_2','Estacionamiento prolongado de camiones de gran tonelaje en calles residenciales',5999.0,3425.2],
    ['s6_3','Derrame de lixiviados sobre el pavimento a la intemperie',5996.5,2353.4],
@@ -316,19 +319,20 @@ function fitLand(){const w=Math.max(LB.x1-LB.x0,LB.z1-LB.z0)+260,a=innerWidth/in
 
 /* texturas de las esferas */
 const TEX={};
-function texNodo(col,macro,ico){const k=col+macro;if(TEX[k])return TEX[k];const cnv=document.createElement('canvas');cnv.width=cnv.height=256;const x=cnv.getContext('2d'),c=new THREE.Color(col),rgb=`${c.r*255|0},${c.g*255|0},${c.b*255|0}`;
+function texNodo(col,macro,ico){const k=col+macro+ico;if(TEX[k])return TEX[k];const cnv=document.createElement('canvas');cnv.width=cnv.height=256;const x=cnv.getContext('2d'),c=new THREE.Color(col),rgb=`${c.r*255|0},${c.g*255|0},${c.b*255|0}`;
  if(macro){const g=x.createRadialGradient(128,128,60,128,128,128);g.addColorStop(0,`rgba(${rgb},.38)`);g.addColorStop(1,`rgba(${rgb},0)`);x.fillStyle=g;x.fillRect(0,0,256,256);
   x.beginPath();x.arc(128,128,74,0,7);x.fillStyle='#0d1013';x.fill();
   const g2=x.createRadialGradient(128,100,10,128,128,74);g2.addColorStop(0,`rgba(${rgb},.32)`);g2.addColorStop(1,`rgba(${rgb},.05)`);x.fillStyle=g2;x.fill();
-  x.lineWidth=6;x.strokeStyle=col;x.stroke();x.beginPath();x.arc(128,128,86,0,7);x.lineWidth=1.5;x.strokeStyle=`rgba(${rgb},.55)`;x.stroke();
-  x.save();x.translate(128-12*3.3,128-12*3.3);x.scale(3.3,3.3);x.strokeStyle='#fff';x.lineWidth=1.6;x.lineCap='round';x.lineJoin='round';x.stroke(new Path2D(ICO[ico]));x.restore()}
+  x.lineWidth=8;x.strokeStyle=col;x.stroke();x.beginPath();x.arc(128,128,88,0,7);x.lineWidth=2;x.strokeStyle=`rgba(${rgb},.6)`;x.stroke();
+  x.save();x.translate(128-12*3.9,128-12*3.9);x.scale(3.9,3.9);x.strokeStyle='#fff';x.lineWidth=1.75;x.lineCap='round';x.lineJoin='round';x.stroke(new Path2D(ICO[ico]));x.restore()}
  else{const g=x.createRadialGradient(128,128,40,128,128,128);g.addColorStop(0,`rgba(${rgb},.5)`);g.addColorStop(1,`rgba(${rgb},0)`);x.fillStyle=g;x.fillRect(0,0,256,256);
-  x.beginPath();x.arc(128,128,62,0,7);const g2=x.createRadialGradient(108,104,6,128,128,64);g2.addColorStop(0,'#ffffff');g2.addColorStop(.28,col);g2.addColorStop(1,`rgba(${rgb},.85)`);x.fillStyle=g2;x.fill();
-  x.lineWidth=3;x.strokeStyle='rgba(255,255,255,.55)';x.stroke()}
+  x.beginPath();x.arc(128,128,64,0,7);const g2=x.createRadialGradient(104,100,6,128,128,66);g2.addColorStop(0,'rgba(255,255,255,.85)');g2.addColorStop(.35,col);g2.addColorStop(1,`rgba(${rgb},.9)`);x.fillStyle=g2;x.fill();
+  x.lineWidth=3;x.strokeStyle='rgba(255,255,255,.55)';x.stroke();
+  x.save();x.translate(128-12*3.4,128-12*3.4);x.scale(3.4,3.4);x.strokeStyle='rgba(8,10,12,.82)';x.lineWidth=2.1;x.lineCap='round';x.lineJoin='round';x.stroke(new Path2D(ICO[ico]));x.restore()}
  const t=new THREE.CanvasTexture(cnv);t.anisotropy=4;return TEX[k]=t}
 const SPR=[];
 NODES.forEach(n=>{const m=new THREE.SpriteMaterial({map:texNodo(n.col,n.k==='p',n.p.ico),transparent:true,depthWrite:false,depthTest:false,fog:false});
- const s=new THREE.Sprite(m);n.size=n.k==='p'?34:12+Math.min(n.deg,6)*2.4;s.scale.set(n.size,n.size,1);s.renderOrder=n.k==='p'?11:10;s.userData.n=n;scene.add(s);n.spr=s;SPR.push(s);n.a=1;n.ta=1;n.pos=n.s.clone()});
+ const s=new THREE.Sprite(m);n.size=n.k==='p'?40:13+Math.min(n.deg,6)*2.4;s.scale.set(n.size,n.size,1);s.renderOrder=n.k==='p'?11:10;s.userData.n=n;scene.add(s);n.spr=s;SPR.push(s);n.a=1;n.ta=1;n.pos=n.s.clone()});
 
 /* enlaces: curvas con color por vértice y alfa propio */
 const SEG=18,LINE_V=`attribute vec3 aCol;attribute float aA;varying vec3 vC;varying float vA;void main(){vC=aCol;vA=aA;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
@@ -403,7 +407,8 @@ fetch('limite.json').then(r=>r.json()).then(Lm=>{const pts=Lm.pts.map(([x,z])=>n
 const LBL=document.getElementById('lbl');
 NODES.forEach(n=>{const d=document.createElement('div');d.className='lb '+n.k;d.style.setProperty('--c',n.col);
  const corto=n.t.length>64?n.t.slice(0,62).replace(/\s+\S*$/,'')+'…':n.t;
- d.innerHTML=n.k==='p'?'<b>'+esc(n.t)+'</b><small>'+String(n.i+1).padStart(2,'0')+' · '+n.causas.length+' causas</small>':'<b>'+esc(corto)+'</b>';LBL.appendChild(d);n.el=d;n.lo=0});
+ d.innerHTML=n.k==='p'?'<b>'+esc(n.t)+'</b><small>'+ico(n.p.ico)+String(n.i+1).padStart(2,'0')+' · '+n.causas.length+' causas</small>':'<b>'+esc(corto)+'</b>';LBL.appendChild(d);n.el=d;n.lo=0});
+function ico(k){return '<svg class="li" viewBox="0 0 24 24" aria-hidden="true"><path d="'+ICO[k]+'"/></svg>'}
 function esc(t){return String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 
 /* ---------- leyenda de problemáticas ---------- */
@@ -468,7 +473,7 @@ cv.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;hovQ=[e.
 cv.addEventListener('pointerleave',()=>{hovQ=null;tipOff()});
 function tipOff(){ST.hov=null;TIP.style.opacity=0;cv.style.cursor=''}
 function hover(){if(!hovQ)return;const [x,y]=hovQ;hovQ=null;if(down){tipOff();return}const n=pick(x,y);ST.hov=n;cv.style.cursor=n?'pointer':'';
- if(!n){TIP.style.opacity=0;return}TIP.style.setProperty('--c',n.col);TIP.innerHTML='<span class="mono">'+(n.k==='p'?'Problemática · '+n.causas.length+' causas':esc(n.par.t)+' · '+n.deg+' conexiones')+'</span>'+esc(n.k==='p'?n.full:n.t);
+ if(!n){TIP.style.opacity=0;return}TIP.style.setProperty('--c',n.col);TIP.innerHTML='<span class="mono">'+ico(n.p.ico)+(n.k==='p'?'Problemática · '+n.causas.length+' causas':esc(n.par.t)+' · '+n.deg+' conexiones')+'</span>'+esc(n.k==='p'?n.full:n.t);
  const w=TIP.offsetWidth,hh=TIP.offsetHeight;TIP.style.transform='translate('+Math.min(innerWidth-w-10,x+16)+'px,'+Math.min(innerHeight-hh-10,y+16)+'px)';TIP.style.opacity=1}
 
 /* ---------- cuadro a cuadro ---------- */
@@ -504,12 +509,20 @@ function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,(now-last
  fGeo.attributes.position.needsUpdate=fGeo.attributes.aA.needsUpdate=true;
  ctl.update();
  // etiquetas
- const H=innerHeight,W=innerWidth,tf=tanF();
+ const H=innerHeight,W=innerWidth,tf=tanF(),PL=[];
  NODES.forEach(n=>{let want=0;if(n.k==='p')want=n.ta===1?1:.12;else if(ST.sel&&ST.sel.k==='c'&&n.ta===1&&!ST.anim)want=1;
   tmp.copy(n.pos).project(cam);if(tmp.z>1||Math.abs(tmp.x)>1.2||Math.abs(tmp.y)>1.2)want=0;
   n.lo+=(want-n.lo)*kA;if(n.lo<.02&&want===0){if(n.el.style.opacity!=='0')n.el.style.opacity='0';return}
   const dist=cam.position.distanceTo(n.pos),rpx=(n.size/2)/(dist*tf)*(H/2);
-  n.el.style.opacity=n.lo.toFixed(2);n.el.style.transform='translate('+((tmp.x+1)/2*W).toFixed(1)+'px,'+((1-tmp.y)/2*H+rpx*.8+4).toFixed(1)+'px) translate(-50%,0)'});
+  const sx=(tmp.x+1)/2*W,sy=(1-tmp.y)/2*H;n.el.style.opacity=n.lo.toFixed(2);
+  if(n.k==='p'){PL.push({n,sx,sy,rpx});return}
+  n.el.style.transform='translate('+sx.toFixed(1)+'px,'+(sy+rpx*.8+4).toFixed(1)+'px) translate(-50%,0)'});
+ // si dos etiquetas de problemáticas se tocan, la del disco más alto en pantalla pasa arriba de su disco
+ PL.sort((a,b)=>a.sy-b.sy);PL.forEach(o=>{o.h=o.n.elH||(o.n.elH=o.n.el.offsetHeight||40);o.w=o.n.elW||(o.n.elW=o.n.el.offsetWidth||170);o.up=0});
+ for(let i=0;i<PL.length;i++)for(let j=i+1;j<PL.length;j++){const a=PL[i],b=PL[j],ta=a.sy+a.rpx*.8+4,tb=b.sy+b.rpx*.8+4;
+  if(Math.abs(a.sx-b.sx)<(a.w+b.w)/2&&ta<tb+b.h&&tb<ta+a.h)a.up=1}
+ PL.forEach(o=>{const n=o.n;n.fu=(n.fu||0)+(o.up-(n.fu||0))*kA;const top=o.sy+o.rpx*.8+4,alt=o.sy-o.rpx*.8-4-o.h;
+  n.el.style.transform='translate('+o.sx.toFixed(1)+'px,'+(top+(alt-top)*n.fu).toFixed(1)+'px) translate(-50%,0)'});
  hover();
  renderer.render(scene,cam)}
 requestAnimationFrame(frame);
