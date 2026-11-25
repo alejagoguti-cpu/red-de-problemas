@@ -59,6 +59,7 @@ const css=`
 .ee-c:hover{text-decoration:underline}
 .ee-p{color:#c5b994}
 .ee-h{font:500 10px var(--letra-dato,'Geist Mono',monospace);letter-spacing:.14em;text-transform:uppercase;color:#7a8480;margin:16px 0 6px}
+.ee-fx{margin-top:12px;font:500 10px var(--letra-dato,'Geist Mono',monospace);letter-spacing:.1em;text-transform:uppercase;color:#5f6966}
 .ee-src{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:6px;max-height:190px;overflow:auto;pointer-events:auto;scrollbar-width:thin}
 .ee-src li{font-size:11.5px;line-height:1.4;color:#8b9591}
 .ee-src a{color:#b6bcc0;text-decoration:none}
@@ -104,36 +105,24 @@ const css=`
 `;
 
 /* ---------- tarjetas ---------- */
+// fuentes en una sola línea: [1] [2] … cada una con su URL
+const fuentes=ks=>'<div class="ee-fx">Fuentes '+ref(...ks)+'</div>';
 function tarjetas(){
- const r5=llega(500),r8=llega(800);
- const T={};
- T.F2='<div class="num"><span>01</span> / 06 · <b>Criterio de diseño</b></div><h2>Hacia el 75 % a 15 minutos</h2><p class="tag">Llevar la plaza a la escala del barrio</p>'+
-  '<div class="ee-big"><div><b>47,3 %</b><span>hoy · viviendas a ≤ 800 m</span></div><i>→</i><div><b class="m">75 %</b><span>meta de diseño · ≤ 15 min a pie</span></div></div>'+
-  '<p>Hoy el <em>47,3 %</em> de las viviendas de Kennedy tiene una plaza a 800 m o menos por las calles, y el <em>22,5 %</em> a 500 m'+ref('calc','prop')+'. Caminando entre 0,94 y 1,43 m/s, en 15 minutos se recorren al menos 850 m: <em>800 m caben en 15 minutos</em> para cualquier adulto'+ref('paso')+'. El criterio: que al menos <em>tres de cada cuatro viviendas</em> tengan una plaza a esa distancia.</p>'+
-  '<p class="ee-nt">El guion cita 28 % de la población del suroccidente a ≤ 15 min (SDP 2022)'+ref('guion')+'; no se usa como línea base porque no tiene URL verificable.</p>'+
-  '<div class="ee-h">Por qué 15 minutos</div><ul class="ee-l">'+
-  '<li>El POT Bogotá Reverdece (Decreto 555 de 2021) organiza la ciudad en Unidades de Planeamiento Local para la <em>Bogotá de los 15 y 30 minutos</em>: lo cotidiano a 15 min a pie o 30 en bicicleta o transporte público'+ref('pot','pot15')+'.</li>'+
-  '<li>La alcaldesa Claudia López lo formuló como <em>ciudad de 30 minutos</em>; los 15 minutos a pie son la escala de barrio dentro de ese modelo'+ref('cl30')+'.</li>'+
-  '<li>La «ciudad de 15 minutos» de Carlos Moreno propone que vivir, abastecerse, cuidarse y aprender quede a un cuarto de hora a pie'+ref('moreno')+'.</li></ul>'+
-  '<div class="ee-h">Estrategia</div><ul class="ee-l"><li><em>Malla de 19 plazas de barrio</em> más una plaza mayor en Bavaria, ubicadas con máxima cobertura y sintaxis espacial (verde en el mapa)'+ref('calc','prop')+'.</li><li>Barcelona sostiene <em>39 mercados</em> y ningún barrio sin mercado de referencia'+ref('bcn')+'.</li></ul>'+
-  '<div class="ee-h">Fuentes</div>'+lista(['calc','prop','paso','pot','pot15','cl30','moreno','bcn']);
- T.F3='<div class="num"><span>01</span> / 06 · <b>Escenarios</b></div><h2>¿Y si sumamos plazas?</h2><p class="tag">Mueve la barra: cada plaza se suma en orden de mayor ganancia</p>'+
+ const r5=llega(500),r8=llega(800),T={};
+ T.F2='<div class="num"><span>01</span> / 06 · <b>Criterio de diseño</b></div><h2>Del 28 % al 75 %</h2><p class="tag">Una plaza a 15 minutos a pie</p>'+
+  '<div class="ee-big"><div><b>28 %</b><span>hoy · suroccidente</span></div><i>→</i><div><b class="m">75 %</b><span>meta</span></div></div>'+
+  '<ul class="ee-l"><li><em>Ciudad de 15 y 30 minutos</em> · POT Bogotá Reverdece'+ref('pot','cl30')+'</li><li><em>Ciudad de 15 minutos</em> · Moreno et al., 2021'+ref('moreno')+'</li><li><em>19 plazas de barrio</em> + plaza mayor en Bavaria'+ref('calc')+'</li></ul>'+
+  fuentes(['guion','pot','cl30','moreno','calc']);
+ T.F3='<div class="num"><span>01</span> / 06 · <b>Escenarios</b></div><h2>¿Y si sumamos plazas?</h2><p class="tag">Mueve la barra</p>'+
   '<div class="ee-ctl"><label for="ee-k">Plazas nuevas <b id="ee-kv">0</b></label><input id="ee-k" type="range" min="0" max="19" step="1" value="0" aria-describedby="ee-out"/>'+
-  '<div class="ee-seg" role="group" aria-label="Distancia a pie"><button type="button" data-r="800" aria-pressed="true">800 m · dentro de 15 min</button><button type="button" data-r="500" aria-pressed="false">500 m</button></div></div>'+
+  '<div class="ee-seg" role="group" aria-label="Distancia a pie"><button type="button" data-r="800" aria-pressed="true">800 m</button><button type="button" data-r="500" aria-pressed="false">500 m</button></div></div>'+
   '<div class="ee-bar" aria-hidden="true"><i id="ee-bi"></i><u id="ee-b0"></u><s style="left:75%"></s></div>'+
-  '<div class="ee-kv" id="ee-out" aria-live="polite"><div><b id="ee-p">47,3 %</b><span>viviendas con plaza a esa distancia</span></div><div><b id="ee-d">+0,0</b><span>puntos frente a hoy</span></div><div><b id="ee-h">79.800</b><span>habitantes por plaza</span></div></div>'+
-  '<p class="ee-ok" id="ee-ok"></p>'+
-  '<p class="ee-nt">Cálculo propio por la red peatonal sobre 77.280 edificios residenciales de toda Kennedy'+ref('calc')+'; habitantes por plaza = 1.037.929'+ref('pob')+' ÷ (13 + plazas nuevas). 800 m caben en 15 minutos a pie incluso al paso más lento reportado (0,94 m/s)'+ref('paso')+'.</p>'+
-  '<div class="ee-h">Fuentes</div>'+lista(['calc','pob','prop','paso']);
- T.F4='<div class="num"><span>01</span> / 06 · <b>Plausibilidad</b></div><h2>¿Es posible llegar?</h2><p class="tag">La curva del escenario y lo que dice la literatura</p>'+
+  '<div class="ee-kv" id="ee-out" aria-live="polite"><div><b id="ee-p">47,3 %</b><span>viviendas cubiertas</span></div><div><b id="ee-d">+0,0</b><span>puntos</span></div><div><b id="ee-h">79.800</b><span>hab. por plaza</span></div></div>'+
+  '<p class="ee-ok" id="ee-ok"></p>'+fuentes(['calc','pob','paso']);
+ T.F4='<div class="num"><span>01</span> / 06 · <b>Plausibilidad</b></div><h2>¿Es posible?</h2><p class="tag">Sí: la meta llega antes de completar la malla</p>'+
   grafica(r5,r8)+
-  '<ul class="ee-l"><li>A 800 m (dentro de 15 min a pie'+ref('paso')+') bastan <em>'+r8+' plazas nuevas</em> para pasar el 75 %; a 500 m hacen falta <em>'+r5+'</em>. La propuesta plantea 19.'+ref('calc')+'</li>'+
-  '<li>Ubicar oferta de alimentos con el <em>modelo de máxima cobertura</em> es un método probado para cerrar desiertos alimentarios'+ref('mclp')+'.</li>'+
-  '<li>Un estudio global en <em>Nature Cities</em> mide el tiempo de proximidad en ciudades de todo el mundo: la densidad local de población juega un papel clave y el número de servicios adicionales que hacen falta para llegar a 15 min varía mucho entre ciudades'+ref('bruno')+'.</li>'+
-  '<li>Barcelona demuestra que una red de mercados de barrio funciona en una ciudad densa: 39 mercados, ningún barrio sin mercado'+ref('bcn')+'.</li>'+
-  '<li><em>Límite:</em> en ciudades latinoamericanas la segregación dificulta el modelo de 15 minutos; la cercanía no garantiza precio ni acceso'+ref('unal')+'.</li></ul>'+
-  '<p class="ee-ok">Plausible en distancia: la meta se alcanza antes de completar la malla. Falta validarla con simulación (cálculo geométrico por la red, no dinámico).</p>'+
-  '<div class="ee-h">Fuentes</div>'+lista(['calc','paso','mclp','bruno','bcn','unal']);
+  '<ul class="ee-l"><li>Máxima cobertura para ubicar alimentos'+ref('mclp')+'</li><li>La densidad local es clave para los 15 min'+ref('bruno')+'</li><li>Barcelona: 39 mercados de barrio'+ref('bcn')+'</li><li>Límite: la segregación'+ref('unal')+'</li></ul>'+
+  fuentes(['calc','mclp','bruno','bcn','unal']);
  return T}
 
 function grafica(r5,r8){const W=420,H=190,l=34,r=10,t=14,b=28,X=k=>l+k*(W-l-r)/19,Y=v=>t+(1-v/100)*(H-t-b);
@@ -184,7 +173,7 @@ function montar(){
  let R=800;const out=()=>{const p=CURVA[R][K],p0=CURVA[R][0],hab=Math.round(POP/(PLAZAS+K)/100)*100;
   document.getElementById('ee-kv').textContent=K;document.getElementById('ee-p').textContent=fmt(p,1)+' %';document.getElementById('ee-d').textContent='+'+fmt(p-p0,1);document.getElementById('ee-h').textContent=fmt(hab);
   document.getElementById('ee-bi').style.width=p+'%';document.getElementById('ee-b0').style.left=p0+'%';
-  const n=llega(R);document.getElementById('ee-ok').textContent=p>=META?'Con '+K+' plazas nuevas se supera la meta del 75 % a '+R+' m.':'Faltan '+(n-K)+' plazas para llegar al 75 % a '+R+' m (se alcanza con '+n+').';
+  const n=llega(R);document.getElementById('ee-ok').textContent=p>=META?'Meta del 75 % alcanzada':'Faltan '+(n-K)+' plazas para el 75 %';
   if(document.getElementById('mksvg')&&document.getElementById('mksvg').dataset.sub==='F3')verSitios(K)};
  const rg=document.getElementById('ee-k');rg.addEventListener('input',()=>{K=+rg.value;out()});
  document.querySelectorAll('.ee-seg button').forEach(b=>b.addEventListener('click',()=>{R=+b.dataset.r;document.querySelectorAll('.ee-seg button').forEach(x=>x.setAttribute('aria-pressed',x===b));out()}));

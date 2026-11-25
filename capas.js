@@ -15,12 +15,12 @@ const SQ=.6,GAP=980,M='matrix(0.86603 -0.28000 0.50000 0.48497 0 0)';
 
 /* cifra principal de la tarjeta de cada paso del recorrido (ESC en index.html), con su misma fuente */
 const IND={ // cada cifra con la URL de su fuente
- F:{v:'47,3 %',t:'de las viviendas con una plaza a ≤ 800 m por las calles (dentro de 15 min a pie)',a:'Cálculo propio · simulador de Kennedy',u:'https://anasoficasca-code.github.io/simulador/bavaria.html'},
+ F:{v:'28 %',t:'tiene una plaza a ≤ 15 min · suroccidente',a:'DANE-SIPSA 2025 · SDP 2022'},
  B:{v:'1.037.929',t:'habitantes en 2024 · 434 hab/ha en Patio Bonito, 90 en Tintal Norte',a:'SaluData · Kennedy 2024',u:'https://saludata.saludcapital.gov.co/osb/wp-content/uploads/2024/12/Kennedy_MasBienestar_2024_v1_2.pdf'},
  C:{v:'+33,4 %',t:'valor catastral total de Kennedy (suelo + construcciones), 2022 → 2026',a:'Catastro Bogotá · Censo Inmobiliario 2026',u:'https://www.catastrobogota.gov.co/sites/default/files/recursos/Documento_Censo_Inmobiliario_Vig_2026_20260331_publicar.pdf'},
  D:{v:'≈ 12 %',t:'al año suben los avisos de venta a < 1 km de la línea (5 % en el resto de Bogotá) · hipótesis',a:'Infobae con datos de Fincaraíz, 2026',u:'https://www.infobae.com/colombia/2026/11/10/vivir-cerca-del-metro-de-bogota-seria-mas-costoso-el-precio-de-la-vivienda-podria-aumentar-cerca-de-12-al-ano/'},
  A:{v:'2,2 M t',t:'de alimentos llegaron a Corabastos en 2022 (2.198.118 t)',a:'Región Metropolitana · SIPSA-DANE 2022',u:'https://regionmetropolitana.gov.co/sites/default/files/archivos/normatividad/2024-11-19/189_5-logistica-y-distribucion-de-alimentos.pdf'},
- E:{v:'77',t:'puntos críticos de residuos reportados en Kennedy',a:'UAESP, mayo de 2023',u:'https://www.uaesp.gov.co/noticias/asi-estamos-acabando-los-puntos-criticos-bogota'}};
+ E:{v:'745',t:'contenedores de basura · 625 de reciclaje',a:'UAESP/IDECA contenerización'}};
 const indicador=id=>IND[id]||{v:'—',t:'',a:''};
 
 const css=`
@@ -104,7 +104,7 @@ function construir(sec){
  const tags=sec.querySelector('.kc-tags');
  L.forEach(l=>{const t=document.createElement('div');t.className='kc-tag';t.style.setProperty('--c',PC[l.id]);
   const nombre=typeof byId!=='undefined'&&byId[l.id]?byId[l.id].t:l.id;
-  t.innerHTML='<div class="h">'+(typeof ic==='function'?ic(ICOK[l.id]):'')+String(l.i+1).padStart(2,'0')+' · '+esc(nombre)+'</div><b'+(l.ind.c?' class="calc"':'')+'>'+esc(l.ind.v)+'</b><span>'+esc(l.ind.t)+'</span><em><a href="'+l.ind.u+'" target="_blank" rel="noopener">'+esc(l.ind.a)+' ↗</a></em>';
+  t.innerHTML='<div class="h">'+(typeof ic==='function'?ic(ICOK[l.id]):'')+String(l.i+1).padStart(2,'0')+' · '+esc(nombre)+'</div><b'+(l.ind.c?' class="calc"':'')+'>'+esc(l.ind.v)+'</b><span>'+esc(l.ind.t)+'</span><em>'+(l.ind.u?'<a href="'+l.ind.u+'" target="_blank" rel="noopener">'+esc(l.ind.a)+' ↗</a>':esc(l.ind.a))+'</em>';
   tags.appendChild(t);l.tag=t;
   const ln=document.createElementNS(NS,'line');ln.style.setProperty('--c',PC[l.id]);guia.appendChild(ln);l.ln=ln});
  // casillas del tablero final, en el mismo orden del recorrido
