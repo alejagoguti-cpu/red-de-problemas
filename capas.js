@@ -46,6 +46,11 @@ const css=`
 #kcap .kl-lado{fill:color-mix(in srgb,var(--pc) 22%,#050607);stroke:none}
 #kcap .kl-upz{fill:var(--pc);stroke:rgba(255,255,255,.35);stroke-width:.8;vector-effect:non-scaling-stroke}
 #kcap .kl .capa{opacity:1!important;transition:none}
+#kcap .kl .mk-sil{fill-opacity:0}
+#kcap .kl .mk-upz path{fill-opacity:0}
+#kcap .kl .mk-borde{stroke:var(--pc);stroke-opacity:.9}
+#kcap .kl-3d{opacity:.78}
+#kcap .kl .mk-ref text{display:none}
 #kcap .kl .mk-obra{opacity:1}
 #kcap .kl .mk-metro,#kcap .kl .mk-metro-b{display:inline}
 #kcap .kl .mk-t,#kcap .kl .mk-st,#kcap .kl text,#kcap .kl .mk-fl,#kcap .kl .mk-fl-base,#kcap .kl .mk-origen{display:none}
@@ -83,6 +88,11 @@ function construir(sec){
  const src=document.getElementById('mksvg');
  if(!src||typeof MK==='undefined'||!MK.P||!MK.lim||!src.querySelector('.mk-losa'))return false;
  const losaD=src.querySelector('.mk-losa').getAttribute('d');
+ // contexto completo: el suelo del mapa (silueta, UPZ, vías y borde) sin las capas temáticas
+ const suelo=src.querySelector('.mk-suelo');let sueloH='';if(suelo){const k=suelo.cloneNode(true);k.querySelectorAll('.capa,[id]').forEach(e=>e.classList&&e.classList.contains('capa')?e.remove():e.removeAttribute('id'));k.setAttribute('class','mk-suelo kl-suelo');sueloH=k.outerHTML}
+ const ref=src.querySelector('.mk-ref');const refH=ref?ref.outerHTML.replace(/ id="[^"]*"/g,''):'';
+ // edificios: lugar para la foto del mapa 3D (se toma cuando los edificios ya cargaron)
+ const img='<image class="kl-3d" x="0" y="0" width="0" height="0" preserveAspectRatio="none"/>';
  // contorno proyectado (para el ancla de cada etiqueta: el punto más a la derecha de la losa)
  let xr=-1e9,yr=0,x0=1e9,y0=1e9,y1=-1e9;MK.lim.forEach(p=>{const q=MK.P(p[0],p[1],0);if(q[0]>xr){xr=q[0];yr=q[1]}x0=Math.min(x0,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1])});
  const ord=(typeof ORDEN!=='undefined'?ORDEN:['F','B','C','D','A','E']).slice(); // de abajo hacia arriba: la causa raíz es la base
@@ -95,7 +105,7 @@ function construir(sec){
  const L=ord.map((id,i)=>{
   const g=document.createElementNS(NS,'g');g.setAttribute('class','kl');g.style.setProperty('--pc',PC[id]);g.style.opacity=0;
   const inner=document.createElementNS(NS,'g');inner.setAttribute('transform','scale(1 '+SQ+')');
-  let h='<g transform="translate(0,46) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="translate(0,23) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="'+M+'"><path class="kl-losa" d="'+losaD+'"/></g>';
+  let h='<g transform="translate(0,46) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="translate(0,23) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="'+M+'"><path class="kl-losa" d="'+losaD+'"/></g>'+img+sueloH+refH;
   if(id==='B'&&MK.UZ)h+='<g transform="'+M+'">'+MK.UZ.filter(u=>u.poly&&u.dens).map(u=>'<path class="kl-upz" style="fill-opacity:'+(.12+.7*(u.dens-90)/(434-90)).toFixed(2)+'" d="M'+u.poly.map(p=>p[0]+' '+p[1]).join('L')+'Z"/>').join('')+'</g>';
   inner.innerHTML=h;
   capas.filter(c=>(c.dataset.capa||'').split(' ').includes(id)).forEach(c=>{const k=c.cloneNode(true);k.removeAttribute('id');inner.appendChild(k)});
@@ -113,12 +123,21 @@ function construir(sec){
   const ln=document.createElementNS(NS,'line');ln.style.setProperty('--c',PC[l.id]);guia.appendChild(ln);l.ln=ln});
  // casillas del tablero final, en el mismo orden del recorrido
  const grid=sec.querySelector('.kc-grid');grid.innerHTML=L.map(()=>'<div class="kc-slot"></div>').join('');L.forEach((l,i)=>l.slot=grid.children[i]);
- S={sec,svg,L,xr,MOB};medir();return true}
+ S={sec,svg,L,xr,MOB};medir();foto();return true}
 
+function foto(){if(!S||S.foto)return;try{
+ const cv=typeof M3!=='undefined'&&M3.r&&M3.r.domElement,src=document.getElementById('mksvg');if(!cv||!M3.edif||typeof dibujar3D!=='function'||!src)return;
+ const ve=[M3.edif.visible,M3.upz&&M3.upz.visible,M3.metro&&M3.metro.visible],su=M3.sube;
+ M3.edif.visible=true;if(M3.upz)M3.upz.visible=false;if(M3.metro)M3.metro.visible=false;M3.sube=1;dibujar3D();dibujar3D();
+ const url=cv.toDataURL('image/png'),r=cv.getBoundingClientRect(),inv=src.getScreenCTM().inverse(),pt=src.createSVGPoint();
+ pt.x=r.left;pt.y=r.top;const a=pt.matrixTransform(inv);pt.x=r.right;pt.y=r.bottom;const b=pt.matrixTransform(inv);
+ M3.edif.visible=ve[0];if(M3.upz)M3.upz.visible=ve[1];if(M3.metro)M3.metro.visible=ve[2];M3.sube=su;dibujar3D();
+ if(!(b.x>a.x)||r.width<10)return;
+ S.svg.querySelectorAll('.kl-3d').forEach(im=>{im.setAttribute('href',url);im.setAttribute('x',a.x.toFixed(1));im.setAttribute('y',a.y.toFixed(1));im.setAttribute('width',(b.x-a.x).toFixed(1));im.setAttribute('height',(b.y-a.y).toFixed(1))});S.foto=1}catch(e){}}
 function medir(){if(!S)return;const MOB=innerWidth<=760,tw=MOB?(S.sec.querySelector('.kc-grid').clientWidth-6)/2:Math.min(250,(S.sec.querySelector('.kc-grid').clientWidth-10)/2),th=MOB?54:124;
  S.sec.style.setProperty('--tw',tw+'px');S.sec.style.setProperty('--th',th+'px');S.tw=tw;S.th=th}
 
-function pintar(){if(!S)return;
+function pintar(){if(!S)return;if(!S.foto){const t=performance.now();if(!S.tf||t-S.tf>700){S.tf=t;foto()}}
  const r=S.sec.getBoundingClientRect(),span=S.sec.offsetHeight-innerHeight,p=cl(-r.top/span);
  const N=S.L.length,col=eio(cl((p-.56)/.2)),junta=cl((p-.62)/.24);
  S.sec.classList.toggle('junto',junta>.02);S.sec.classList.toggle('listo',junta>.97);
@@ -133,6 +152,9 @@ function pintar(){if(!S)return;
   // la losa de cada capa se aclara al fundirse para que se vean todas
   const losa=l.g.querySelector('.kl-losa');if(losa)losa.style.fillOpacity=(i===0?1:1-col*.92).toFixed(2);
   l.g.querySelectorAll('.kl-lado').forEach(e=>e.style.opacity=(i===0?1:1-col).toFixed(2));
+  const im=l.g.querySelector('.kl-3d');if(im)im.style.opacity=(i===0?.78:.78*(1-col)).toFixed(2);
+  l.g.querySelectorAll('.kl-suelo,.mk-ref').forEach(e=>e.style.opacity=(i===0?1:1-col).toFixed(2));
+  if(l.id==='B'){const u=1-.6*col;if(l.u!==u){l.u=u;l.g.querySelectorAll('.kl-upz').forEach(e=>e.style.opacity=u.toFixed(2))}}
   // ancla en pantalla (borde derecho de la losa)
   const pt=S.svg.createSVGPoint();pt.x=S.xr;pt.y=l.ay+y;const sp=pt.matrixTransform(ctm);
   const ax=sp.x-vr.left+(S.MOB?6:18),ay=AN[i];
