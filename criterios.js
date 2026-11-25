@@ -25,8 +25,8 @@ const ORD=['A','B','C','D','E','F'];
 if(typeof SRC!=='undefined'){
  SRC[11]=SRC[11]||['Alcaldía de Bogotá. «Distrito intervendrá 17 Plazas Distritales»: las plazas distritales representan el 5,1 % del abastecimiento de alimentos de la ciudad.','https://bogota.gov.co/mi-ciudad/desarrollo-economico/plazas-de-mercado-de-bogota-distrito-intervendra-17-plazas-distritales'];
  SRC[18]=SRC[18]||['Casas, Gómez y Trujillo. Distrito Bavaria Común y simulador de Kennedy: datos, sintaxis y usos del suelo (repositorio del simulador, 2026). Cálculos de acceso sobre 77.280 edificios residenciales.','https://anasoficasca-code.github.io/simulador/bavaria.html'];
- SRC[25]=SRC[25]||['Jardín Botánico de Bogotá, capa Arbolado por UPZ, con población proyectada por la SDP 2023–2024 (archivo upz.json de este repositorio).','upz.json'];
- SRC[26]=SRC[26]||['Propuesta Bavaria Común: «Qué cambia, cuánto y cómo se mide» (metas y supuestos de la propuesta, no resultados).','propuesta.html#problemas'];
+ SRC[25]=SRC[25]||['Jardín Botánico de Bogotá, capa Arbolado por UPZ, con población proyectada por la SDP 2023–2024 (archivo upz.json de este repositorio).','https://alejagoguti-cpu.github.io/red-de-problemas/upz.json'];
+ SRC[26]=SRC[26]||['Propuesta Bavaria Común: «Qué cambia, cuánto y cómo se mide» (metas y supuestos de la propuesta, no resultados).','https://alejagoguti-cpu.github.io/red-de-problemas/propuesta.html#problemas'];
 }
 const cite=a=>(a||[]).map(i=>typeof SRC!=='undefined'&&SRC[i]?'<a class="cb" href="'+SRC[i][1]+'" target="_blank" rel="noopener" title="'+String(SRC[i][0]).replace(/"/g,'')+'">['+i+']</a>':'').join('');
 
@@ -109,7 +109,7 @@ const PROB={
   pr:'Red de mercados barriales, equipamientos de proximidad, Estaciones Circulares y espacios comunitarios conectados con criterios de sintaxis espacial.',
   co:'Porcentaje de población con acceso a servicios dentro de tiempos de desplazamiento definidos, cobertura por sector y capacidad disponible por habitante.',
   re:'Crecimiento poblacional, movilidad, dependencia alimentaria y valorización del suelo.',i:['I1','I8','I4','I6'],
-  nota:'El encargo cita un 28 % de población a menos de 15 minutos de una plaza; ese valor no aparece en los datos del proyecto. Lo calculado es 22,5 % de las viviendas a 500 m o menos (6 a 7 minutos a pie) y 63,0 % a 1.000 m o menos (unos 12 a 15 minutos). El 75 % se trata como meta preliminar de diseño, pendiente de validación: no es un resultado comprobado ni un estándar obligatorio.'},
+  nota:'El paso 01 del recorrido cita 28 % de la población del suroccidente con una plaza a 15 minutos o menos (guion del proyecto, SDP 2022), pero sin URL verificable, así que no se usa como línea base. La línea base con fuente es el cálculo propio por la red peatonal: 22,5 % de las viviendas a 500 m y 47,3 % a 800 m, distancia que cabe en 15 minutos a pie. El 75 % es la meta de diseño del proyecto, preliminar y pendiente de validación.'},
  X:{dg:'Diversidad, parches, corredores, conectividad, especies focales, interacciones bióticas, persistencia y ciclos del agua, el carbono y los nutrientes.',
   cr:'Que cada intervención mantenga o aumente la capacidad del territorio para sostener la vida no humana, medida con los mismos indicadores antes y después.',
   pr:'Restauración de humedales, corredores ecológicos, refugios, huertas ubicadas por corredores y Estaciones Circulares.',
@@ -218,7 +218,7 @@ const IND=[
  {id:'F2',p:'F',n:'Viviendas a 1.000 m o menos de una plaza (≈ 12 a 15 minutos a pie)',b:{v:'63,0 %',n:63,u:'%',a:'2026',s:[18],t:'calc'},loc:{v:'Ver lectura espacial por UPZ',t:'calc'},
   c:'Que nadie dependa de un viaje largo para el abasto básico.',m:MP(),dir:1,ri:['I1'],
   f:'viviendas con una plaza a ≤ 1.000 m ÷ total de viviendas × 100',u:'%',rel:['F1','B1'],um:UM,ex:'EXP-06',sm:'—',
-  nota:'No existe en el proyecto el 28 % citado en el encargo; requiere confirmar su fuente.'},
+  nota:'El 28 % a 15 min del guion (SDP 2022) no tiene URL verificable; se usa el cálculo propio, que sí la tiene.'},
  {id:'F3',p:'F',n:'Distancia mediana a la plaza más cercana',b:{v:'832 m',n:832,u:'m',a:'2026',s:[18],t:'calc'},loc:{v:'De 257 m (Bavaria) a 1.592 m (Carvajal) en la muestra',t:'calc'},
   c:'Acortar el recorrido cotidiano al abasto.',m:{v:'Pendiente de validación · estimación geométrica 317 m',t:'val'},dir:-1,ri:['I1'],
   f:'mediana de la distancia por red de cada vivienda a la plaza más cercana',u:'m',rel:['F1','F2'],um:UM,ex:'EXP-06',sm:'—'},

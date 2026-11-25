@@ -2,8 +2,9 @@
    Escena por scroll entre el mapa de los seis problemas (#mk) y «Ningún problema ocurre solo»:
    1) las seis capas del mapa aparecen una encima de la otra, cada una con su indicador principal;
    2) las capas bajan y se funden en un solo territorio, y los seis indicadores se juntan en un tablero.
-   Las capas son copias de las capas reales del mapa (#mksvg) y la de densidad se dibuja con los polígonos de las UPZ.
-   Los indicadores se leen del objeto D de index.html (mismas cifras y fuentes que el panel de la red). */
+   Cada capa es una foto del mapa del recorrido en ese paso (mismo encuadre de Kennedy): el 3D del paso (edificios,
+   volúmenes de densidad o metro) y el dibujo del paso con sus estilos reales. Nada se redibuja a mano.
+   Las cifras son las de la tarjeta de cada paso del recorrido (objeto ESC de index.html), con sus mismas fuentes. */
 (function(){
 'use strict';
 const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -12,14 +13,15 @@ const cl=x=>Math.max(0,Math.min(1,x)),eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2
 const ICOK={F:'mercado',B:'persona',C:'suelo',D:'precio',A:'camion',E:'basura'};
 const SQ=.6,GAP=980,M='matrix(0.86603 -0.28000 0.50000 0.48497 0 0)';
 
-/* indicador principal de cada problema: mismas cifras del panel de la red */
-function indicador(id){
- const k=(i,j)=>{try{return D[id].g[i].k[j]}catch(e){return null}};
- const m={A:k(0,0),B:k(0,1),C:k(0,0),D:k(0,0),E:k(0,0)}[id];
- if(id==='F')return {v:'22,5 %',t:'de las viviendas a 500 m o menos de una plaza de mercado',a:'2026 · cálculo propio',c:1};
- if(!m)return {v:'—',t:'',a:''};
- return {v:m[0],t:m[1],a:m[2]+(m[4]?' · cálculo propio':''),s:m[3],c:m[4]};
-}
+/* cifra principal de la tarjeta de cada paso del recorrido (ESC en index.html), con su misma fuente */
+const IND={ // cada cifra con la URL de su fuente
+ F:{v:'47,3 %',t:'de las viviendas con una plaza a ≤ 800 m por las calles (dentro de 15 min a pie)',a:'Cálculo propio · simulador de Kennedy',u:'https://anasoficasca-code.github.io/simulador/bavaria.html'},
+ B:{v:'1.037.929',t:'habitantes en 2024 · 434 hab/ha en Patio Bonito, 90 en Tintal Norte',a:'SaluData · Kennedy 2024',u:'https://saludata.saludcapital.gov.co/osb/wp-content/uploads/2024/12/Kennedy_MasBienestar_2024_v1_2.pdf'},
+ C:{v:'+33,4 %',t:'valor catastral total de Kennedy (suelo + construcciones), 2022 → 2026',a:'Catastro Bogotá · Censo Inmobiliario 2026',u:'https://www.catastrobogota.gov.co/sites/default/files/recursos/Documento_Censo_Inmobiliario_Vig_2026_20260331_publicar.pdf'},
+ D:{v:'≈ 12 %',t:'al año suben los avisos de venta a < 1 km de la línea (5 % en el resto de Bogotá) · hipótesis',a:'Infobae con datos de Fincaraíz, 2026',u:'https://www.infobae.com/colombia/2026/11/10/vivir-cerca-del-metro-de-bogota-seria-mas-costoso-el-precio-de-la-vivienda-podria-aumentar-cerca-de-12-al-ano/'},
+ A:{v:'2,2 M t',t:'de alimentos llegaron a Corabastos en 2022 (2.198.118 t)',a:'Región Metropolitana · SIPSA-DANE 2022',u:'https://regionmetropolitana.gov.co/sites/default/files/archivos/normatividad/2024-11-19/189_5-logistica-y-distribucion-de-alimentos.pdf'},
+ E:{v:'77',t:'puntos críticos de residuos reportados en Kennedy',a:'UAESP, mayo de 2023',u:'https://www.uaesp.gov.co/noticias/asi-estamos-acabando-los-puntos-criticos-bogota'}};
+const indicador=id=>IND[id]||{v:'—',t:'',a:''};
 
 const css=`
 #kcap{position:relative;z-index:1;height:430vh;background:var(--campo-0,#050607);pointer-events:auto;border-top:1px solid var(--linea,rgba(214,228,222,.12))}
@@ -42,18 +44,11 @@ const css=`
 #kcap .kc-fin a .ico{width:16px;height:16px}
 #kcap .kc-mapa{position:relative;z-index:1}
 #kcap svg.kc-svg{position:absolute;inset:4vh 0 4vh 0;width:100%;height:92vh;overflow:visible}
-#kcap .kl-losa{fill:rgba(8,10,11,.62);stroke:var(--pc);stroke-width:1.3;vector-effect:non-scaling-stroke}
-#kcap .kl-lado{fill:color-mix(in srgb,var(--pc) 22%,#050607);stroke:none}
-#kcap .kl-upz{fill:var(--pc);stroke:rgba(255,255,255,.35);stroke-width:.8;vector-effect:non-scaling-stroke}
-#kcap .kl .capa{opacity:1!important;transition:none}
-#kcap .kl .mk-sil{fill-opacity:0}
-#kcap .kl .mk-upz path{fill-opacity:0}
-#kcap .kl .mk-borde{stroke:var(--pc);stroke-opacity:.9}
-#kcap .kl-3d{opacity:.78}
-#kcap .kl .mk-ref text{display:none}
-#kcap .kl .mk-obra{opacity:1}
-#kcap .kl .mk-metro,#kcap .kl .mk-metro-b{display:inline}
-#kcap .kl .mk-t,#kcap .kl .mk-st,#kcap .kl text,#kcap .kl .mk-fl,#kcap .kl .mk-fl-base,#kcap .kl .mk-origen{display:none}
+#kcap .kl-losa{fill:rgba(8,10,11,.62);stroke:var(--pc);stroke-width:1.6;vector-effect:non-scaling-stroke;transition:fill-opacity .6s}
+#kcap .kl.lista .kl-losa{fill-opacity:0}
+#kcap .kl-3d,#kcap .kl-svg{opacity:0;transition:opacity .6s}
+#kcap .kl.lista .kl-svg{opacity:1}
+#mksvg.kc-shot,#mksvg.kc-shot *{transition:none!important;animation:none!important}
 #kcap .kl-n{font:500 150px 'Geist Mono',monospace;fill:var(--pc);letter-spacing:.06em}
 #kcap .kc-tags{position:absolute;inset:0;pointer-events:none;z-index:4}
 #kcap .kc-tag{--c:#fff;position:absolute;left:0;top:0;width:var(--tw,240px);height:var(--th,96px);padding:11px 12px 10px 14px;background:rgba(8,10,11,.86);border:1px solid rgba(214,228,222,.14);border-left:2px solid var(--c);opacity:0;will-change:transform,opacity;display:flex;flex-direction:column;gap:3px;overflow:hidden}
@@ -62,6 +57,8 @@ const css=`
 #kcap .kc-tag b{font:300 28px/1 'Barlow Condensed','Arial Narrow',sans-serif;color:#eaefed;letter-spacing:.01em}
 #kcap .kc-tag b.calc{color:var(--c)}
 #kcap .kc-tag span{font-size:11.5px;line-height:1.3;color:#a9b3af;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#kcap .kc-tag em a{color:inherit;text-decoration:none;pointer-events:auto}
+#kcap .kc-tag em a:hover{color:#eaefed;text-decoration:underline}
 #kcap .kc-tag em{font-style:normal;font:400 9.5px var(--letra-dato,'Geist Mono',monospace);color:#6c7672;margin-top:auto}
 #kcap .kc-guia{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3}
 #kcap .kc-guia line{stroke:var(--c);stroke-width:1;stroke-dasharray:2 3;opacity:.55}
@@ -88,28 +85,17 @@ function construir(sec){
  const src=document.getElementById('mksvg');
  if(!src||typeof MK==='undefined'||!MK.P||!MK.lim||!src.querySelector('.mk-losa'))return false;
  const losaD=src.querySelector('.mk-losa').getAttribute('d');
- // contexto completo: el suelo del mapa (silueta, UPZ, vías y borde) sin las capas temáticas
- const suelo=src.querySelector('.mk-suelo');let sueloH='';if(suelo){const k=suelo.cloneNode(true);k.querySelectorAll('.capa,[id]').forEach(e=>e.classList&&e.classList.contains('capa')?e.remove():e.removeAttribute('id'));k.setAttribute('class','mk-suelo kl-suelo');sueloH=k.outerHTML}
- const ref=src.querySelector('.mk-ref');const refH=ref?ref.outerHTML.replace(/ id="[^"]*"/g,''):'';
- // edificios: lugar para la foto del mapa 3D (se toma cuando los edificios ya cargaron)
- const img='<image class="kl-3d" x="0" y="0" width="0" height="0" preserveAspectRatio="none"/>';
  // contorno proyectado (para el ancla de cada etiqueta: el punto más a la derecha de la losa)
  let xr=-1e9,yr=0,x0=1e9,y0=1e9,y1=-1e9;MK.lim.forEach(p=>{const q=MK.P(p[0],p[1],0);if(q[0]>xr){xr=q[0];yr=q[1]}x0=Math.min(x0,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1])});
  const ord=(typeof ORDEN!=='undefined'?ORDEN:['F','B','C','D','A','E']).slice(); // de abajo hacia arriba: la causa raíz es la base
  const N=ord.length,top=y0*SQ-(N-1)*GAP-260,bot=y1*SQ+380,MOB=innerWidth<=760;
  const vbx0=x0-220,vbx1=MOB?xr+5200:xr+3600;
  const svg=document.createElementNS(NS,'svg');svg.setAttribute('class','kc-svg');svg.setAttribute('viewBox',vbx0+' '+top+' '+(vbx1-vbx0)+' '+(bot-top));svg.setAttribute('preserveAspectRatio',MOB?'xMidYMax meet':'xMinYMid meet');svg.setAttribute('aria-hidden','true');
- // los degradados y tramas del mapa original
- const defs=src.querySelector('defs');if(defs)svg.appendChild(defs.cloneNode(true));
- const capas=[...src.querySelectorAll('.capa')];
  const L=ord.map((id,i)=>{
   const g=document.createElementNS(NS,'g');g.setAttribute('class','kl');g.style.setProperty('--pc',PC[id]);g.style.opacity=0;
   const inner=document.createElementNS(NS,'g');inner.setAttribute('transform','scale(1 '+SQ+')');
-  let h='<g transform="translate(0,46) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="translate(0,23) '+M+'"><path class="kl-lado" d="'+losaD+'"/></g><g transform="'+M+'"><path class="kl-losa" d="'+losaD+'"/></g>'+img+sueloH+refH;
-  if(id==='B'&&MK.UZ)h+='<g transform="'+M+'">'+MK.UZ.filter(u=>u.poly&&u.dens).map(u=>'<path class="kl-upz" style="fill-opacity:'+(.12+.7*(u.dens-90)/(434-90)).toFixed(2)+'" d="M'+u.poly.map(p=>p[0]+' '+p[1]).join('L')+'Z"/>').join('')+'</g>';
-  inner.innerHTML=h;
-  capas.filter(c=>(c.dataset.capa||'').split(' ').includes(id)).forEach(c=>{const k=c.cloneNode(true);k.removeAttribute('id');inner.appendChild(k)});
-  inner.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));
+  // foto del 3D del paso, foto del dibujo del paso y el borde de la losa en el color del problema
+  inner.innerHTML='<image class="kl-3d" preserveAspectRatio="none"/><image class="kl-svg" preserveAspectRatio="none"/><g transform="'+M+'"><path class="kl-losa" d="'+losaD+'"/></g>';
   g.appendChild(inner);svg.appendChild(g);
   return {id,g,i,off:-i*GAP,ay:yr*SQ,ind:indicador(id)}});
  const mapa=sec.querySelector('.kc-mapa');mapa.appendChild(svg);
@@ -118,26 +104,43 @@ function construir(sec){
  const tags=sec.querySelector('.kc-tags');
  L.forEach(l=>{const t=document.createElement('div');t.className='kc-tag';t.style.setProperty('--c',PC[l.id]);
   const nombre=typeof byId!=='undefined'&&byId[l.id]?byId[l.id].t:l.id;
-  t.innerHTML='<div class="h">'+(typeof ic==='function'?ic(ICOK[l.id]):'')+String(l.i+1).padStart(2,'0')+' · '+esc(nombre)+'</div><b'+(l.ind.c?' class="calc"':'')+'>'+esc(l.ind.v)+'</b><span>'+esc(l.ind.t)+'</span><em>'+esc(l.ind.a)+'</em>';
+  t.innerHTML='<div class="h">'+(typeof ic==='function'?ic(ICOK[l.id]):'')+String(l.i+1).padStart(2,'0')+' · '+esc(nombre)+'</div><b'+(l.ind.c?' class="calc"':'')+'>'+esc(l.ind.v)+'</b><span>'+esc(l.ind.t)+'</span><em><a href="'+l.ind.u+'" target="_blank" rel="noopener">'+esc(l.ind.a)+' ↗</a></em>';
   tags.appendChild(t);l.tag=t;
   const ln=document.createElementNS(NS,'line');ln.style.setProperty('--c',PC[l.id]);guia.appendChild(ln);l.ln=ln});
  // casillas del tablero final, en el mismo orden del recorrido
  const grid=sec.querySelector('.kc-grid');grid.innerHTML=L.map(()=>'<div class="kc-slot"></div>').join('');L.forEach((l,i)=>l.slot=grid.children[i]);
- S={sec,svg,L,xr,MOB};medir();foto();return true}
+ S={sec,svg,L,xr,MOB};medir();return true}
 
-function foto(){if(!S||S.foto)return;try{
- const cv=typeof M3!=='undefined'&&M3.r&&M3.r.domElement,src=document.getElementById('mksvg');if(!cv||!M3.edif||typeof dibujar3D!=='function'||!src)return;
- const ve=[M3.edif.visible,M3.upz&&M3.upz.visible,M3.metro&&M3.metro.visible],su=M3.sube;
- M3.edif.visible=true;if(M3.upz)M3.upz.visible=false;if(M3.metro)M3.metro.visible=false;M3.sube=1;dibujar3D();dibujar3D();
- const url=cv.toDataURL('image/png'),r=cv.getBoundingClientRect(),inv=src.getScreenCTM().inverse(),pt=src.createSVGPoint();
- pt.x=r.left;pt.y=r.top;const a=pt.matrixTransform(inv);pt.x=r.right;pt.y=r.bottom;const b=pt.matrixTransform(inv);
- M3.edif.visible=ve[0];if(M3.upz)M3.upz.visible=ve[1];if(M3.metro)M3.metro.visible=ve[2];M3.sube=su;dibujar3D();
- if(!(b.x>a.x)||r.width<10)return;
- S.svg.querySelectorAll('.kl-3d').forEach(im=>{im.setAttribute('href',url);im.setAttribute('x',a.x.toFixed(1));im.setAttribute('y',a.y.toFixed(1));im.setAttribute('width',(b.x-a.x).toFixed(1));im.setAttribute('height',(b.y-a.y).toFixed(1))});S.foto=1}catch(e){}}
+/* ---------- fotos de cada paso del mapa del recorrido ---------- */
+const cuadros=n=>new Promise(r=>{let k=0,hecho=0;const fin=()=>{if(!hecho){hecho=1;r()}};const f=()=>{if(++k>=n)fin();else requestAnimationFrame(f)};requestAnimationFrame(f);setTimeout(fin,90*n)});
+const PROPS=['display','visibility','opacity','fill','fill-opacity','fill-rule','stroke','stroke-width','stroke-opacity','stroke-dasharray','stroke-dashoffset','stroke-linecap','stroke-linejoin','paint-order','vector-effect','font-family','font-size','font-weight','letter-spacing','text-anchor','dominant-baseline','text-transform','filter','mix-blend-mode'];
+const URLRE=/url\("?[^#")]*#([^")]+)"?\)/g;
+// el SVG del mapa tal como se ve (estilos calculados en línea), convertido en imagen
+async function fotoSVG(src){const ori=[src,...src.querySelectorAll('*')],k=src.cloneNode(true),cop=[k,...k.querySelectorAll('*')],quita=[];
+ ori.forEach((e,i)=>{const cs=getComputedStyle(e),c=cop[i];if(i&&cs.display==='none'){quita.push(c);return}
+  c.setAttribute('style',PROPS.map(p=>{let v=cs.getPropertyValue(p);if(!v)return '';v=v.replace(URLRE,'url(#$1)');return p+':'+v}).filter(Boolean).join(';'));c.removeAttribute('class')});
+ quita.forEach(c=>c.remove());const r=src.getBoundingClientRect();k.setAttribute('xmlns',NS);k.setAttribute('width',r.width);k.setAttribute('height',r.height);k.removeAttribute('id');
+ const img=new Image();img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(new XMLSerializer().serializeToString(k));await img.decode();
+ const c=document.createElement('canvas'),d=Math.min(2,devicePixelRatio||1)*1.5;c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);c.getContext('2d').drawImage(img,0,0,c.width,c.height);return c.toDataURL('image/png')}
+function marco(src){const r=src.getBoundingClientRect(),inv=src.getScreenCTM().inverse(),pt=src.createSVGPoint();pt.x=r.left;pt.y=r.top;const a=pt.matrixTransform(inv);pt.x=r.right;pt.y=r.bottom;const b=pt.matrixTransform(inv);return [a.x,a.y,b.x-a.x,b.y-a.y]}
+const pon=(im,url,f)=>{im.setAttribute('href',url);im.setAttribute('x',f[0].toFixed(1));im.setAttribute('y',f[1].toFixed(1));im.setAttribute('width',f[2].toFixed(1));im.setAttribute('height',f[3].toFixed(1))};
+// pone el mapa del recorrido en cada paso (sin animación, con el encuadre de Kennedy) y lo fotografía; solo cuando ese mapa no está en pantalla
+async function fotos(){if(!S||S.fotos||S.tomando)return;const src=document.getElementById('mksvg'),caja=document.querySelector('#mk .mk-mapa');if(!src||!caja||typeof pasoMapa!=='function')return;
+ const rc=caja.getBoundingClientRect();if(rc.bottom>0&&rc.top<innerHeight)return;
+ const gl=typeof M3!=='undefined'&&M3.r;if(gl&&!M3.edif)return; // los edificios aún no cargan
+ S.tomando=1;const antes=MK.paso,mov=typeof MOV!=='undefined'?MOV.on:null;
+ try{if(mov!==null)MOV.on=false;src.classList.add('kc-shot');
+  for(const l of S.L){pasoMapa(l.id);await cuadros(2);
+   cancelAnimationFrame(MK.rafv);if(MK.VBK){MK.vbAct=MK.VBK.slice();MK.vb=MK.vbAct;src.setAttribute('viewBox',MK.vbAct.map(v=>v.toFixed(1)).join(' '))}escalarMapa();await cuadros(2);
+   const f=marco(src);let u3='';if(gl&&typeof dibujar3D==='function'&&M3.obj){dibujar3D();u3=M3.r.domElement.toDataURL('image/png')}
+   const us=await fotoSVG(src);if(u3)pon(l.g.querySelector('.kl-3d'),u3,f);pon(l.g.querySelector('.kl-svg'),us,f);l.u3=!!u3;l.g.classList.add('lista')}
+  S.fotos=1}catch(e){console.warn('capas: no se pudo fotografiar el mapa',e)}
+ finally{src.classList.remove('kc-shot');if(mov!==null)MOV.on=mov;if(antes)pasoMapa(antes);S.tomando=0;pedirPintar()}}
+let pedirPintar=()=>{};
 function medir(){if(!S)return;const MOB=innerWidth<=760,tw=MOB?(S.sec.querySelector('.kc-grid').clientWidth-6)/2:Math.min(250,(S.sec.querySelector('.kc-grid').clientWidth-10)/2),th=MOB?54:124;
  S.sec.style.setProperty('--tw',tw+'px');S.sec.style.setProperty('--th',th+'px');S.tw=tw;S.th=th}
 
-function pintar(){if(!S)return;if(!S.foto){const t=performance.now();if(!S.tf||t-S.tf>700){S.tf=t;foto()}}
+function pintar(){if(!S)return;if(!S.fotos&&!S.tomando){const t=performance.now();if(!S.tf||t-S.tf>500){S.tf=t;fotos()}}
  const r=S.sec.getBoundingClientRect(),span=S.sec.offsetHeight-innerHeight,p=cl(-r.top/span);
  const N=S.L.length,col=eio(cl((p-.56)/.2)),junta=cl((p-.62)/.24);
  S.sec.classList.toggle('junto',junta>.02);S.sec.classList.toggle('listo',junta>.97);
@@ -149,12 +152,9 @@ function pintar(){if(!S)return;if(!S.foto){const t=performance.now();if(!S.tf||t
   const a=RM?(p>.04+i*.07?1:0):eoc(cl((p-.04-i*.07)/.1));          // aparición de la capa i
   const y=l.off*(1-col)-(1-a)*700;                                  // apilada → fundida; entra desde arriba
   l.g.setAttribute('transform','translate(0,'+y.toFixed(1)+')');l.g.style.opacity=a.toFixed(3);
-  // la losa de cada capa se aclara al fundirse para que se vean todas
-  const losa=l.g.querySelector('.kl-losa');if(losa)losa.style.fillOpacity=(i===0?1:1-col*.92).toFixed(2);
-  l.g.querySelectorAll('.kl-lado').forEach(e=>e.style.opacity=(i===0?1:1-col).toFixed(2));
-  const im=l.g.querySelector('.kl-3d');if(im)im.style.opacity=(i===0?.78:.78*(1-col)).toFixed(2);
-  l.g.querySelectorAll('.kl-suelo,.mk-ref').forEach(e=>e.style.opacity=(i===0?1:1-col).toFixed(2));
-  if(l.id==='B'){const u=1-.6*col;if(l.u!==u){l.u=u;l.g.querySelectorAll('.kl-upz').forEach(e=>e.style.opacity=u.toFixed(2))}}
+  // al fundirse queda el 3D de la capa base (edificios) y encima el dibujo de los seis pasos
+  const im=l.g.querySelector('.kl-3d');if(im&&l.u3)im.style.opacity=(i===0?1:1-col).toFixed(2);
+  const lo0=l.g.querySelector('.kl-losa');if(lo0)lo0.style.strokeOpacity=(i===0?1:1-col).toFixed(2);
   // ancla en pantalla (borde derecho de la losa)
   const pt=S.svg.createSVGPoint();pt.x=S.xr;pt.y=l.ay+y;const sp=pt.matrixTransform(ctm);
   const ax=sp.x-vr.left+(S.MOB?6:18),ay=AN[i];
@@ -180,7 +180,7 @@ function montar(){
  mk.insertAdjacentElement('afterend',sec);
  sec.querySelector('[data-kcrit]').addEventListener('click',ev=>{const c=document.getElementById('criterios');if(c){ev.preventDefault();c.scrollIntoView({behavior:RM?'auto':'smooth'})}});
  // se construye cuando la escena se acerca (el mapa original ya está dibujado)
- let raf=0;const tick=()=>{raf=0;pintar()};const pedir=()=>{if(!raf)raf=requestAnimationFrame(tick)};
+ let raf=0;const tick=()=>{raf=0;pintar()};const pedir=()=>{if(!raf)raf=requestAnimationFrame(tick)};pedirPintar=pedir;
  const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting&&!S){if(construir(sec))pedir()}}),{rootMargin:'100% 0px 100% 0px'});io.observe(sec);
  addEventListener('scroll',()=>{if(S)pedir()},{passive:true});
  let rz=0;addEventListener('resize',()=>{clearTimeout(rz);rz=setTimeout(()=>{if(!S)return;const MOB=innerWidth<=760;if(MOB!==S.MOB){S.svg.remove();S.sec.querySelector('.kc-guia').remove();S.sec.querySelector('.kc-tags').innerHTML='';S=null;construir(sec)}medir();pedir()},200)});
